@@ -27,7 +27,7 @@
     </header>
     <main class="container">
         <h4 class="display-4">Advanced OOP Techniques</h4>
-        <p><a href="https://github.com/nvbach91/4IZ278-2023-2024-LS/tree/master/www/nguv03/cv05/oop">https://github.com/nvbach91/4IZ278-2023-2024-LS/tree/master/www/nguv03/cv05/oop</a></p>
+        <p><a href="https://github.com/nvbach91/4IZ278-2024-2025-LS/tree/master/www/nguv03/cv05/oop">https://github.com/nvbach91/4IZ278-2024-2025-LS/tree/master/www/nguv03/cv05/oop</a></p>
         <ul class="list-group">
             <li class="list-group-item"><a href="01-simpleclass.php">        01-simpleclass.php</a></li>
             <li class="list-group-item"><a href="02-classmembers.php">       02-classmembers.php</a></li>

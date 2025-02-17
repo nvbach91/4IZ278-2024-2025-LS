@@ -6,5 +6,5 @@ const CONFIG_FACEBOOK = [
 ];
 const CONFIG_PROTOCOL = 'http://';
 const CONFIG_DOMAIN = 'localhost';
-const CONFIG_PATH = '/4IZ278-2023-2024-LS/www/nguv03/cv11/facebook';
+const CONFIG_PATH = '/4IZ278-2024-2025-LS/www/nguv03/cv11/facebook';
 ?>
