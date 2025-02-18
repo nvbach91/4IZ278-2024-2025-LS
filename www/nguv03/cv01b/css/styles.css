@@ -1,0 +1,40 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+.business-card {
+    background-image: url(https://t4.ftcdn.net/jpg/03/98/35/91/360_F_398359128_fCeLDN5UOrirgsgmEW81EYmUeVmJpDLL.jpg);
+    background-color: #313162;
+    color: white;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 20px;
+    width: 600px;
+}
+
+.business-card a {
+    text-decoration: none;
+    color: #ff98ff;
+}
+
+.business-card>div {
+    width: calc(100% / 2);
+    padding: 5px;
+}
+
+.bc-name {
+    font-weight: bold;
+    font-size: 42px;
+}
+
+.bc-lastName {
+    font-size: 32px;
+}
+
+.bc-logo img {
+    width: 100px;
+}
