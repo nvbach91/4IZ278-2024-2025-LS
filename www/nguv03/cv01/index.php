@@ -1,84 +1,109 @@
 <?php
 
-// this is a one-line comment
+$name = 'Adam';
 
-/*
-this is a multiline
-comment
-*/
+$brand = 'BMW'; // "
+$model = 'iX';
+$year = 2024;
+$performance = 200;
+$price = 41234.50;
+$isDiscontinued = false;
+$isLuxuryCar = true;
+// index 0        1          2
+$features = ['sport', 'comfort', 'large wheels'];
+$features[0]; // sport
+$features[1]; // comfort
+$features[2]; // large wheels
+
+class Book
+{
+  public $title;
+  public $price;
+  public function __construct($title, $price)
+  {
+    $this->title = $title;
+    $this->price = $price;
+  }
+}
+
+$myBook = new Book(
+  'Harry Potter and the Chamber of Secrets',
+  500,
+);
+
+$myBook->title; // Harry Potter ...
+$myBook->price; // 500
+
+// associative arrays
+$player = [
+  'name' => 'Ronaldo',
+  'age' => 38,
+  'goals' => 1000,
+];
+$player['name']; // Ronaldo
+$player['age']; // 38
+$player['goals']; // 1000
+
+?>
 
 
-// variable declaration and initialization
+<?php
 
-$avatar = 'jedi-logo.svg';                  // datatype string
-$firstName = 'Anakin';
-$lastName = 'Skywalker';
-$title = 'Lead Developer / Architect';
-$company = 'First Order Jedi Council';
-$phone = '+420 777 888 999';
-$email = 'skywalker@jedi-council.com';
-$website = 'www.jedi-council.com';
-$available = false;                         // datatype boolean
-$street = 'Temple of Eedit';
-$propertyNumber = 42;                       // datatype integer number
-$orientationNumber = 121;
-$city = 'Coruscant';
-$bankBalance = 1217412.420;                 // datatype double/float
-$currency = 'CZK';
-
-// string concatenation
-$address = $street . ' ' . $propertyNumber . '/' . $orientationNumber . ', ' . $city;
-
-// string variable interpolation
-$address = "$street $propertyNumber/$orientationNumber, $city";
-$address = "{$street} {$propertyNumber}/{$orientationNumber}, {$city}";
+$firstName = 'David';
+$lastName = 'Beckham';
+$email = 'david@beckham.com';
+$profession = 'Football player';
+$position = 'Midfielder/Winger';
+$salary = 500000;
+$currency = 'EUR';
+$logo = 'https://upload.wikimedia.org/wikipedia/en/thumb/5/56/Real_Madrid_CF.svg/800px-Real_Madrid_CF.svg.png';
+$birthYear = 1975;
+$age = date('Y') - $birthYear;
+$company = 'Real Madrid C.F.';
+$street = 'Avenida de Concha Espina 1';
+$city = 'Madrid';
+$zip = '28036';
+$phone = '+34 91 3984300';
+$web = 'https://www.realmadrid.com';
+$isRetired = true;
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Business card</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-    <link rel="stylesheet" href="./css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/styles.css">
 </head>
-
 <body>
-    <main class="container">
-        <h1 class="text-center">My Business Card in PHP</h1>
-        <div class="business-card bc-front row">
-            <div class="col-sm-4">
-                <div class="logo" style="background-image: url(./img/<?php echo $avatar; ?>)"></div>
-            </div>
-            <div class="col-sm-8">
-                <div class="bc-firstname"><?php echo $firstName; ?></div>
-                <div class="bc-lastname"><?php echo $lastName; ?></div>
-                <div class="bc-title"><?php echo $title; ?></div>
-                <div class="bc-company"><?php echo $company; ?></div>
-            </div>
-        </div>
-        <div class="business-card bc-back row">
-            <div class="col-sm-6">
-                <div class="bc-firstname"><?php echo $firstName; ?></div>
-                <div class="bc-lastname"><?php echo $lastName; ?></div>
-                <div class="bc-title"><?php echo $title ?></div>
-            </div>
-            <div class="col-sm-6 contacts">
-                <div class="bc-address"><i class="fas fa-map-marker-alt"></i> <?php echo $address; ?></div>
-                <div class="bc-phone"><i class="fas fa-phone"></i> <?php echo $phone; ?></div>
-                <div class="bc-email"><i class="fas fa-at"></i> <?php echo $email; ?></div>
-                <div class="bc-website"><i class="fas fa-globe"></i> <?php echo $website; ?></div>
-                <div class="bc-available"><?php echo $available ? 'Not available for contracts' : 'Now available for contracts'; ?></div>
-            </div>
-        </div>
-    </main>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/js/bootstrap.min.js"></script>
+  <div class="business-card">
+    <div class="bc-firstName"><?php echo $firstName; ?></div>
+    <div class="bc-lastName"><?php echo $lastName; ?></div>
+    <div class="bc-email">
+      <a href="mailto:<?php echo $email; ?>"><?php echo $email; ?></a>
+    </div>
+    <div class="bc-profession"><?php echo $profession; ?></div>
+    <div class="bc-position"><?php echo $position; ?></div>
+    <div class="bc-salary">Salary: <?php echo $salary; ?><?php echo $currency; ?></div>
+    <div class="bc-logo">
+      <img src="<?php echo $logo; ?>" width="70">
+    </div>
+    <div class="bc-birthYear">Date of birth: <?php echo $birthYear; ?></div>
+    <div class="bc-age">Age: <?php echo $age; ?></div>
+    <div class="bc-company"><?php echo $company; ?></div>
+    <div class="bc-street"><?php echo $street; ?></div>
+    <div class="bc-city">
+      <?php echo $city; ?>, <?php echo $zip; ?>
+    </div>
+    <div class="bc-phone">
+      <a href="tel:<?php echo $phone; ?>"><?php echo $phone; ?></a>
+    </div>
+    <div class="bc-web">
+      <a href="<?php echo $web; ?>" target="_blank">Official website</a>
+    </div>
+    <div class="bc-isRetired"><?php echo $isRetired ? 'Retired' : 'Active'; ?></div>
+  </div>
 </body>
 
 </html>

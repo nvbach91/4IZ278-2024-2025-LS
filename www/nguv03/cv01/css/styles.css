@@ -1,53 +1,36 @@
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .business-card {
-  padding: 30px;
-  background-color: #292a30;
-  color: #e1e1e1;
-  max-width: 600px;
-  margin: 20px auto;
-  height: 300px;
-  display: flex;
-  align-items: center;
-  box-shadow: 0px 5px 20px #000;
+    width: 600px;
+    height: 350px;
+    background-image: url(https://t4.ftcdn.net/jpg/03/98/35/91/360_F_398359128_fCeLDN5UOrirgsgmEW81EYmUeVmJpDLL.jpg);
+    display: flex;
+    color: white;
+    flex-wrap: wrap;
+    padding: 20px;
+    background-position: center;
+    background-size: cover;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
 }
-.bc-firstname {
-  line-height: 1.2em;
-  font-size: 2.5em;
-  text-transform: uppercase;
+.business-card > div {
+    width: calc(100% / 3);
 }
-.bc-lastname {
-  line-height: 1.2em;
-  font-size: 2.5em;
-  text-transform: uppercase;
-  font-weight: bold;
-  color: #b49e65;
+.bc-firstName, .bc-lastName {
+    font-size: 32px;
+    font-weight: bold;
 }
-.bc-title, .bc-company {
-  font-size: 1em;
-}
-.bc-company {
-  text-transform: uppercase;
-  font-weight: bold;
-}
-.logo {
-  width: 150px;
-  height: 150px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.contacts {
-  font-size: 0.8em;
-  line-height: 1.5em;
-}
-.bc-back .bc-firstname, .bc-back .bc-lastname {
-  font-size: 2em;
-}
-.bc-back > div:first-child {
-  border-right: 2px solid #e1e1e1;
-}
-.bc-address {
-  font-weight: bold;
+.business-card a {
+    text-decoration: none;
+    color: white;
+    background-color: #df5959;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 5px;
 }
