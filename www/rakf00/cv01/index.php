@@ -34,7 +34,14 @@ $zamestnany = true;
         <section id="aboutMe">
             <h2><?php echo $jmeno ?> <?php echo " " . $prijmeni ?></h2>
             <p><?php echo $vek; ?> y/o</p>
-            <h3><?php echo $povolani ?></h3>
+            <h3><?php
+                if ($zamestnany) {
+                    echo $povolani;
+                }else{
+                  echo  "Jsem otevřený pracovním nabídkám";
+                }
+
+                ?></h3>
             <p><?php echo $firma ?></p>
             <address>
                 <?php echo $ulice . ", " . $mesto ?>
