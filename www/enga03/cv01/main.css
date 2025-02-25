@@ -1,0 +1,123 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    background-color: #000; /* Dark background */
+    font-family: 'DM Mono', serif; /* Change the font */
+    color: #f0f0f0;
+}
+
+#businessCard {
+    display: grid;
+    grid-template-columns: auto 2fr; /* Left column has width according to the logo */
+    gap: 20px;
+    background-color: #1c1c21; /* Dark background */
+    border: 2px solid #e22e57; /* Border color */
+    border-radius: 10px; /* Slight border radius */
+    padding: 20px;
+    align-items: stretch;
+    width: 70%;
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1); /* Softer box shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+#businessCard:hover {
+    transform: translateY(-10px); /* Pop effect */
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2); /* Enhanced box shadow on hover */
+}
+
+#logoContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Push the logo as far right as possible */
+    transform: rotate(-90deg);
+    width: auto;
+    height: 150px;
+}
+
+#logo {
+    max-height: 100%;
+    width: auto;
+}
+
+#nameAndBasicInfo {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.label {
+    text-transform: uppercase;
+    font-size: 0.9em;
+    color: #e22e57;
+}
+
+.labelGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+#infoContainer {
+    display: grid;
+    grid-template-rows: auto auto auto 1fr;
+    gap: 10px;
+}
+
+#details {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+#jobs {
+    background-color: #74af00;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+#company {
+    display: grid;
+    place-items: center;
+}
+
+#address {
+    background-color: #009cea;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+#contactInfo {
+    background-color: #ffab00;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    #businessCard {
+        grid-template-columns: 1fr;
+        width: 90%;
+    }
+
+    #logoContainer {
+        justify-content: center;
+        transform: rotate(0deg);
+        height: auto;
+    }
+
+    #logo {
+        width: 100%;
+        height: auto;
+    }
+
+    #nameAndBasicInfo {
+        grid-template-columns: 1fr;
+    }
+
+    #details {
+        grid-template-columns: 1fr;
+    }
+}
