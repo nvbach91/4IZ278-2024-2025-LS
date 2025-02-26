@@ -1,0 +1,109 @@
+img {
+    width: 100%;
+}
+
+a:active {
+    color: rgb(0, 0, 0);
+  }
+a:visited {
+    color: rgb(0, 0, 0);
+  }
+a:link {
+    color: rgb(0, 0, 0);
+    text-decoration: underline;
+  }
+
+.upper-text p {
+    margin-top: 0;
+    margin-bottom: 0.3rem;
+}
+
+.down-text p {
+    margin-top: 0;
+    margin-bottom: 0.7rem;
+}
+.container {
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.cardos {
+    padding: 20px;
+    background-color: #e1fca4;
+    color: #000000;
+    width: 500px; 
+    height: 300px; 
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+    border-radius: 5%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.down-text
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    margin-top: 20px;
+    font-size: 17px;
+}
+
+.upper-text
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+}
+
+.name {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+
+.year {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.profession {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.company {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.telephone {
+        font-size: 13px;
+        font-weight: bold;
+}
+
+.email {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.web {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.available {
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.address {
+    font-size: 13px;
+    font-weight: bold;
+}
