@@ -1,0 +1,68 @@
+
+body{
+    background-color: #555555;
+}
+
+.card {
+    background-color: #dcc464;
+    border: 4px solid #702a83;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    padding-top: 5px;
+    margin: 0 auto;
+    margin-bottom: 35px;
+    width: 260px;
+    height: 150px;
+    text-align: center;
+    font-family: 'Lobster';
+}
+
+#logo {
+    width: 100%;
+    height: 50%;
+    object-fit: contain;
+    margin-bottom: -20px;
+}
+
+#name{
+    font-family: 'Lobster', cursive;
+}
+
+h3{
+    color: #333333;
+}
+
+h4{
+    color: #454545;
+    transform: scale(0.7);
+}
+
+p{
+    color: #454545;
+}
+
+hr{
+    width: 50%;
+    margin: 20px auto;
+    margin-top: -10px;
+    margin-bottom: -10px;
+    border: 1px solid #454545;
+}
+
+#divider{
+    width: 3px;
+    height: 70%;
+    border-radius: 5px;
+    background-color: #720a83;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.container{
+    height: 80%;
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    vertical-align: middle;
+}
