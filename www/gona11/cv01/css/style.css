@@ -1,0 +1,93 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    box-sizing: border-box;
+    font-family: Montserrat;
+    line-height: 1.2rem;
+}
+
+.box {
+    height: 400px;
+    width: 600px;
+    background-color: lightblue;
+    border: solid 8px #aaa;
+    margin-top: 1rem;
+}
+
+.box_front {
+    display: flex;
+    justify-content: space-between;
+}
+
+.box_back {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.box_back_content {
+    max-height: 300px;
+}
+
+h1 {
+    font-weight: 600;
+    font-size: 2.5rem;
+    margin: 1rem 0 1.5rem;
+    color: #444;
+}
+
+p {
+    font-size: 1.2rem;
+    margin: 0.4rem;
+    color: #444;
+}
+
+.align_left {
+    align-self: center;
+    flex-wrap: nowrap;
+    padding-left: 2rem;
+}
+
+.align_right {
+    align-self: center;
+    height: 350px;
+    max-width: 300px;   
+}
+
+.right_top {
+    margin-bottom: 2rem;
+}
+
+.avatar {
+    width: 220px;
+    box-shadow: 2px 3px 8px #222 ;
+}
+
+.info_inline {
+    display: inline-flex;
+    align-items: center;
+    margin: 0.2rem 0;
+}
+
+.info_inline > span {
+    margin-right: 0.5rem;
+}
+
+.logo {
+    height: 24px;
+    width: 24px;
+    margin-right: 12px;
+    padding: 0;
+}
+
+.divider {
+    height: 5px;
+    width: 350px;
+    background-color: #444;
+}
+
+.foot {
+    margin-top: 20px;
+}
