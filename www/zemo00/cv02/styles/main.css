@@ -1,0 +1,36 @@
+
+
+.cards {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 30px;
+    justify-content: center;
+}
+
+.card {
+    min-width: 240px;
+    max-width: 400px;
+    aspect-ratio: 1.545;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.name {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 2.5%;
+}
+
+.position {
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+p, a{
+    margin-left: 10px;
+}

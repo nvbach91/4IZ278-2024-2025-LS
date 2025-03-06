@@ -1,0 +1,32 @@
+@font-face {
+    font-family: 'Aurebesh';
+    src: url('/cv02/fonts/Aurebesh.otf');
+}
+
+
+.galactic{
+    font-family: 'Aurebesh';
+}
+
+.galactic .card {
+    border-radius: 3px;
+    background: linear-gradient(135deg, #a1a1a1 0%, #d4d4d4 50%, #a1a1a1 100%);
+    
+    color: transparent;
+    text-shadow: 
+        1px 1px 0 rgba(255, 255, 255, 0.3),
+        -1px -1px 0 rgba(0, 0, 0, 0.6),
+        1px 0 0 rgba(0, 0, 0, 0.3);
+}
+
+.galactic img {
+    height: 60%;
+    display: block;
+    margin: auto;
+    opacity: 0.4;
+    position: relative;
+}
+
+.galactic a {
+    color: #4682B4;
+}

@@ -1,0 +1,25 @@
+
+
+.classic .card {
+    background-color: #f3ead7;
+    background-image: url(/cv02/images/paper.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.classic img {
+    width: 15%;
+    display: block;
+    margin: auto;
+    margin-top: 20px;
+    opacity: 0.8;
+}
+
+.classic .name {
+    margin-top: 25px;
+}
+
+.classic .position {
+    width: 70%;
+}
