@@ -1,0 +1,17 @@
+
+.vse {
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+.vse .card {
+    background-color: white;
+    border-radius: 1px;
+}
+
+.vse img {
+    width: 50%;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-bottom: 10%;
+}
+
