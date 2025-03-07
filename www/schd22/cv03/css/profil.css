@@ -1,0 +1,30 @@
+body {
+    background-color: gray; /* Nebo jiné odstíny šedé */
+}
+
+h1{
+    align-self: center;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 50px;
+}
+
+.centered-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: auto;
+    
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
