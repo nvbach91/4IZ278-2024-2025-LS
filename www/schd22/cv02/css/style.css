@@ -1,0 +1,97 @@
+@font-face {
+    font-family: 'Cooperplate Gothic';
+    src: url('Copperplate.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+    box-sizing: border-box;
+    font-family: 'Copperplate Gothic', sans-serif;
+    font-size: 20px;
+    color: black;
+}
+.whole{
+    margin-bottom: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.front{
+    width: 600px;
+    height: 340px;
+    background-color: #F3F2ED;
+    padding: 20px;
+    background-position: center;
+    background-size: cover;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.contact{
+    display: flex;
+    justify-content: space-between;
+}
+.header {
+    display: block;
+    text-align: center;
+
+    .name, .lastName {
+        font-size: 25px;
+        display:inline-block
+    }
+    .lastName {
+        text-transform: uppercase;
+    }
+    .job {
+        font-size: 18px;
+    }
+}
+.place{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+}
+.back{
+    width: 600px;
+    height: 340px;
+    background-color: #F3F2ED;
+    padding: 20px;
+    background-position: center;
+    background-size: cover;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.firm{
+    display: block;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.text-center{
+    text-align: center;
+    font-size: larger;
+    font-family: 'Courier New', Courier, monospace;
+
+    width:  100%;
+    height: 50px;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+body {
+    background-color: rgb(197, 197, 197)
+    ;
+}
