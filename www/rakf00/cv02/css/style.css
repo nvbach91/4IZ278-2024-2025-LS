@@ -1,0 +1,64 @@
+.container{
+    display: flex;
+    border: 2px solid black;
+    border-radius: 1%;
+    padding-left: 20px;
+    background-image: url("../images/bg.jpg");
+    flex: 1;
+
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.clickAble{
+    padding-top: 6px;
+    display: grid;
+    row-gap: 6px;
+}
+.clickAble a:hover{
+    transform: scale(110%);
+    color: rgba(0,0,0,0.60);
+}
+
+section {
+    flex: 1;
+}
+
+img{
+    max-width: 100%;
+    height: auto;
+}
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+h2 {
+    animation: blink 3s infinite;
+}
+body{
+
+    font-family: Arial, sans-serif;
+    width: 500px;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+    transition: transform .5s;
+}
+
+p,a, address{ font-weight: bold;
+}
+
+address{padding-bottom: 5px}
+
+#aboutMe{
+    text-align: center;
+}
+
