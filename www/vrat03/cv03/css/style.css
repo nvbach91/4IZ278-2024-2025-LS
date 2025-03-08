@@ -1,0 +1,14 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+}
+
+.form{
+    width: 500px;
+}
+
+.profilePicture{
+    width: 80px;
+}
