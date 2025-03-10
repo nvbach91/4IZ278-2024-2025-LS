@@ -1,17 +1,17 @@
 <?php
 
 
-$firstName = "Filip";
-$surname = "Rakús";
-$age = 21;
-$job = "Client Integration Engineer";
-$company = "VIVnetworks s.r.o";
-$street= "Husova 123";
-$city = "Praha";
-$phone = "777 777 777";
+$jmeno = "Filip";
+$prijmeni = "Rakús";
+$vek = 21;
+$povolani = "Client Integration Engineer";
+$firma = "VIVnetworks s.r.o";
+$ulice = "Husova 123";
+$mesto = "Praha";
+$telefon = "777 777 777";
 $mail = "filrakus@email.com";
 $web = "http://fr.dev.web";
-$lookingForJob = true;
+$zamestnany = true;
 
 
 ?>
@@ -32,22 +32,22 @@ $lookingForJob = true;
     <div class="container">
         <section><img src="logo.png" alt="logo"></section>
         <section id="aboutMe">
-            <h2><?php echo $firstName ?> <?php echo " " . $surname ?></h2>
-            <p><?php echo $age; ?> y/o</p>
+            <h2><?php echo $jmeno ?> <?php echo " " . $prijmeni ?></h2>
+            <p><?php echo $vek; ?> y/o</p>
             <h3><?php
-                if ($lookingForJob) {
-                    echo "Jsem otevřený pracovním nabídkám";
+                if ($zamestnany) {
+                    echo $povolani;
                 }else{
-                  echo $job;
+                  echo  "Jsem otevřený pracovním nabídkám";
                 }
 
                 ?></h3>
-            <p><?php echo $company ?></p>
+            <p><?php echo $firma ?></p>
             <address>
-                <?php echo $street . ", " . $city ?>
+                <?php echo $ulice . ", " . $mesto ?>
             </address>
             <div class="clickAble">
-            <a href="<?php echo "tel:+420" . $phone; ?>"><?php echo "+420 " . $phone; ?></a>
+            <a href="<?php echo "tel:+420" . $telefon; ?>"><?php echo "+420 " . $telefon; ?></a>
             <a href="mailto:<?php echo $mail; ?>"><?php echo $mail; ?></a>
             <a id="website" href="<?php echo $web; ?>" target="_blank">WEB</a>
             </div>
