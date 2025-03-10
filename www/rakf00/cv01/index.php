@@ -29,30 +29,30 @@ $lookingForJob = true;
 
 <body>
 
-    <div class="container">
-        <section><img src="logo.png" alt="logo"></section>
-        <section id="aboutMe">
-            <h2><?php echo $firstName ?> <?php echo " " . $surname ?></h2>
-            <p><?php echo $age; ?> y/o</p>
-            <h3><?php
-                if ($lookingForJob) {
-                    echo "Jsem otevřený pracovním nabídkám";
-                }else{
-                  echo $job;
-                }
+<div class="container">
+    <section><img src="logo.png" alt="logo"></section>
+    <section id="aboutMe">
+        <h2><?php echo $firstName ?> <?php echo " " . $surname ?></h2>
+        <p><?php echo $age; ?> y/o</p>
+        <h3><?php
+            if ($lookingForJob) {
+                echo "Jsem otevřený pracovním nabídkám";
+            }else{
+                echo $job;
+            }
 
-                ?></h3>
-            <p><?php echo $company ?></p>
-            <address>
-                <?php echo $street . ", " . $city ?>
-            </address>
-            <div class="clickAble">
+            ?></h3>
+        <p><?php echo $company ?></p>
+        <address>
+            <?php echo $street . ", " . $city ?>
+        </address>
+        <div class="clickAble">
             <a href="<?php echo "tel:+420" . $phone; ?>"><?php echo "+420 " . $phone; ?></a>
             <a href="mailto:<?php echo $mail; ?>"><?php echo $mail; ?></a>
             <a id="website" href="<?php echo $web; ?>" target="_blank">WEB</a>
-            </div>
-        </section>
-    </div>
+        </div>
+    </section>
+</div>
 
 </body>
 

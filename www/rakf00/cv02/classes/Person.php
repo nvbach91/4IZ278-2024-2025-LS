@@ -12,9 +12,7 @@ class Person
         public          $street,
         public          $city,
         public          $email,
-    )
-    {
-    }
+    ) {}
 
 
     public function getFullName()
@@ -26,9 +24,4 @@ class Person
     {
         return "$this->street , $this->city";
     }
-
-
 }
-
-
-?>
