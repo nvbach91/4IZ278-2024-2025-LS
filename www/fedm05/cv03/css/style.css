@@ -1,0 +1,11 @@
+.active {
+    display: block;
+}
+
+.inactive {
+    display: none;
+}
+
+footer {
+    text-align: center;
+}
