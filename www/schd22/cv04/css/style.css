@@ -1,0 +1,92 @@
+/* ====== ZÁKLADNÍ NASTAVENÍ ====== */
+body {
+    background-color: #f5f2eb;
+    color: #333; /* Tmavší text */
+    font-family: 'Poppins', sans-serif; /* Moderní font */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* ====== CENTROVÁNÍ HLAVNÍHO OBSAHU ====== */
+.container {
+    background: #fff; /* Bílé pozadí pro hlavní obsah */
+    padding: 30px;
+    border-radius: 10px; /* Zaoblené rohy */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Jemný stín */
+    text-align: center;
+    max-width: 400px; /* Maximální šířka */
+}
+
+/* ====== NADPISY ====== */
+h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #6b4226; /* Tmavší béžová */
+}
+
+.alert {
+    margin-top: 10px;
+}
+.mb3 {
+    margin-bottom: 20px;
+}
+/* ====== TLAČÍTKA ====== */
+.button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+button,
+.btn-primary {
+    background-color: #c2a080; /* Béžová */
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+    width: 70%;
+    align-self: center;
+}
+
+button:hover,
+.btn-primary:hover {
+    background-color: #a68261; /* Tmavší odstín */
+}
+
+/* ====== ODKAZY ====== */
+a {
+    text-decoration: none;
+    color: #6b4226;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #a68261;
+}
+
+img {
+    width: 150px; /* Upravit velikost podle potřeby */
+    height: auto;
+    margin: 20px 0; /* Oddělí obrázek od textu i tlačítek */
+    animation: spin 3s linear infinite;
+}
+
+/* Otočení obrázku */
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
