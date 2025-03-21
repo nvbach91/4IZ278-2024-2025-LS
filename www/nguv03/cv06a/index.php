@@ -1,7 +1,11 @@
-<?php require_once __DIR__ . '/database/UserDB.php' ?>4
+<?php require_once __DIR__ . '/database/UserDB.php' ?>
+<?php require_once __DIR__ . '/database/ProductDB.php' ?>
 <?php
 $userDB = new UserDB();
 $users = $userDB->fetch([]);
+
+$productDB = new ProductDB();
+$products = $productDB->fetch([]);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,6 +18,15 @@ $users = $userDB->fetch([]);
     <ul>
         <?php foreach($users as $user): ?>
             <li><?php echo $user['name']; ?></li>
+        <?php endforeach; ?>
+    </ul>
+    <ul>
+        <?php foreach($products as $product): ?>
+            <li>
+                <?php echo $product['name']; ?>
+                -
+                <?php echo $product['price']; ?>
+            </li>
         <?php endforeach; ?>
     </ul>
 </body>
