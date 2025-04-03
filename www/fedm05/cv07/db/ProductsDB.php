@@ -27,4 +27,14 @@ class ProductsDB
         $goods = $stmt->fetchAll();
         return $goods;
     }
+    public function createProduct($product) {
+        $sql = "INSERT INTO $this->tableName (name, price, description, img) VALUES (:name, :price, :description, :img)";
+        $statement = DatabaseConnection::getInstance()->prepare($sql);
+        $statement->execute([
+            ':name' => $product['name'],
+            ':price' => $product['price'],
+            ':description' => $product['description'],
+            ':img' => $product['img']
+        ]);
+    }
 }

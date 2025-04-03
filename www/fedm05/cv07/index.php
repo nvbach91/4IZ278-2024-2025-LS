@@ -18,7 +18,8 @@
     <?php include __DIR__ . "/incl/header.php" ?>
     <!-- Page Content-->
     <div class="container">
-        <?php include __DIR__ .  '/components/ProductDisplay.php'; ?>
+        <a href="create-item.php" class="btn btn-success mb-3">Add New Item</a>
+        <?php include __DIR__ . '/components/ProductDisplay.php'; ?>
     </div>
     <!-- Footer-->
     <?php include __DIR__ . "/incl/footer.php" ?>

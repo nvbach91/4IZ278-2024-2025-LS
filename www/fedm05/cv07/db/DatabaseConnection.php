@@ -4,8 +4,8 @@ class DatabaseConnection
 {
     private static ?PDO $instance = null;
     private static string $host = 'localhost';
-    private static string $dbName = 'fedm05';
-    private static string $username = 'root';
+    private static string $dbName = '';
+    private static string $username = '';
     private static string $password = '';
     private static string $charset = 'utf8mb4';
 
