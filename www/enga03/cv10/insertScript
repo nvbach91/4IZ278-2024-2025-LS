@@ -1,0 +1,28 @@
+USE enga03;
+
+CREATE TABLE cv10_users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    privilege TINYINT NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE cv10_goods (
+    good_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    img VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Example data for testing
+INSERT INTO cv10_users (email, password, name, privilege) VALUES
+('admin@example.com', '$2y$12$Eq.1NpnDo0tNr8muTuSgGuM52zaxqcHThM3NJULMHWCbM9GhQV6q.', 'Admin', 3),
+('user@example.com', '$2y$12$Eq.1NpnDo0tNr8muTuSgGuM52zaxqcHThM3NJULMHWCbM9GhQV6q.', 'User', 1);
+
+INSERT INTO cv10_goods (name, description, price, img) VALUES
+('Apple', 'Fresh red apple', 10.50, 'https://tse2.mm.bing.net/th?id=OIP.PWcj4nniqGB605UFMDTfHQHaHa&pid=Api'),
+('Banana', 'Yellow ripe banana', 5.00, 'https://tse2.mm.bing.net/th/id/OIP.nJbI_lwJ-aG0fstsXTo4swHaHa?pid=Api');
