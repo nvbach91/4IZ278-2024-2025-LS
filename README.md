@@ -1,9 +1,19 @@
-# 4IZ278-2024-2025-LS
+Popis aplikace
+ShareMoney je webová aplikace umožňující správu sdílených financí mezi více uživateli.
+Mohla by se hodit pro spolubydlení, výlety s kamarády, páry nebo kolegy, kteří sdílí výdaje.
 
+Každý uživatel může:
 
-## Description
-A repository for laboratories of subject 4IZ278, Semester Spring 2024-2025.
+Založit nový společný účet
+Připojit se k existujícímu účtu pokud ho admin přidá
+Účty mají přiřazené role s různými oprávněními:
 
+Admin (1x)
+Moderátor (Nx)
+Uživatel (Nx)
+Aplikace umožňuje:
 
-### Go to Wiki pages for more information
-https://github.com/nvbach91/4IZ278-2024-2025-LS/wiki
+Vkládání peněz
+Odesílání a přijímání plateb
+Přehled transakcí
+Správu členů v rámci účtu
