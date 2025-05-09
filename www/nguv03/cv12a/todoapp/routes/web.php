@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TodoListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +15,34 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    // fetch db data
+    $data = [
+        'name' => 'David Beckham',
+        'age' => 70,
+    ];
+    return view('welcome')->with($data);
 });
+
+
+Route::get('/products', function () {
+    // fetch db data
+    $items = [
+        [
+            'name' => 'BMW iX1',
+            'price' => 70000,
+        ],
+        [
+            'name' => 'Audi eTRON',
+            'price' => 80000,
+        ]
+    ];
+    return view('products')->with(['items' => $items]);
+});
+
+
+
+
+Route::post(
+    '/todo',
+    [TodoListController::class, 'saveTodo']
+)->name('saveTodo');
