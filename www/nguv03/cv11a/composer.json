@@ -1,0 +1,15 @@
+{
+    "name": "nguv03/cv11a",
+    "description": "Testovani composer",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nguyen Viet Bach",
+            "email": "nvbach91@outlook.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "^3.9"
+    }
+}
