@@ -1,0 +1,122 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  border-bottom: 2px solid #ccc;
+  background-color: #f9f9f9;
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.nav-links a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #000;
+}
+
+.nav-actions a {
+  margin-left: 15px;
+  text-decoration: none;
+  color: #000;
+}
+
+
+.main-content {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+h1 {
+  font-size: 2.5em;
+  margin-bottom: 30px;
+}
+
+.product-gallery {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  background-color: #ddd;
+  width: 25em;
+  height: 40em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.product-card img {
+    width: 100%;
+    height: inherit;
+}
+
+.shop-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: 2px solid #333;
+  background: white;
+  border-radius: 6px;
+}
+
+.footer {
+  background-color: #f1f1f1;
+  padding: 30px 20px 15px;
+  margin-top: 40px;
+  font-size: 14px;
+  color: #333;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.footer-section {
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-section h4 {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.footer-section a {
+  text-decoration: none;
+  color: #333;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 13px;
+  color: #777;
+}
+
