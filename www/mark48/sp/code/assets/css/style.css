@@ -1,0 +1,162 @@
+/* Custom styles for the ticketing system */
+
+body {
+    padding-bottom: 20px;
+}
+
+main {
+    min-height: calc(100vh - 150px);
+}
+
+.navbar {
+    margin-bottom: 20px;
+}
+
+/* Seating plan styles */
+.seating-plan {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.seat {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    margin: 2px;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.seat.free {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.seat.reserved {
+    background-color: #FFC107;
+    color: black;
+}
+
+.seat.sold {
+    background-color: #F44336;
+    color: white;
+    cursor: not-allowed;
+}
+
+.seat.selected {
+    background-color: #2196F3;
+    color: white;
+    transform: scale(1.1);
+}
+
+.seat:hover:not(.sold) {
+    opacity: 0.8;
+}
+
+.seat-legend {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.seat-legend .legend-item {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+}
+
+.seat-legend .legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border-radius: 3px;
+}
+
+.seat-legend .free {
+    background-color: #4CAF50;
+}
+
+.seat-legend .reserved {
+    background-color: #FFC107;
+}
+
+.seat-legend .sold {
+    background-color: #F44336;
+}
+
+.seat-legend .selected {
+    background-color: #2196F3;
+}
+
+/* Ticket styles */
+.ticket {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    position: relative;
+    background-color: #f9f9f9;
+}
+
+.ticket:before {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: -10px;
+    border-left: 1px solid #ddd;
+}
+
+.ticket:after {
+    content: '';
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    right: -10px;
+    border-right: 1px solid #ddd;
+}
+
+.ticket-header {
+    border-bottom: 1px dashed #ddd;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+
+.ticket-event {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.ticket-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Admin dashboard styles */
+.dashboard-stat {
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.dashboard-stat .stat-value {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.dashboard-stat .stat-label {
+    color: #6c757d;
+    text-transform: uppercase;
+    font-size: 14px;
+} 
