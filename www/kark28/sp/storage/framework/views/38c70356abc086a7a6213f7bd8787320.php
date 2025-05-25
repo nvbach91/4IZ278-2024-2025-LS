@@ -48,7 +48,9 @@
 <h2>Můj Business</h2>
 <hr>
 
-<button type="button" class="btn btn-primary w-100">Vytvořit Business</button>
+<?php if (! (Auth::user()->ownedBusiness())): ?>
+    <a href="<?php echo e(route('business.create')); ?>" type="button" class="btn btn-primary w-100">Vytvořit Business</a>
+<?php endif; ?>
             </div>
         </div>
     </div>

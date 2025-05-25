@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
@@ -32,13 +33,12 @@ class UserController extends Controller
         'password.min' => 'Heslo musí mít alespoň 8 znaků.']);
 
         $user = User::create([
-            'name' => Str::trim($fields['name']),
-            'email' => Str::trim($fields['email']),
+            'name' => Str::of($fields['name'])->trim(),
+            'email' => Str::of($fields['email'])->trim(),
             'password_hash' => Hash::make($fields['password'])
         ]);
 
-        Session::put('user_id', $user->id);
-        Session::put('username', $user->name);
+        Auth::login($user); 
         return redirect('/');
     }
 
@@ -59,16 +59,19 @@ class UserController extends Controller
         }
 
         // Everything OK
-        Session::put('user_id', $user->id);
-        Session::put('username', $user->name);
+        Auth::login($user);
 
         return redirect('/');
     }
 
-    public function logout() {
-        Session::forget('user_id');
+    public function logout(Request $request) {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
         return redirect('/');
     }
+
 
     public function showUserProfile() {
         return view('user.profile');

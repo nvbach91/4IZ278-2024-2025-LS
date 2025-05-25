@@ -1,7 +1,3 @@
-<?php
-     $userName = session('username');
-?>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="<?php echo e(route('home')); ?>">Rezervační Systém</a>
@@ -10,13 +6,25 @@
     </button>
     
     <div class="collapse navbar-collapse" id="navbarNav">
+      
       <ul class="navbar-nav ms-auto">
-        <?php if(session()->has('user_id')): ?>
+        <?php if(Auth::check()): ?> 
+
+          <?php if(Auth::user()->ownedBusiness()): ?>
+            <li class="nav-item me-3">
+              
+              <a href="<?php echo e(route('business.show', Auth::user()->ownedBusiness()->id)); ?>" class="d-flex align-items-center icon-link btn btn-secondary">
+               <i class="fa-solid fa-briefcase"></i>
+                <?php echo e(Auth::user()->ownedBusiness()->name); ?>
+
+              </a>
+            </li>
+          <?php endif; ?>
 
           <li class="nav-item dropdown ms-auto">
         <a class="dropdown-toggle d-flex align-items-center icon-link btn btn-secondary" href="#" role="button" data-bs-toggle="dropdown">
             <i class="fa-solid fa-user"></i>
-            <?php echo e($userName); ?>
+            <?php echo e(Auth::user()->name); ?>
 
         </a>
             <ul class="dropdown-menu dropdown-menu-end">

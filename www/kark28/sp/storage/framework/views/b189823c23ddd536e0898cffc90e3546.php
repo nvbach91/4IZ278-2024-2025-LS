@@ -1,31 +1,46 @@
 
 
-<?php $__env->startSection('title', 'Rezervační systém'); ?>
 
+<?php $__env->startSection('title', 'Rezervační systém'); ?>
 <?php $__env->startSection('content'); ?>
 
 <div class="container mt-5">
     <div class="row">
-        <?php for($i = 0; $i < 5; $i++): ?>
+        <?php $__currentLoopData = $businesses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $business): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="card h-100 shadow-sm">
                     <img src="https://placehold.co/300x150" class="card-img-top" alt="Business image">
                     <div class="card-body d-flex flex-column">
-                        <h5 class="card-title">Název Businessu</h5>
+                        <h5 class="card-title"><?php echo e($business->name); ?></h5>
                         
-                        <p class="card-text">Popisek</p>
-                        <p class="text-muted mb-1">Vlastník: <strong>Jméno vlastníka</strong></p>
-                        <!-- Rating (Static Stars) -->
+                        <p class="card-text"><?php echo e(Str::limit($business->description, 100)); ?></p>
+                        <p class="text-muted mb-1">Vlastník: <strong><?php echo e($business->business_managers->first()?->user->name ?? 'Neznámý'); ?></strong></p>
+                        <?php
+                            $avgRating = $business->reviews->avg('rating');
+                        ?>
+                        
                         <div class="mb-2 text-warning">
-                            ★★★★☆ <span class="text-muted small">(4.0)</span>
+                            <?php for($i = 1; $i <= 5; $i++): ?>
+                                <?php if($i <= round($avgRating)): ?>
+                                    ★
+                                <?php else: ?>
+                                    ☆
+                                <?php endif; ?>
+                            <?php endfor; ?>
+                            <span class="text-muted small">(<?php echo e(number_format($avgRating, 1) ?? '0.0'); ?>)</span>
                         </div>
 
-                        <a href="#" class="btn btn-primary mt-auto">View Profile</a>
+
+                        <a href="<?php echo e(route('business.show', ['id' => $business->id])); ?>" class="btn btn-primary mt-auto">View Profile</a>
                     </div>
                 </div>
             </div>
-        <?php endfor; ?>
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+          <div class="d-flex justify-content-center mt-4">
+        <?php echo e($businesses->links()); ?>
+
     </div>
+  
 </div>
 
 <?php $__env->stopSection(); ?>

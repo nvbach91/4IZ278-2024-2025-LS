@@ -1,7 +1,3 @@
-@php
-     $userName = session('username');
-@endphp
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="{{ route('home') }}">Rezervační Systém</a>
@@ -10,13 +6,24 @@
     </button>
     
     <div class="collapse navbar-collapse" id="navbarNav">
+      
       <ul class="navbar-nav ms-auto">
-        @if(session()->has('user_id'))
+        @if (Auth::check()) 
+
+          @if (Auth::user()->ownedBusiness())
+            <li class="nav-item me-3">
+              
+              <a href="{{ route('business.show', Auth::user()->ownedBusiness()->id) }}" class="d-flex align-items-center icon-link btn btn-secondary">
+               <i class="fa-solid fa-briefcase"></i>
+                {{ Auth::user()->ownedBusiness()->name }}
+              </a>
+            </li>
+          @endif
 
           <li class="nav-item dropdown ms-auto">
         <a class="dropdown-toggle d-flex align-items-center icon-link btn btn-secondary" href="#" role="button" data-bs-toggle="dropdown">
             <i class="fa-solid fa-user"></i>
-            {{ $userName }}
+            {{ Auth::user()->name }}
         </a>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="{{ route('user.profile') }}">Můj Profil</a></li>

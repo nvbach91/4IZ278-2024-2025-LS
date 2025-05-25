@@ -27,12 +27,12 @@ class BusinessManager extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'business_id' => 'int'
+		'business_id' => 'int',
+		'user_id' => 'string',
 	];
 
 	protected $fillable = [
 		'business_id',
-		'user_id',
 		'permission_level'
 	];
 
@@ -43,6 +43,8 @@ class BusinessManager extends Model
 
 	public function user()
 	{
-		return $this->belongsTo(User::class);
+		return $this->belongsTo(User::class, 'user_id', 'id');
 	}
+
+
 }

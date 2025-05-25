@@ -1,65 +1,58 @@
 <?php
-
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-/**
- * Class User
- * 
- * @property string $id
- * @property string $name
- * @property string $email
- * @property string $password_hash
- * @property string $role
- * @property bool|null $is_admin
- * 
- * @property Collection|BusinessManager[] $business_managers
- * @property Collection|Reservation[] $reservations
- * @property Collection|Review[] $reviews
- * @property Collection|Timeslot[] $timeslots
- *
- * @package App\Models
- */
-class User extends Model
+class User extends Authenticatable
 {
-	protected $table = 'users';
-	public $incrementing = false;
-	public $timestamps = false;
+    use Notifiable;
 
-	protected $casts = [
-		'is_admin' => 'bool'
-	];
+    protected $table = 'users';
+    public $incrementing = false;
+    public $timestamps = false;
 
-	protected $fillable = [
-		'name',
-		'email',
-		'password_hash',
-		'is_admin'
-	];
+    protected $casts = [
+        'is_admin' => 'bool'
+    ];
 
-	public function business_managers()
-	{
-		return $this->hasMany(BusinessManager::class);
-	}
+    protected $fillable = [
+        'name',
+        'email',
+        'password_hash',
+        'is_admin'
+    ];
 
-	public function reservations()
-	{
-		return $this->hasMany(Reservation::class);
-	}
+    public function business_managers()
+    {
+        return $this->hasMany(BusinessManager::class, 'user_id', 'id');
+    }
 
-	public function reviews()
-	{
-		return $this->hasMany(Review::class);
-	}
+    public function ownedBusiness()
+    {
+        $manager = $this->business_managers()
+            ->where('permission_level', 'owner')
+            ->first();
 
-	public function timeslots()
-	{
-		return $this->hasMany(Timeslot::class, 'provider_id');
-	}
+        return $manager?->business;
+    }
+
+
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function timeslots()
+    {
+        return $this->hasMany(Timeslot::class, 'provider_id');
+    }
+ 
+
 }
