@@ -15,13 +15,11 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $id
  * @property int|null $service_id
- * @property string|null $provider_id
  * @property Carbon $start_time
  * @property Carbon $end_time
  * @property bool|null $available
  * 
  * @property Service|null $service
- * @property User|null $user
  * @property Collection|Reservation[] $reservations
  *
  * @package App\Models
@@ -40,7 +38,6 @@ class Timeslot extends Model
 
 	protected $fillable = [
 		'service_id',
-		'provider_id',
 		'start_time',
 		'end_time',
 		'available'
@@ -49,11 +46,6 @@ class Timeslot extends Model
 	public function service()
 	{
 		return $this->belongsTo(Service::class);
-	}
-
-	public function user()
-	{
-		return $this->belongsTo(User::class, 'provider_id');
 	}
 
 	public function reservations()

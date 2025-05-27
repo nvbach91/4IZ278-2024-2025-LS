@@ -29,7 +29,9 @@ class Reservation extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'timeslot_id' => 'int'
+		'timeslot_id' => 'int',
+		'created_at' => 'datetime'
+
 	];
 
 	protected $fillable = [

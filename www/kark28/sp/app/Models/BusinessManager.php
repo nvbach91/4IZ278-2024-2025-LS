@@ -28,11 +28,12 @@ class BusinessManager extends Model
 
 	protected $casts = [
 		'business_id' => 'int',
-		'user_id' => 'string',
+		
 	];
 
 	protected $fillable = [
 		'business_id',
+		'user_id',
 		'permission_level'
 	];
 
@@ -45,6 +46,16 @@ class BusinessManager extends Model
 	{
 		return $this->belongsTo(User::class, 'user_id', 'id');
 	}
+
+	public static function availableRoles(): array
+	{
+		return [
+			'owner' => 'Vlastník',
+			'manager' => 'Manažer',
+			'worker' => 'Personál',
+		];
+	}
+
 
 
 }

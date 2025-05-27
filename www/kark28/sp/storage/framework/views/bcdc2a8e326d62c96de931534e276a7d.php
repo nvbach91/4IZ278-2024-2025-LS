@@ -7,5 +7,6 @@
  <!-- Icons -->
   <script src="https://kit.fontawesome.com/1b73125708.js" crossorigin="anonymous"></script>
 
+
 </body>
 </html><?php /**PATH C:\xampp\htdocs\rezervacni system\rezervacni_system\resources\views/partials/footer.blade.php ENDPATH**/ ?>

@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\BusinessController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\ReservationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +40,17 @@ Route::get('/user_profile', [UserController::class, 'showUserprofile'])->name('u
 Route::middleware(['auth'])->group(function () {
     Route::get('/business/create', [BusinessController::class, 'create'])->name('business.create');
     Route::post('/business', [BusinessController::class, 'store'])->name('business.store');
+    Route::get('/business/{id}/edit', [BusinessController::class, 'edit'])->name('business.edit');
+    Route::put('/business/{id}', [BusinessController::class, 'update'])->name('business.update');
+
+    Route::get('/service/{id}', [ServiceController::class, 'index'])->name('service.show');
+    Route::get('/business/service/{id}', [ServiceController::class, 'show'])->name('business.service');
+    Route::post('/business/service/{id}/time', [ServiceController::class, 'saveTimeSlots'])->name('business.service.time');
+
+    Route::delete('/business/service/{id}', [ServiceController::class, 'deleteTimeslots'])->name('business.service');
+
+
+    Route::post('/reservation/confirm', [ReservationController::class, 'confirm'])->name('reservation.confirm');
 });
 
 
@@ -47,7 +60,3 @@ Route::middleware(['auth'])->group(function () {
 
 // Wildcards
 Route::get('/business/{id}', [BusinessController::class, 'show'])->name('business.show');
-
-
-
-

@@ -9,15 +9,16 @@
 
         <div class="mb-3">
             <label for="email">E-mail</label>
-            <input type="email" name="email" required autofocus class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}">
-             @error('email')
+            <input type="email" name="email" required autofocus class="form-control @error('email') is-invalid @enderror"
+                value="{{ old('email') }}">
+            @error('email')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="password">Heslo</label>
             <input type="password" name="password" required class="form-control @error('password') is-invalid @enderror">
-             @error('password')
+            @error('password')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>

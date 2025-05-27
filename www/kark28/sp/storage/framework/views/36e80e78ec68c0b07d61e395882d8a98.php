@@ -29,8 +29,8 @@
         </a>
             <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="<?php echo e(route('user.profile')); ?>">Můj Profil</a></li>
-                <li><a class="dropdown-item" href="/reservations">Moje Rezervace</a></li>
-                <li><a class="dropdown-item" href="/reservations">Můj Business</a></li>
+                <li><a class="dropdown-item" href="<?php echo e(route('user.profile')); ?>">Moje Rezervace</a></li>
+                <li><a class="dropdown-item" href="<?php echo e(route('user.profile')); ?>">Můj Business</a></li>
                      <li><hr class="dropdown-divider"></li>
                 <li>
                     

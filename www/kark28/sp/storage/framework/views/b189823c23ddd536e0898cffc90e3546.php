@@ -5,6 +5,25 @@
 <?php $__env->startSection('content'); ?>
 
 <div class="container mt-5">
+    <form method="GET" action="<?php echo e(route('home')); ?>" class="mb-4">
+    <div class="row g-2">
+        <div class="col-md-6">
+            <input type="text" name="search" class="form-control" placeholder="Hledat podnik..." value="<?php echo e(request('search')); ?>">
+        </div>
+        <div class="col-md-4">
+            <select name="sort" class="form-select">
+                <option value="newest" <?php echo e(request('sort', 'newest') == 'newest' ? 'selected' : ''); ?>>Nejnovější</option>
+                <option value="name_asc" <?php echo e(request('sort') == 'name_asc' ? 'selected' : ''); ?>>Název A-Z</option>
+                <option value="name_desc" <?php echo e(request('sort') == 'name_desc' ? 'selected' : ''); ?>>Název Z-A</option>
+                <option value="rating_desc" <?php echo e(request('sort') == 'rating_desc' ? 'selected' : ''); ?>>Nejlépe hodnocené</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-outline-primary w-100">Filtrovat</button>
+        </div>
+    </div>
+</form>
+
     <div class="row">
         <?php $__currentLoopData = $businesses; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $business): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="col-md-6 col-lg-3 mb-4">
@@ -37,7 +56,8 @@
             </div>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           <div class="d-flex justify-content-center mt-4">
-        <?php echo e($businesses->links()); ?>
+        <?php echo e($businesses->appends(request()->query())->links()); ?>
+
 
     </div>
   
