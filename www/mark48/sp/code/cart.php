@@ -10,7 +10,7 @@ require_once 'includes/init.php';
 // Redirect if not logged in
 if (!isLoggedIn()) {
     setFlashMessage('error', 'You must be logged in to view your cart.');
-    redirect(SITE_URL . '/login.php');
+    redirect(SITE_URL . 'login.php');
 }
 
 // Check if we have reserved seats
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         }
 
         // Redirect to refresh page
-        redirect(SITE_URL . '/cart.php');
+        redirect(SITE_URL . 'cart.php');
     }
 }
 

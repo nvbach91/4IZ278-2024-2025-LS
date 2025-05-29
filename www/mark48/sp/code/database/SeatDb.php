@@ -498,4 +498,50 @@ class SeatDb
         // Return seating dimensions
         return $this->getSeatingDimensions($eventId);
     }
+
+    /**
+     * Update seat categories for specific seats
+     * @param int $eventId Event ID
+     * @param array $seatCoordinates Array of seat coordinates [['row' => int, 'col' => int], ...]
+     * @param int $categoryId New category ID
+     * @return int|false Number of seats updated if successful, false otherwise
+     */
+    public function updateSeatCategories($eventId, $seatCoordinates, $categoryId)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            // Ensure category exists
+            if (!$this->getSeatCategoryById($categoryId)) {
+                $this->db->rollback();
+                return false;
+            }
+
+            // Build the WHERE clause for specific seats
+            $conditions = [];
+            $params = [];
+            foreach ($seatCoordinates as $coord) {
+                $conditions[] = "(row_index = ? AND col_index = ?)";
+                $params[] = $coord['row'];
+                $params[] = $coord['col'];
+            }
+
+            // Add event_id to params
+            array_unshift($params, $eventId);
+
+            // Update the seats
+            $result = $this->db->query(
+                "UPDATE sp_seats 
+                 SET seat_category_id = ? 
+                 WHERE event_id = ? AND (" . implode(' OR ', $conditions) . ")",
+                array_merge([$categoryId], $params)
+            );
+
+            $this->db->commit();
+            return $result->rowCount();
+        } catch (PDOException $e) {
+            $this->db->rollback();
+            return false;
+        }
+    }
 }

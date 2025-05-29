@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isLoggedIn()) {
                 $_SESSION['reservation_timestamp'] = time();
 
                 // Redirect to cart page
-                redirect(SITE_URL . '/cart.php');
+                redirect(SITE_URL . 'cart.php');
             } else {
                 $errors[] = 'Failed to reserve seats. They may have been taken by someone else.';
             }

@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Check CSRF token
     if (!checkCSRFToken()) {
         setFlashMessage('error', 'Invalid security token. Please try again.');
-        redirect(SITE_URL . '/admin/events.php');
+        redirect(SITE_URL . 'admin/events.php');
     }
 
     // Handle event creation
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Validate required fields
         if (empty($title) || empty($startDateTime) || empty($endDateTime) || $eventTypeId <= 0) {
             setFlashMessage('error', 'All required fields must be filled in.');
-            redirect(SITE_URL . '/admin/events.php?action=' . $action . ($eventId ? '&id=' . $eventId : ''));
+            redirect(SITE_URL . 'admin/events.php?action=' . $action . ($eventId ? '&id=' . $eventId : ''));
         }
 
         $eventData = [
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = $eventModel->createEvent($eventData);
             if ($result) {
                 setFlashMessage('success', 'Event created successfully.');
-                redirect(SITE_URL . '/admin/events.php?action=edit&id=' . $result);
+                redirect(SITE_URL . 'admin/events.php?action=edit&id=' . $result);
             }
         } else if ($action === 'edit' && $eventId) {
             // Add version for optimistic locking
@@ -97,10 +97,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'end_datetime' => $endDateTime,
                     'location' => $location
                 ];
-                redirect(SITE_URL . '/admin/events.php?action=edit&id=' . $eventId);
+                redirect(SITE_URL . 'admin/events.php?action=edit&id=' . $eventId);
             } else if ($result) {
                 setFlashMessage('success', 'Event updated successfully.');
-                redirect(SITE_URL . '/admin/events.php?action=edit&id=' . $eventId);
+                redirect(SITE_URL . 'admin/events.php?action=edit&id=' . $eventId);
             }
         }
 
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             setFlashMessage('error', 'There was an error deleting the event.');
         }
-        redirect(SITE_URL . '/admin/events.php');
+        redirect(SITE_URL . 'admin/events.php');
     }
 }
 
@@ -129,7 +129,7 @@ if ($action === 'edit' && $eventId) {
     $event = $eventModel->getEventById($eventId);
     if (!$event) {
         setFlashMessage('error', 'Event not found.');
-        redirect(SITE_URL . '/admin/events.php');
+        redirect(SITE_URL . 'admin/events.php');
     }
     // Check if event has a seating plan
     $hasSeatPlan = $seatModel->getSeatingPlanForEvent($eventId);
@@ -140,15 +140,18 @@ $events = [];
 if ($action === 'list') {
     $events = $eventModel->getAllEvents(true); // Include past events
     // Check which events have seating plans
-    foreach ($events as &$event) {
+    $processedEvents = [];
+    foreach ($events as $event) {
         $event->has_seating_plan = $seatModel->getSeatingPlanForEvent($event->id) ? true : false;
+        $processedEvents[] = $event;
     }
+    $events = $processedEvents;
 }
 
 // Handle seating plan creation
 if ($action === 'create_seating_plan' && $eventId) {
     // Redirect to seating plan editor
-    redirect(SITE_URL . '/admin/seating_plan.php?event_id=' . $eventId);
+    redirect(SITE_URL . 'admin/seating_plan.php?event_id=' . $eventId);
 }
 
 // Include the header
@@ -161,7 +164,7 @@ include '../views/admin_header.php';
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1><?php echo $action === 'list' ? 'Events Management' : ($action === 'create' ? 'Create Event' : 'Edit Event'); ?></h1>
                 <?php if ($action === 'list'): ?>
-                    <a href="<?php echo SITE_URL; ?>/admin/events.php?action=create" class="btn btn-primary">
+                    <a href="<?php echo SITE_URL; ?>admin/events.php?action=create" class="btn btn-primary">
                         <i class="fas fa-plus-circle"></i> Create Event
                     </a>
                 <?php endif; ?>
@@ -198,18 +201,18 @@ include '../views/admin_header.php';
                                                 <td><?php echo escape($event->location); ?></td>
                                                 <td>
                                                     <div class="btn-group btn-group-sm">
-                                                        <a href="<?php echo SITE_URL; ?>/admin/events.php?action=edit&id=<?php echo $event->id; ?>" class="btn btn-primary" title="Edit">
+                                                        <a href="<?php echo SITE_URL; ?>admin/events.php?action=edit&id=<?php echo $event->id; ?>" class="btn btn-primary" title="Edit">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
-                                                        <a href="<?php echo SITE_URL; ?>/event.php?id=<?php echo $event->id; ?>" class="btn btn-info" title="View" target="_blank">
+                                                        <a href="<?php echo SITE_URL; ?>event.php?id=<?php echo $event->id; ?>" class="btn btn-info" title="View" target="_blank">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
                                                         <?php if (!$event->has_seating_plan): ?>
-                                                            <a href="<?php echo SITE_URL; ?>/admin/events.php?action=create_seating_plan&id=<?php echo $event->id; ?>" class="btn btn-success" title="Create Seating Plan">
+                                                            <a href="<?php echo SITE_URL; ?>admin/events.php?action=create_seating_plan&id=<?php echo $event->id; ?>" class="btn btn-success" title="Create Seating Plan">
                                                                 <i class="fas fa-chair"></i>
                                                             </a>
                                                         <?php else: ?>
-                                                            <a href="<?php echo SITE_URL; ?>/admin/seating_plan.php?event_id=<?php echo $event->id; ?>" class="btn btn-warning" title="Edit Seating Plan">
+                                                            <a href="<?php echo SITE_URL; ?>admin/seating_plan.php?event_id=<?php echo $event->id; ?>" class="btn btn-warning" title="Edit Seating Plan">
                                                                 <i class="fas fa-chair"></i>
                                                             </a>
                                                         <?php endif; ?>
@@ -233,7 +236,7 @@ include '../views/admin_header.php';
                                                                 </div>
                                                                 <div class="modal-footer">
                                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                                    <form method="post" action="<?php echo SITE_URL; ?>/admin/events.php?action=delete&id=<?php echo $event->id; ?>">
+                                                                    <form method="post" action="<?php echo SITE_URL; ?>admin/events.php?action=delete&id=<?php echo $event->id; ?>">
                                                                         <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                                                                         <button type="submit" class="btn btn-danger">Delete</button>
                                                                     </form>
@@ -261,7 +264,7 @@ include '../views/admin_header.php';
                         $formData = $_SESSION['form_data'] ?? null;
                         unset($_SESSION['form_data']); // Clear stored data after retrieving
                         ?>
-                        <form method="post" action="<?php echo SITE_URL; ?>/admin/events.php?action=<?php echo $action; ?><?php echo $eventId ? '&id=' . $eventId : ''; ?>">
+                        <form method="post" action="<?php echo SITE_URL; ?>admin/events.php?action=<?php echo $action; ?><?php echo $eventId ? '&id=' . $eventId : ''; ?>">
                             <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                             <?php if ($action === 'edit'): ?>
                                 <input type="hidden" name="version" value="<?php echo $event->version; ?>">
@@ -312,7 +315,7 @@ include '../views/admin_header.php';
 
                             <div class="form-group mt-4">
                                 <button type="submit" class="btn btn-primary">Save Event</button>
-                                <a href="<?php echo SITE_URL; ?>/admin/events.php" class="btn btn-secondary ml-2">Cancel</a>
+                                <a href="<?php echo SITE_URL; ?>admin/events.php" class="btn btn-secondary ml-2">Cancel</a>
                             </div>
                         </form>
                     </div>

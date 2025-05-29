@@ -11,7 +11,7 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 
 // Site settings
-define('SITE_URL', '');
+define('SITE_URL', ''); // Update with your site URL
 define('ADMIN_PATH', 'admin');
 
 // Path settings

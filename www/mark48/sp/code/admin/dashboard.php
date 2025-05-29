@@ -38,7 +38,7 @@ include '../views/admin_header.php';
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Dashboard</h1>
                 <div>
-                    <a href="<?php echo SITE_URL; ?>/admin/events.php?action=create" class="btn btn-primary">
+                    <a href="<?php echo SITE_URL; ?>admin/events.php?action=create" class="btn btn-primary">
                         <i class="fas fa-plus-circle"></i> Create Event
                     </a>
                 </div>
@@ -70,7 +70,7 @@ include '../views/admin_header.php';
                                             <?php foreach ($salesByEvent as $event): ?>
                                                 <tr>
                                                     <td>
-                                                        <a href="<?php echo SITE_URL; ?>/admin/events.php?action=edit&id=<?php echo $event['id']; ?>">
+                                                        <a href="<?php echo SITE_URL; ?>admin/events.php?action=edit&id=<?php echo $event['id']; ?>">
                                                             <?php echo htmlspecialchars($event['title'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
                                                         </a>
                                                     </td>
@@ -83,7 +83,7 @@ include '../views/admin_header.php';
                                 </div>
                                 <?php if (count($salesByEvent) > 5): ?>
                                     <div class="mt-2 text-right">
-                                        <a href="<?php echo SITE_URL; ?>/admin/reports.php" class="btn btn-sm btn-outline-primary">View Full Report</a>
+                                        <a href="<?php echo SITE_URL; ?>admin/reports.php" class="btn btn-sm btn-outline-primary">View Full Report</a>
                                     </div>
                                 <?php endif; ?>
                             <?php endif; ?>
@@ -109,6 +109,7 @@ include '../views/admin_header.php';
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Customer</th>
+                                                <th>Tickets</th>
                                                 <th>Amount</th>
                                                 <th>Date</th>
                                                 <th>Status</th>
@@ -148,6 +149,7 @@ include '../views/admin_header.php';
                                                         #<?php echo $order->order_id; ?>
                                                     </td>
                                                     <td><?php echo htmlspecialchars($order->user_name ?? 'Unknown', ENT_QUOTES, 'UTF-8'); ?></td>
+                                                    <td><?php echo $order->ticket_count; ?></td>
                                                     <td><?php echo number_format($order->total_price ?? 0, 0); ?> CZK</td>
                                                     <td><?php echo formatDate($order->order_date); ?></td>
                                                     <td><span class="badge badge-<?php echo $statusClass; ?>"><?php echo htmlspecialchars($statusName, ENT_QUOTES, 'UTF-8'); ?></span></td>
@@ -183,10 +185,10 @@ include '../views/admin_header.php';
                                                 <small><?php echo formatDate($event->start_datetime); ?></small>
                                             </div>
                                             <div>
-                                                <a href="<?php echo SITE_URL; ?>/admin/events.php?action=edit&id=<?php echo $event->id; ?>" class="btn btn-sm btn-primary mr-1">
+                                                <a href="<?php echo SITE_URL; ?>admin/events.php?action=edit&id=<?php echo $event->id; ?>" class="btn btn-sm btn-primary mr-1">
                                                     <i class="fas fa-edit"></i> Edit
                                                 </a>
-                                                <a href="<?php echo SITE_URL; ?>/event.php?id=<?php echo $event->id; ?>" class="btn btn-sm btn-secondary" target="_blank">
+                                                <a href="<?php echo SITE_URL; ?>event.php?id=<?php echo $event->id; ?>" class="btn btn-sm btn-secondary" target="_blank">
                                                     <i class="fas fa-eye"></i> View
                                                 </a>
                                             </div>
@@ -195,7 +197,7 @@ include '../views/admin_header.php';
                                 </ul>
 
                                 <div class="mt-3">
-                                    <a href="<?php echo SITE_URL; ?>/admin/events.php" class="btn btn-outline-primary btn-sm">View All Events</a>
+                                    <a href="<?php echo SITE_URL; ?>admin/events.php" class="btn btn-outline-primary btn-sm">View All Events</a>
                                 </div>
                             <?php endif; ?>
                         </div>

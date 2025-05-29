@@ -10,7 +10,7 @@ require_once 'includes/init.php';
 // Redirect if not logged in
 if (!isLoggedIn()) {
     setFlashMessage('error', 'You must be logged in to view order details.');
-    redirect(SITE_URL . '/login.php');
+    redirect(SITE_URL . 'login.php');
 }
 
 // Get order ID from URL
@@ -25,7 +25,7 @@ $order = $orderModel->getOrderById($orderId);
 // Verify that the order exists and belongs to the current user
 if (!$order || $order->user_id != $_SESSION['user_id']) {
     setFlashMessage('error', 'Order not found or access denied.');
-    redirect(SITE_URL . '/orders.php');
+    redirect(SITE_URL . 'orders.php');
 }
 
 // Get tickets for the order

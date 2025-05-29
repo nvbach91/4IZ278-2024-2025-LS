@@ -25,7 +25,7 @@ class EventDb
      */
     public function getAllEvents($includeEnded = false)
     {
-        $sql = "SELECT e.*, et.name as event_type_name 
+        $sql = "SELECT DISTINCT e.*, et.name as event_type_name 
                 FROM sp_events e
                 JOIN sp_event_types et ON e.event_type_id = et.id";
 
@@ -656,6 +656,7 @@ class EventDb
     public function acquireLock($eventId, $userId)
     {
         try {
+            error_log("Attempting to acquire lock for event $eventId by user $userId");
             $this->db->beginTransaction();
 
             // First clean up any stale locks
@@ -676,6 +677,7 @@ class EventDb
             );
 
             if (!$currentLock) {
+                error_log("No event found with ID $eventId");
                 $this->db->rollback();
                 return false;
             }
@@ -690,6 +692,10 @@ class EventDb
             $isOurLock = $currentLock['locked_by_user_id'] == $userId;
             $isStale = !$currentLock['lock_timestamp'] ||
                 strtotime($currentLock['lock_timestamp']) < time() - (10 * 60);
+
+            error_log("Lock conditions - NoLock: " . ($isNoLock ? 'true' : 'false') .
+                ", OurLock: " . ($isOurLock ? 'true' : 'false') .
+                ", Stale: " . ($isStale ? 'true' : 'false'));
 
             if ($isNoLock || $isOurLock || $isStale) {
                 // Update the lock with a fresh timestamp
@@ -706,14 +712,20 @@ class EventDb
 
                 if ($rowCount > 0) {
                     $this->db->commit();
+                    error_log("Successfully acquired lock for event $eventId by user $userId");
                     return true;
+                } else {
+                    error_log("Failed to acquire lock - no rows affected");
                 }
+            } else {
+                error_log("Cannot acquire lock - event is locked by another user");
             }
 
             $this->db->rollback();
             return false;
         } catch (PDOException $e) {
             error_log("Error acquiring lock: " . $e->getMessage());
+            error_log("Stack trace: " . $e->getTraceAsString());
             $this->db->rollback();
             return false;
         }

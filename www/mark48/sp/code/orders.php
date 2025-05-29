@@ -10,7 +10,7 @@ require_once 'includes/init.php';
 // Redirect if not logged in
 if (!isLoggedIn()) {
     setFlashMessage('error', 'You must be logged in to view your orders.');
-    redirect(SITE_URL . '/login.php');
+    redirect(SITE_URL . 'login.php');
 }
 
 // Initialize models
@@ -36,7 +36,7 @@ if (isset($_POST['cancel_order']) && isset($_POST['order_id'])) {
     }
 
     // Redirect to refresh the page
-    redirect(SITE_URL . '/orders.php');
+    redirect(SITE_URL . 'orders.php');
 }
 
 // Include the header
