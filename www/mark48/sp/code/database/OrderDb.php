@@ -3,6 +3,7 @@
 require_once __DIR__ . '/Database.php';
 require_once __DIR__ . '/../models/Order.php';
 require_once __DIR__ . '/../models/Ticket.php';
+require_once __DIR__ . '/../includes/init.php';
 
 /**
  * Order database model
@@ -141,9 +142,10 @@ class OrderDb
 
             // Create tickets
             foreach ($seatIds as $seatId) {
+                $uuid = guidv4(); // Generate unique ticket ID
                 $this->db->query(
-                    "INSERT INTO sp_tickets (order_id, seat_id) VALUES (?, ?)",
-                    [$orderId, $seatId]
+                    "INSERT INTO sp_tickets (order_id, seat_id, uuid) VALUES (?, ?, ?)",
+                    [$orderId, $seatId, $uuid]
                 );
 
                 // Update seat status

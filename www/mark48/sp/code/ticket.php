@@ -131,12 +131,16 @@ include 'views/header.php';
                 </div>
 
                 <div class="col-md-4 text-center">
-                    <div class="qr-code-placeholder" style="width: 200px; height: 200px; background-color: #f8f9fa; margin: 0 auto; display: flex; align-items: center; justify-content: center; border: 1px dashed #dee2e6;">
-                        <div>
-                            <p class="mb-0">QR Code</p>
-                            <small>Ticket ID: <?php echo $ticket->id; ?></small>
+                    <?php if ($ticket->uuid): ?>
+                        <img src="https://api.gokasa.eu/public/qrcode?text=<?php echo $ticket->uuid; ?>" alt="Barcode" class="img-fluid mb-3">
+                    <?php else: ?>
+                        <div class="qr-code-placeholder" style="width: 200px; height: 200px; background-color: #f8f9fa; margin: 0 auto; display: flex; align-items: center; justify-content: center; border: 1px dashed #dee2e6;">
+                            <div>
+                                <p class="mb-0">QR Code</p>
+                                <small>Ticket ID: <?php echo $ticket->id; ?></small>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
 
                     <div class="mt-3">
                         <span class="badge badge-success">VALID</span>

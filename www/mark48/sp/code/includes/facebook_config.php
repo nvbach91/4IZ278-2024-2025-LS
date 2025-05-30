@@ -10,8 +10,8 @@ use JanuSoftware\Facebook\Exception\SDKException;
 
 
 // Facebook OAuth Configuration
-define('FACEBOOK_APP_ID', '');
-define('FACEBOOK_APP_SECRET', '');
+define('FACEBOOK_APP_ID', ''); // Replace with your App ID
+define('FACEBOOK_APP_SECRET', ''); // Replace with your App Secret
 define('FACEBOOK_REDIRECT_URI', SITE_URL . 'facebook_callback.php');
 
 

@@ -93,10 +93,14 @@
             #<?php echo $ticket->order_id; ?>
         </div>
 
-        <div class="qr-placeholder">
-            <p>QR Code</p>
-            <small>Ticket ID: <?php echo $ticket->id; ?></small>
-        </div>
+        <?php if ($ticket->uuid): ?>
+            <img src="https://api.gokasa.eu/public/qrcode?text=<?php echo $ticket->uuid; ?>" alt="Barcode" class="img-fluid mb-3">
+        <?php else: ?>
+            <div class="qr-placeholder">
+                <p>QR Code</p>
+                <small>Ticket ID: <?php echo $ticket->id; ?></small>
+            </div>
+        <?php endif; ?>
 
         <div class="ticket-status">VALID</div>
 

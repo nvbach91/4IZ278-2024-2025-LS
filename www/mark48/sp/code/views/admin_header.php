@@ -22,16 +22,16 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="<?php echo SITE_URL; ?>admin/dashboard.php">Dashboard</a>
+                            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>" href="<?php echo SITE_URL; ?>admin/dashboard.php">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?php echo SITE_URL; ?>admin/events.php">Events</a>
+                            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'events.php' ? 'active' : ''; ?>" href="<?php echo SITE_URL; ?>admin/events.php">Events</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?php echo SITE_URL; ?>admin/event_types.php">Event Types</a>
+                            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'event_types.php' ? 'active' : ''; ?>" href="<?php echo SITE_URL; ?>admin/event_types.php">Event Types</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="<?php echo SITE_URL; ?>admin/seat_categories.php">Seat Categories</a>
+                            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'seat_categories.php' ? 'active' : ''; ?>" href="<?php echo SITE_URL; ?>admin/seat_categories.php">Seat Categories</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="<?php echo SITE_URL; ?>" target="_blank">View Site</a>

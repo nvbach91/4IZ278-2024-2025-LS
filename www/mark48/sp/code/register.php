@@ -41,10 +41,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (empty($password)) {
             $errors[] = 'Password is required.';
-        } elseif (strlen($password) < 6) {
-            $errors[] = 'Password must be at least 6 characters long.';
+        } elseif (strlen($password) < 8) {
+            $errors[] = 'Password must be at least 8 characters long.';
+        } elseif (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).+$/', $password)) {
+            $errors[] = 'Password must contain at least one uppercase letter, one number, and one special character.';
         }
-
         if ($password !== $confirmPassword) {
             $errors[] = 'Passwords do not match.';
         }
@@ -95,7 +96,7 @@ include 'views/header.php';
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" id="password" name="password" class="form-control" required>
-                            <small class="form-text text-muted">Password must be at least 6 characters long.</small>
+                            <small class="form-text text-muted">Password must be at least 8 characters long, must contain at least one uppercase letter, one number, and one special character..</small>
                         </div>
 
                         <div class="form-group">

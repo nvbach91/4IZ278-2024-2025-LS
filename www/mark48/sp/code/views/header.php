@@ -21,14 +21,14 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="<?php echo SITE_URL; ?>">Home</a>
+                            <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'index.php' ? 'active' : ''; ?>" href="<?php echo SITE_URL; ?>">Home</a>
                         </li>
                         <?php if (isLoggedIn()): ?>
                             <?php
                             $cartCount = isset($_SESSION['reserved_seats']) ? count($_SESSION['reserved_seats']) : 0;
                             ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?php echo SITE_URL; ?>cart.php">
+                                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'cart.php' ? 'active' : ''; ?>" href="<?php echo SITE_URL; ?>cart.php">
                                     <i class="fa fa-shopping-cart"></i> Cart
                                     <?php if ($cartCount > 0): ?>
                                         <span class="badge badge-pill badge-danger"><?php echo $cartCount; ?></span>
@@ -36,7 +36,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?php echo SITE_URL; ?>orders.php">My Orders</a>
+                                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'orders.php' ? 'active' : ''; ?>" href="<?php echo SITE_URL; ?>orders.php">My Orders</a>
                             </li>
                         <?php endif; ?>
                         <?php if (isAdmin()): ?>
@@ -72,10 +72,10 @@
                             </li>
                         <?php else: ?>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?php echo SITE_URL; ?>login.php">Login</a>
+                                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'login.php' ? 'active' : ''; ?>" href="<?php echo SITE_URL; ?>login.php">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="<?php echo SITE_URL; ?>register.php">Register</a>
+                                <a class="nav-link <?php echo basename($_SERVER['PHP_SELF']) == 'register.php' ? 'active' : ''; ?>" href="<?php echo SITE_URL; ?>register.php">Register</a>
                             </li>
                         <?php endif; ?>
                     </ul>

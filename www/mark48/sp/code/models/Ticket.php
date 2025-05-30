@@ -17,6 +17,7 @@ class Ticket
     public $event_id;
     public $start_datetime;
     public $location;
+    public $uuid;
 
     /**
      * Constructor
@@ -35,6 +36,7 @@ class Ticket
             $this->event_id = $data['event_id'] ?? null;
             $this->start_datetime = $data['start_datetime'] ?? null;
             $this->location = $data['location'] ?? null;
+            $this->uuid = $data['uuid'] ?? null;
         }
     }
 }
