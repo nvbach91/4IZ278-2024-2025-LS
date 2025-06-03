@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class ProductDetailInfo extends Component
 {
-    public $cart;
+    public $product;
     public function render()
     {
         return view('livewire.product-detail-info');

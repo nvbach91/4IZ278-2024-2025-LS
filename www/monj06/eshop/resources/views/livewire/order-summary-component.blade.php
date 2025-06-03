@@ -10,21 +10,21 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <div class="text-sm text-neutral-500 mb-1">Name</div>
-                        <div>name</div>
+                        <div>{{ $deliverData['first-name'] . ' ' . $deliverData['last-name'] }}</div>
                     </div>
                     <div>
                         <div class="text-sm text-neutral-500 mb-1">Email</div>
-                        <div>email</div>
+                        <div>{{ $deliverData['email'] }}</div>
                     </div>
                     <div>
                         <div class="text-sm text-neutral-500 mb-1">Phone</div>
-                        <div>phone</div>
+                        <div>{{ $deliverData['phone'] }}</div>
                     </div>
                     <div>
                         <div class="text-sm text-neutral-500 mb-1">Address</div>
                         <div>
-                            street<br>
-                            city, Postal Code<br>
+                            {{ $deliverData['street'] }}<br>
+                            {{ $deliverData['street'] }}, {{ $deliverData['zip'] }}<br>
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                                     <div class="text-sm text-neutral-500">Quantity: {{ $item['quantity'] }}</div>
                                 </div>
                                 <div class="ml-4 text-sm font-medium">
-                                    {{ $item['price'] * $item['quantity'] }}
+                                    {{ (int) $item['price'] * $item['quantity'] }}
                                 </div>
                             </div>
                         @endforeach
@@ -92,27 +92,43 @@
 
             <div class="space-y-4 mb-6">
                 <div class="flex justify-between text-neutral-700">
-                    <span>Subtotal</span>
-                    <span>Total price</span>
+                    <span>Mezisoučet</span>
+                    <span>{{ number_format($subtotal, 2) }} Kč</span>
                 </div>
                 <div class="flex justify-between text-neutral-700">
-                    <span>Shipping</span>
-                    <span>Shipping price</span>
+                    <span>Doručení</span>
+                    <span id="cart-shipping">0 Kč</span>
                 </div>
                 <div class="flex justify-between font-bold text-neutral-900 pt-4 border-t border-neutral-200">
-                    <span>Total</span>
-                    <span>Total With Shipping</span>
+                    <span>Celkem</span>
+                    <span id="cart-total">{{ $total }} Kč</span>
                 </div>
             </div>
 
 
             <div class="space-y-4">
-                <button id="place-order-btn"
-                    class="block w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    Place Order
-                </button>
+                <form method="POST" action="{{ route('order.store') }}">
+                    @csrf
 
-                <a href="/delivery-details.html" data-navlink
+                    <!-- Skrytá pole pro předání deliveryData -->
+                    <input type="hidden" name="first-name" value="{{ $deliverData['street'] }}">
+                    <input type="hidden" name="last-name" value="{{ $deliverData['street'] }}">
+                    <input type="hidden" name="email" value="{{ $deliverData['street'] }}">
+                    <input type="hidden" name="phone" value="{{ $deliverData['street'] }}">
+                    <input type="hidden" name="street" value="{{ $deliverData['street'] }}">
+                    <input type="hidden" name="zip" value="{{ $deliverData['zip'] }}">
+                    <input type="hidden" name="city" value="{{ $deliverData['city'] }}">
+                    <input type="hidden" name="totalPrice" value="{{ $total }}">
+                    <!-- <input type="hidden" name="delivery" value="">
+                    <input type="hidden" name="payment" value="">-->
+
+                    <button type="submit"
+                        class="block w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Place Order
+                    </button>
+                </form>
+
+                <a href="{{ route('delivery.details') }}" data-navlink
                     class="block w-full text-center text-primary-500 hover:text-primary-700">
                     Back to Delivery Details
                 </a>

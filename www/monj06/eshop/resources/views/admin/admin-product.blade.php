@@ -13,5 +13,5 @@
 
 @section('footer')
     <!-- footer LiveWire component -->
-    <livewire:footer />
+    <livewire:footer :categories="$categories" />
 @endsection

@@ -33,15 +33,14 @@ define('BASE_URL', '/4IZ278/DU/du06/');
             <div class="container mx-auto px-4 py-20 md:py-32 relative">
                 <div class="max-w-2xl">
                     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight reveal-on-scroll">
-                        Adventure Awaits <br />With Every Ride
+                        Jízní kola, <br />Příslušenství
                     </h1>
                     <p class="text-lg md:text-xl mb-8 text-neutral-200 max-w-lg reveal-on-scroll"
                         style="animation-delay: 0.2s;">
-                        Discover premium bikes and gear that will elevate your cycling experience. From mountain trails
-                        to city streets, we've got you covered.
+                        Prozkoumejte naší nabídku
                     </p>
                     <div class="flex flex-wrap gap-4 reveal-on-scroll" style="animation-delay: 0.4s;">
-                        <a href="" data-navlink
+                        <a href="{{ route('products.index') }}" data-navlink
                             class="bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-flex items-center">
                             Shop Now
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20"
@@ -81,24 +80,7 @@ define('BASE_URL', '/4IZ278/DU/du06/');
         </section>
     </main>
     <!-- footer LiveWire component -->
-    <livewire:footer />
-
-    <!--
-    <div
-        class="bg-[url(https://www.magazin.cyklistickey.cz/assets/img/upload/clanek_nahled/8X9A0018.png)] p-100 bg-center">
-
-    </div>
-    <div class="flex max-md:flex-col items-start">
-        <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-            <h2 class="text-2xl font-bold tracking-tight text-gray-900">Products</h2>
-            <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-
-                
-
-
-            </div>
-        </div>
-    </div>-->
+    <livewire:footer :categories="$categories" />
     @fluxScripts
 </body>
 

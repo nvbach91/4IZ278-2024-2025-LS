@@ -89,17 +89,25 @@ define('BASE_URL', '/4IZ278/DU/du06/');
             <div class="md:w-3/4 lg:w-4/5">
                 <!-- Sorting options -->
                 <div class="flex justify-between items-center mb-6">
-                    <div class="flex items-center">
-                        <label for="sort-by" class="mr-2">Sort by:</label>
-                        <select id="sort-by"
-                            class="rounded border-neutral-300 focus:border-primary-500 focus:ring focus:ring-primary-200 focus:ring-opacity-50">
-                            <option value="default">Featured</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="name-asc">Name: A to Z</option>
-                            <option value="name-desc">Name: Z to A</option>
-                        </select>
-                    </div>
+                    <form method="GET" action="{{ route('products.index') }}" id="sort-form">
+                        <div class="flex items-center">
+                            <label for="sort-by" class="mr-2">Sort by:</label>
+                            <select name="sort" id="sort-by"
+                                onchange="document.getElementById('sort-form').submit();"
+                                class="rounded border-neutral-300 focus:border-primary-500 focus:ring focus:ring-primary-200 focus:ring-opacity-50">
+                                <option value="default" {{ request('sort') == 'default' ? 'selected' : '' }}>Featured
+                                </option>
+                                <option value="price-low" {{ request('sort') == 'price-low' ? 'selected' : '' }}>Price:
+                                    Low to High</option>
+                                <option value="price-high" {{ request('sort') == 'price-high' ? 'selected' : '' }}>
+                                    Price: High to Low</option>
+                                <option value="name-asc" {{ request('sort') == 'name-asc' ? 'selected' : '' }}>Name: A
+                                    to Z</option>
+                                <option value="name-desc" {{ request('sort') == 'name-desc' ? 'selected' : '' }}>Name: Z
+                                    to A</option>
+                            </select>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

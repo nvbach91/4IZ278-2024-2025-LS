@@ -62,7 +62,7 @@
                                                 {{ $item['price'] }}
                                             </a>
                                             <div class="text-sm text-neutral-500">
-                                                {{ $item['category'] }}
+                                                Category: {{ $item['category'] }}
                                             </div>
                                         </div>
                                     </div>
@@ -94,17 +94,18 @@
                                     <div class="font-medium">{{ $item['price'] }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium item-total">
-                                    {{ $item['price'] * $item['quantity'] }}
+                                    {{ (int) $item['price'] * $item['quantity'] }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <button class="remove-item text-red-500 hover:text-red-700">
+                                    <a href="{{ route('cart.remove', $id) }}"
+                                        class="remove-item text-red-500 hover:text-red-700">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
                                             fill="currentColor">
                                             <path fill-rule="evenodd"
                                                 d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                                                 clip-rule="evenodd" />
                                         </svg>
-                                    </button>
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach
@@ -144,40 +145,25 @@
 
                 <div class="space-y-4 mb-6">
                     <div class="flex justify-between text-neutral-700">
-                        <span>Subtotal</span>
-                        <span id="cart-subtotal">total price</span>
+                        <span>Mezisoučet</span>
+                        <span>{{ number_format($subtotal, 2) }} Kč</span>
                     </div>
                     <div class="flex justify-between text-neutral-700">
-                        <span>Shipping</span>
-                        <span id="cart-shipping">shipping cost</span>
+                        <span>Doručení</span>
+                        <span id="cart-shipping">0 Kč</span>
                     </div>
                     <div class="flex justify-between font-bold text-neutral-900 pt-4 border-t border-neutral-200">
-                        <span>Total</span>
-                        <span id="cart-total">total price + shipping price</span>
+                        <span>Celkem</span>
+                        <span id="cart-total">{{ $total }} Kč</span>
                     </div>
                 </div>
 
                 <div class="space-y-3">
-                    <a href="${currentUser ? '/delivery-payment.html' : '/login.html?redirect=/delivery-payment.html'}"
-                        data-navlink
+                    <a href="{{ route('delivery.payment') }}" data-navlink
                         class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         Proceed to Checkout
                     </a>
 
-                    <div class="text-center text-sm text-neutral-500 mt-4">
-                        <p>Free shipping on all orders over $100!</p>
-                    </div>
-
-                    <div class="flex items-center justify-center text-neutral-500 mt-4">
-                        <div class="flex space-x-4">
-                            <img src="https://images.pexels.com/photos/972887/pexels-photo-972887.jpeg?auto=compress&cs=tinysrgb&w=40&h=20&dpr=1"
-                                alt="Visa" class="h-5">
-                            <img src="https://images.pexels.com/photos/13861/IMG_3496bfree.jpg?auto=compress&cs=tinysrgb&w=40&h=20&dpr=1"
-                                alt="Mastercard" class="h-5">
-                            <img src="https://images.pexels.com/photos/6214469/pexels-photo-6214469.jpeg?auto=compress&cs=tinysrgb&w=40&h=20&dpr=1"
-                                alt="PayPal" class="h-5">
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

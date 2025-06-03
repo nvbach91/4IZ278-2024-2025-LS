@@ -59,14 +59,6 @@
                             class="h-4 w-4 text-primary-500 focus:ring-primary-500 border-neutral-300">
                         <div class="ml-3">
                             <span class="font-medium">Credit/Debit Card</span>
-                            <div class="flex items-center mt-1 space-x-2">
-                                <img src="https://images.pexels.com/photos/972887/pexels-photo-972887.jpeg?auto=compress&cs=tinysrgb&w=40&h=20&dpr=1"
-                                    alt="Visa" class="h-6">
-                                <img src="https://images.pexels.com/photos/13861/IMG_3496bfree.jpg?auto=compress&cs=tinysrgb&w=40&h=20&dpr=1"
-                                    alt="Mastercard" class="h-6">
-                                <img src="https://images.pexels.com/photos/6214469/pexels-photo-6214469.jpeg?auto=compress&cs=tinysrgb&w=40&h=20&dpr=1"
-                                    alt="American Express" class="h-6">
-                            </div>
                         </div>
                     </div>
                 </label>
@@ -77,7 +69,6 @@
                             class="h-4 w-4 text-primary-500 focus:ring-primary-500 border-neutral-300">
                         <div class="ml-3">
                             <span class="font-medium">PayPal</span>
-                            <p class="text-sm text-neutral-500">Safe and secure payments</p>
                         </div>
                     </div>
                 </label>
@@ -88,7 +79,6 @@
                             class="h-4 w-4 text-primary-500 focus:ring-primary-500 border-neutral-300">
                         <div class="ml-3">
                             <span class="font-medium">Bank Transfer</span>
-                            <p class="text-sm text-neutral-500">Pay directly from your bank account</p>
                         </div>
                     </div>
                 </label>
@@ -103,26 +93,27 @@
 
             <div class="space-y-4 mb-6">
                 <div class="flex justify-between text-neutral-700">
-                    <span>Subtotal</span>
-                    <span>Total price</span>
+                    <span>Mezisoučet</span>
+                    <span>{{ number_format($subtotal, 2) }} Kč</span>
                 </div>
                 <div class="flex justify-between text-neutral-700">
-                    <span>Shipping</span>
-                    <span>Shipping price</span>
+                    <span>Doručení</span>
+                    <span id="cart-shipping">0 Kč</span>
                 </div>
                 <div class="flex justify-between font-bold text-neutral-900 pt-4 border-t border-neutral-200">
-                    <span>Total</span>
-                    <span>Total With Shipping</span>
+                    <span>Celkem</span>
+                    <span id="cart-total">{{ $total }} Kč</span>
                 </div>
             </div>
 
             <div class="space-y-4">
-                <a href="" data-navlink
+                <a href="{{ route('delivery.details') }}" data-navlink
                     class="block w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     Continue to Delivery Details
                 </a>
 
-                <a href="" data-navlink class="block w-full text-center text-primary-500 hover:text-primary-700">
+                <a href="{{ route('cart.index') }}" data-navlink
+                    class="block w-full text-center text-primary-500 hover:text-primary-700">
                     Return to Cart
                 </a>
             </div>
@@ -141,7 +132,7 @@
                                 <div class="text-sm text-neutral-500">Quantity: {{ $item['quantity'] }}</div>
                             </div>
                             <div class="ml-4 text-sm font-medium">
-                                {{ $item['price'] * $item['quantity'] }}
+                                {{ (int) $item['price'] * $item['quantity'] }}
                             </div>
                         </div>
                     @endforeach

@@ -4,14 +4,12 @@
             <!-- Company info -->
             <div>
                 <div class="flex items-center mb-4">
-                    <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8.5c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm5.8-10l2.4-2.9.7-.9L11.6 5s-1.2-1.2-1.9-1.8c-.6-.6-1.6-.4-2.1.2-.6.6-.4 1.6.2 2.1L9.3 7 5.9 12c-2.8.1-5.1 2.4-5.1 5.2 0 .2 0 .4.1.6.1-.5.5-.9 1-1 .6-.1 1.1.2 1.3.7.2.5 0 1.1-.4 1.3-.4.3-.9.1-1.3-.2-.1-.1-.2-.2-.2-.3-.1 1 .2 2.3.7 3.2.7-.8 1.8-1.2 3-1.2s2.3.4 3 1.2c.5-.9.8-2.2.7-3.2 0 .1-.1.2-.1.3-.4.4-.9.6-1.4.3-.5-.3-.6-.8-.4-1.3.2-.5.7-.8 1.3-.7.5.1.9.5 1 1 0-.2.1-.4.1-.6 0-2.8-2.2-5.2-5.1-5.2l2.4-3.6L14 9.1c.2.2.3.3.5.3.2 0 .3 0 .4-.1.3-.2.3-.6.1-.9L13.6 7l1.4.7c.8.4 1.1 1.3.7 2-.2.4-.6.6-1 .7l-3.9 3.7c-1.2 1.1-3 1.1-4.1-.1-.3-.4-.6-.8-.7-1.3l-.2-.7c0-.5.1-1 .3-1.4l1.7-2.1z" />
-                    </svg>
-                    <span class="ml-2 text-xl font-bold">BikeShop</span>
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLf8hZ5Hom0OLaDeIOuzkdHOMH3pKIWSEYOg&s"
+                        alt="logo" height="30px" width="30px">
+                    </img>
+                    <span class="ml-2 text-xl font-bold">Cyklo obchod</span>
                 </div>
-                <p class="text-neutral-300 mb-4">Your one-stop shop for all things cycling. Quality bikes, accessories,
-                    and expert advice.</p>
+                <p class="text-neutral-300 mb-4">Váš obchod pro nákup kol a cyklo příslušenství.</p>
                 <div class="flex space-x-4">
                     <a href="#" class="text-white hover:text-accent-500 transition-colors">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -39,63 +37,25 @@
 
             <!-- Navigation -->
             <div>
-                <h3 class="text-lg font-semibold mb-4">Shop</h3>
+                <h3 class="text-lg font-semibold mb-4">Kategorie</h3>
                 <ul class="space-y-2">
-                    <li><a href="" data-navlink
-                            class="text-neutral-300 hover:text-white transition-colors">Mountain Bikes</a></li>
-                    <li><a href="" data-navlink class="text-neutral-300 hover:text-white transition-colors">Road
-                            Bikes</a></li>
-                    <li><a href="" data-navlink class="text-neutral-300 hover:text-white transition-colors">City
-                            Bikes</a></li>
-                    <li><a href="" data-navlink
-                            class="text-neutral-300 hover:text-white transition-colors">Electric Bikes</a></li>
-                    <li><a href="" data-navlink
-                            class="text-neutral-300 hover:text-white transition-colors">Accessories</a></li>
-                    <li><a href="" data-navlink
-                            class="text-neutral-300 hover:text-white transition-colors">Components</a></li>
-                    <li><a href="" data-navlink
-                            class="text-neutral-300 hover:text-white transition-colors">Clothing</a></li>
+                    @foreach ($categories as $category)
+                        <li><a href="{{ route('products.index', ['category' => $category->id]) }}" data-navlink
+                                class="text-neutral-300 hover:text-white transition-colors"> {{ $category->name }}</a>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
 
-            <!-- Customer Service -->
-            <div>
-                <h3 class="text-lg font-semibold mb-4">Customer Service</h3>
-                <ul class="space-y-2">
-                    <li><a href="#" class="text-neutral-300 hover:text-white transition-colors">Contact Us</a>
-                    </li>
-                    <li><a href="#" class="text-neutral-300 hover:text-white transition-colors">FAQs</a></li>
-                    <li><a href="#" class="text-neutral-300 hover:text-white transition-colors">Shipping &
-                            Returns</a></li>
-                    <li><a href="#" class="text-neutral-300 hover:text-white transition-colors">Store Locator</a>
-                    </li>
-                    <li><a href="#" class="text-neutral-300 hover:text-white transition-colors">Warranty</a></li>
-                </ul>
-            </div>
-
-            <!-- Newsletter -->
-            <div>
-                <h3 class="text-lg font-semibold mb-4">Stay Updated</h3>
-                <p class="text-neutral-300 mb-4">Subscribe to our newsletter for the latest products, offers, and
-                    cycling tips.</p>
-                <form class="flex">
-                    <input type="email" placeholder="Your email address"
-                        class="flex-grow p-2 rounded-l bg-neutral-700 text-white border-neutral-600 focus:outline-none focus:ring-1 focus:ring-accent-500" />
-                    <button type="submit"
-                        class="bg-accent-500 text-white px-4 py-2 rounded-r hover:bg-accent-600 transition-colors">
-                        Subscribe
-                    </button>
-                </form>
-            </div>
         </div>
 
         <div class="border-t border-neutral-700 mt-12 pt-6 text-neutral-400 text-sm">
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <p>&copy; 2025 BikeShop. All rights reserved.</p>
+                <p>&copy; 2025 Jaromír Mondschein.</p>
                 <div class="flex mt-4 md:mt-0 space-x-6">
-                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <!--<a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
                     <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
-                    <a href="#" class="hover:text-white transition-colors">Cookie Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Cookie Policy</a>-->
                 </div>
             </div>
         </div>

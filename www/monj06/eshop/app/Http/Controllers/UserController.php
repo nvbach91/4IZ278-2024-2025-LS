@@ -25,4 +25,24 @@ class UserController extends Controller
         $categories = Category::all();
         return view('admin.admin-users', compact('users', 'categories'));
     }
+    public function deleteUser($id)
+    {
+        User::where('id', $id)->delete();
+        return redirect()->back()->with('success', 'Uživatel smazán!');
+    }
+    public function updateUser(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'privilege' => 'required|numeric',
+        ]);
+        User::where('id', $id)
+            ->update([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'privilege' => $validated['privilege'],
+            ]);
+        return redirect()->back()->with('success', 'Uživatel aktualizován!');
+    }
 }

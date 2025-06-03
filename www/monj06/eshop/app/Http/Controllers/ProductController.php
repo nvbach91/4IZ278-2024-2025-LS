@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,26 +15,50 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = DB::table('products');
+        $query = Product::query();
 
-        if ($request->has('category_id')) {
-            $query->where('category_id', $request->category_id);
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
         }
 
-        $products = $query->paginate(self::ITEMS_PER_PAGE);
+        if ($request->filled('category')) {
+            $query->where('category_id', $request->category);
+        }
 
-        $categories = DB::table('categories')->get();
+        switch ($request->get('sort')) {
+            case 'price-low':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'price-high':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'name-asc':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'name-desc':
+                $query->orderBy('name', 'desc');
+                break;
+            default:
+                $query->latest();
+        }
 
-        return view('products.index', [
-            'products' => $products,
-            'categories' => $categories,
-        ]);
+        $products = $query->paginate(self::ITEMS_PER_PAGE)->withQueryString();
+
+        $categories = Category::all();
+
+        return view('products.index', compact('products', 'categories'));
     }
+
     public function adminProduct($id)
     {
         $categories = DB::table('categories')->get();
         $product = Product::findOrFail($id);
         return view('admin.admin-product', compact('categories', 'product'));
+    }
+    public function deleteProduct($id)
+    {
+        Product::where('product_id', $id)->delete();
+        return redirect()->back()->with('success', 'Zboží smazáno!');
     }
 
 
@@ -45,7 +70,12 @@ class ProductController extends Controller
     public function detail($id)
     {
         $product = Product::findOrFail($id);
-        return view('products.product-detail', compact('product'));
+        $categories = DB::table('categories')->get();
+
+        return view('products.product-detail', [
+            'product' => $product,
+            'categories' => $categories,
+        ]);
     }
     /**
      * Show the form for creating a new resource.

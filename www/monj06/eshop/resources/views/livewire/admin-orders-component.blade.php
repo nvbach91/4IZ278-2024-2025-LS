@@ -13,11 +13,8 @@
                 </svg>
             </button>
         </h2>
-        <div id="accordion-collapse-body-{{ $order['id'] }}" class="hidden"
+        <div @if ($activeOrderId === $order->id) class="block" @else class="hidden" @endif
             aria-labelledby="accordion-collapse-heading-1">
-
-
-
 
             <div class="flex flex-col lg:flex-row gap-8">
                 <!-- Cart Items -->
@@ -56,7 +53,8 @@
                                                 <div class="flex items-center">
                                                     <div
                                                         class="h-16 w-16 flex-shrink-0 rounded overflow-hidden bg-neutral-100">
-                                                        <img class="h-full w-full object-cover" src=""
+                                                        <img class="h-full w-full object-cover"
+                                                            src="{{ $products[$item->product_id]['img'] }}"
                                                             alt="product image">
                                                     </div>
                                                     <div class="ml-4">
@@ -72,43 +70,45 @@
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center justify-center">
-                                                    <button
+                                                    <!--<button
                                                         class="decrease-quantity border border-neutral-300 rounded-l px-2 py-1 bg-neutral-100 hover:bg-neutral-200 transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
                                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 stroke-width="2" d="M20 12H4" />
                                                         </svg>
-                                                    </button>
+                                                    </button>-->
                                                     <input type="number" min="1" max="1"
                                                         value="{{ $item->quantity }}"
                                                         class="item-quantity w-12 text-center border-y border-neutral-300 py-1 focus:outline-none focus:ring-1 focus:ring-primary-500" />
-                                                    <button
+                                                    <!--<button
                                                         class="increase-quantity border border-neutral-300 rounded-r px-2 py-1 bg-neutral-100 hover:bg-neutral-200 transition-colors">
                                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
                                                             fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                                 stroke-width="2" d="M12 4v16m8-8H4" />
                                                         </svg>
-                                                    </button>
+                                                    </button>-->
                                                 </div>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
-                                                <div class="font-medium">price</div>
+                                                <div class="font-medium">{{ $products[$item->product_id]['price'] }}
+                                                </div>
                                             </td>
                                             <td
                                                 class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium item-total">
-                                                {{ 10 * $item->quantity }}
+                                                {{ (int) $products[$item->product_id]['price'] * $item->quantity }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <button class="remove-item text-red-500 hover:text-red-700">
+                                                <a href="{{ route('delete.itemOrder', $item->product_id) }}"
+                                                    class="remove-item text-red-500 hover:text-red-700">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
                                                         viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd"
                                                             d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                                                             clip-rule="evenodd" />
                                                     </svg>
-                                                </button>
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -123,36 +123,60 @@
                     <div class="bg-white rounded-lg shadow-lg p-6">
 
 
-                        <form class="max-w-sm mx-auto">
+                        <form class="max-w-sm mx-auto" action="{{ route('update.order', $order->id) }}" method="GET">
                             <div class="mb-5">
-                                <label for="email"
+                                <label for="price"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Name</label>
-                                <input type="email" id="email"
+                                    price</label>
+                                <input type="text" name="price"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="name@flowbite.com" required />
+                                    value="{{ $order->price }}" required />
                             </div>
                             <div class="mb-5">
-                                <label for="email"
+                                <label for="userId"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Email</label>
-                                <input type="email" id="email"
+                                    userId</label>
+                                <input type="text" name="userId"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="name@flowbite.com" required />
+                                    value="{{ $order->user_id }}" required />
                             </div>
                             <div class="mb-5">
-                                <label for="password"
+                                <label for="status"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                                    Privilege</label>
-                                <input type="password" id="password"
+                                    status</label>
+                                <input type="text" name="status"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    required />
+                                    value="{{ $order->status }}" required />
+                            </div>
+                            <div class="mb-5">
+                                <label for="street"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    street</label>
+                                <input type="text" name="street"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    value="{{ $order->street }}" required />
+                            </div>
+                            <div class="mb-5">
+                                <label for="postalCode"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    postal code</label>
+                                <input type="text" name="postalCode"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    value="{{ $order->postal_code }}" required />
+                            </div>
+                            <div class="mb-5">
+                                <label for="city"
+                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                    city</label>
+                                <input type="text" name="city"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    value="{{ $order->city }}" required />
                             </div>
                             <button type="submit"
                                 class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Change</button>
                         </form>
-                        <button type="button"
-                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</button>
+                        <a href="{{ route('delete.order', $order->id) }}"
+                            class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Delete</a>
 
 
 

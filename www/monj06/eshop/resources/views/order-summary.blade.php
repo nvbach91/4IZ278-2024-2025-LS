@@ -7,11 +7,11 @@
 
     <flux:main container>
         <!-- order summary LiveWire component -->
-        <livewire:order-summary-component :cart="$cart" />
+        <livewire:order-summary-component :cart="$cart" :deliverData="$deliverData" />
     </flux:main>
 @endsection
 
 @section('footer')
     <!-- footer LiveWire component -->
-    <livewire:footer />
+    <livewire:footer :categories="$categories" />
 @endsection

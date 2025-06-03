@@ -21,23 +21,43 @@ class CartController extends Controller
         ]);
     }
 
-    public function add($id)
+    public function add(Request $request, $id)
     {
         $product = Product::findOrFail($id);
         $cart = session()->get('cart', []);
 
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity']++;
+        // Data z formuláře
+        $quantity = $request->only([
+            'quantity',
+        ]);
+        if ($request->filled('quantity')) {
+            if (isset($cart[$id])) {
+                $cart[$id]['quantity'] += $quantity['quantity'];
+            } else {
+                $cart[$id] = [
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'image' => $product->image,
+                    'category' => $product->category_id,
+                    'stock' => $product->stock,
+                    'quantity' => $quantity['quantity']
+                ];
+            }
         } else {
-            $cart[$id] = [
-                'name' => $product->name,
-                'price' => $product->price,
-                'image' => $product->image,
-                'category' => $product->category_id,
-                'stock' => $product->stock,
-                'quantity' => 1
-            ];
+            if (isset($cart[$id])) {
+                $cart[$id]['quantity']++;
+            } else {
+                $cart[$id] = [
+                    'name' => $product->name,
+                    'price' => $product->price,
+                    'image' => $product->image,
+                    'category' => $product->category_id,
+                    'stock' => $product->stock,
+                    'quantity' => 1
+                ];
+            }
         }
+
 
         session()->put('cart', $cart);
         return redirect()->back()->with('success', 'Produkt přidán do košíku!');
