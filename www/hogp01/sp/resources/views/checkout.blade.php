@@ -38,7 +38,7 @@
         
       </div>
       
-      <button type="submit">Závazne objednať</button>
+      <button type="submit">Závazně objednať</button>
       @if($errors->any())
       @foreach ($errors->all() as $error)
       <p>{{ $error }}</p>
