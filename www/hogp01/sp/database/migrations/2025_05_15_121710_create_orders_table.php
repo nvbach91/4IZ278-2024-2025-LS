@@ -17,6 +17,7 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->enum('status', ['pending', 'paid', 'shipped', 'completed'])->default('pending');
             $table->text('shipping_address')->nullable();
+            $table->timestamps();
         });
     }
 

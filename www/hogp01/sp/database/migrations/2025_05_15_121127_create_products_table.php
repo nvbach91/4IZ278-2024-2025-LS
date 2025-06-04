@@ -19,6 +19,8 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->json('properties')->nullable();
             $table->integer('stock')->default(0);
+            $table->timestamps();
+
         });
     }
 
