@@ -439,7 +439,6 @@ h1 {
 .product-detail .product .images {
   width: 55%;
   aspect-ratio: 1 / 1;
-  max-height: 30em;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
