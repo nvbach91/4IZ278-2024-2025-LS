@@ -1,23 +1,50 @@
-@vite('resources/css/app.css')
 <!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>CRM Platforma</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @vite('resources/css/app.css')
+    <title>@yield('title', 'Moje Appka')</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- Bootstrap CDN only, no build step needed --}}
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
 
-    <nav class="bg-white border-b shadow p-4 mb-6">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="/" class="text-xl font-semibold text-indigo-600">CRM Platforma</a>
+    {{-- FLASH BANNERY --}}
+    @if (session('success'))
+        <div id="flash-banner" class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3 shadow" role="alert">
+            <span>{{ session('success') }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    </nav>
+    @endif
 
-    <main>
+    @if (session('error'))
+        <div id="flash-banner" class="alert alert-danger alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3 shadow" role="alert">
+            <span>{{ session('error') }}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    {{-- ZDE INCLUDUJEME NAVBAR Z partials/navbar.blade.php --}}
+    @include('partials.navbar')
+
+    {{-- HLAVNÍ OBLAST (z jiných layoutů dědí obsah) --}}
+    <div class="pt-4 container"> {{-- lehký odsazení pod navbar --}}
         @yield('content')
-    </main>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- Skript pro flash banner a inicializaci carouselu --}}
+    <script>
+        (() => {
+            const banner = document.getElementById('flash-banner');
+            if (banner) {
+                const alert = bootstrap.Alert.getOrCreateInstance(banner);
+                setTimeout(() => alert.close(), 3000);
+            }
+
+            document.querySelectorAll('.carousel').forEach(el => {
+                new bootstrap.Carousel(el);
+            });
+        })();
+    </script>
 </body>
 </html>

@@ -1,24 +1,42 @@
 @extends('layouts.app')
 
+@section('title', 'Welcome')
+
 @section('content')
-<div class="max-w-5xl mx-auto p-6">
-    <h1 class="text-3xl font-bold mb-6">Vítej v CRM platformě!</h1>
+<section class="container py-5 d-flex flex-column flex-lg-row align-items-center justify-content-between">
+    {{-- LEVÁ STRANA – text --}}
+    <div class="me-lg-5 text-center text-lg-start mb-4 mb-lg-0" style="max-width: 500px;">
+        <h1 class="display-5">Welcome</h1>
+        <p class="lead">
+            Manage courses, lessons &amp; homework in one simple place.
+        </p>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        @foreach ($courses as $course)
-            <div class="bg-white shadow rounded-2xl p-4 border border-gray-200">
-                <h2 class="text-xl font-semibold mb-2">{{ $course->name ?? 'Název kurzu' }}</h2>
-                <p class="text-gray-600 mb-2">{{ $course->description ?? 'Popis není dostupný' }}</p>
-                <p class="text-sm text-gray-500">Lekcí: {{ $course->lessons->count() }}</p>
-
-                @php
-                    $homeworkCount = $course->lessons->reduce(fn($carry, $lesson) => $carry + $lesson->homework->count(), 0);
-                @endphp
-                <p class="text-sm text-gray-500">Domácích úkolů: {{ $homeworkCount }}</p>
-
-                <a href="{{ route('courses.index') }}" class="mt-4 inline-block text-indigo-600 hover:text-indigo-800 font-medium">Zobrazit všechny kurzy</a>
-            </div>
-        @endforeach
+        <div class="mt-3">
+            <a href="{{ route('student.register.show') }}" class="btn btn-primary me-2">Začít zdarma</a>
+            <a href="" class="btn btn-outline-secondary">Přihlásit se</a>
+        </div>
     </div>
-</div>
+
+    {{-- PRAVÁ STRANA – carousel --}}
+    <div class="w-100" style="max-width: 720px;">
+        <div id="landingCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @for ($i = 1; $i <= 3; $i++)
+                    <div class="carousel-item {{ $i === 1 ? 'active' : '' }}">
+                        <img src="{{ asset("images/landing-$i.jpg") }}" class="d-block w-100" alt="slide {{ $i }}" style="height: 360px; object-fit: cover;">
+                    </div>
+                @endfor
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#landingCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#landingCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+
 @endsection

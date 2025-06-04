@@ -2,27 +2,35 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Course;
 
-class Student extends Model
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+class Student extends Authenticatable
 {
+    use HasFactory;
+
+    /** ← přidej toto */
     protected $table = 'z_students';
 
-    protected $fillable = ['name', 'birth_year', 'email', 'profile_picture'];
+    protected $fillable = [
+        'name',
+        'email',
+        'birth_year',
+        'password',
+        'profile_picture',
+    ];
 
-    public function enrollments()
+    /** Kurzy, do kterých je student přihlášen */
+    public function courses(): BelongsToMany
     {
-        return $this->hasMany(Enrollment::class, 'student_id');
-    }
-
-    public function progress()
-    {
-        return $this->hasMany(Progress::class, 'student_id');
-    }
-
-    public function submissions()
-    {
-        return $this->hasMany(Submission::class, 'student_id');
+        return $this->belongsToMany(
+            Course::class,     // cílový model
+            'z_enrollments',     // pivot tabulka
+            'student_id',      // FK na z_students
+            'course_id'        // FK na courses
+        )->withTimestamps();
     }
 }
-

@@ -12,8 +12,8 @@ class DatabaseSeeder extends Seeder
     {
         // Coaches
         DB::table('z_coaches')->insert([
-            ['name' => 'Petr Novák', 'email' => 'petr.novak@example.com', 'oauth_provider' => 'google', 'profile_picture' => 'profile1.jpg'],
-            ['name' => 'Jana Dvořáková', 'email' => 'jana.dvorakova@example.com', 'oauth_provider' => 'google', 'profile_picture' => 'profile2.jpg'],
+            ['name' => 'Petr Novák', 'email' => 'petr.novak@example.com', 'oauth_provider' => 'google', 'profile_picture' => 'https://www.pngkit.com/png/detail/126-1262807_instagram-default-profile-picture-png.png'],
+            ['name' => 'Jana Dvořáková', 'email' => 'jana.dvorakova@example.com', 'oauth_provider' => 'google', 'profile_picture' => 'https://www.pngkit.com/png/detail/126-1262807_instagram-default-profile-picture-png.png'],
         ]);
 
         // Course Templates
@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
         // Homework
         for ($i = 1; $i <= 6; $i++) {
             DB::table('z_homework')->insert([
-                'lesson_id' => $i,
+                'id' => $i,
                 'title' => "Úkol k lekci $i",
                 'description' => "Instrukce k úkolu $i",
                 'open_at' => '2025-06-01 10:00:00',
@@ -55,9 +55,9 @@ class DatabaseSeeder extends Seeder
 
         // Students
         DB::table('z_students')->insert([
-            ['name' => 'Adam Kučera', 'birth_year' => 2010, 'email' => 'adam.kucera@example.com', 'profile_picture' => 'student1.jpg'],
-            ['name' => 'Lucie Novotná', 'birth_year' => 2011, 'email' => 'lucie.novotna@example.com', 'profile_picture' => 'student2.jpg'],
-            ['name' => 'Tomáš Marek', 'birth_year' => 2009, 'email' => 'tomas.marek@example.com', 'profile_picture' => 'student3.jpg'],
+            ['name' => 'Adam Kučera', 'birth_year' => 2010, 'email' => 'adam.kucera@example.com', 'profile_picture' => 'https://www.pngkit.com/png/detail/126-1262807_instagram-default-profile-picture-png.png'],
+            ['name' => 'Lucie Novotná', 'birth_year' => 2011, 'email' => 'lucie.novotna@example.com', 'profile_picture' => 'https://www.pngkit.com/png/detail/126-1262807_instagram-default-profile-picture-png.png'],
+            ['name' => 'Tomáš Marek', 'birth_year' => 2009, 'email' => 'tomas.marek@example.com', 'profile_picture' => 'https://www.pngkit.com/png/detail/126-1262807_instagram-default-profile-picture-png.png'],
         ]);
 
         // Enrollments
@@ -73,7 +73,7 @@ class DatabaseSeeder extends Seeder
         for ($i = 1; $i <= 6; $i++) {
             DB::table('z_progress')->insert([
                 'student_id' => rand(1, 3),
-                'lesson_id' => $i,
+                'id' => $i,
                 'completed_at' => '2025-06-02 17:00:00',
             ]);
         }

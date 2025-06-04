@@ -7,7 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 class Course extends Model
 {
     protected $table = 'z_courses';
-protected $fillable = ['template_id', 'coach_id', 'start_date', 'end_date', 'schedule_info'];
+    protected $fillable = [
+        'name',
+        'template_id',
+        'coach_id',
+        'start_date',
+        'end_date',
+        'schedule_info',
+    ];
+
+protected $casts = [
+        'start_date' => 'date',
+        'end_date'   => 'date',
+    ];
+
 
 public function template()
 {
@@ -18,6 +31,13 @@ public function coach()
 {
     return $this->belongsTo(Coach::class, 'coach_id');
 }
+
+public function students()
+    {
+        return $this->belongsToMany(
+            Student::class, 'z_enrollments', 'course_id', 'student_id'
+        );
+    }
 
 public function lessons()
 {
