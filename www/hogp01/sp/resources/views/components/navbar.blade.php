@@ -18,7 +18,7 @@
 
             @else
                 <a href="{{ route('cart.index') }}"><i class="bi bi-bag"></i></a>
-                <a href="#"><i class="bi bi-person-circle"></i></a>
+                <a href="{{ route('profile.index') }}"><i class="bi bi-person-circle"></i></a>
             @endif
                 <a href="{{ route('logout') }}"><i class="bi bi-box-arrow-right"></i></a>
 
