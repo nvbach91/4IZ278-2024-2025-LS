@@ -1,8 +1,8 @@
 <?php require_once __DIR__ . '/Database.php'; ?>
 <?php
-class CategoriesDB extends Database
+class ShippingDB extends Database
 {
-    protected $tableName = 'categories';
+    protected $tableName = 'shipping_method';
 
     public function fetchById($id)
     {

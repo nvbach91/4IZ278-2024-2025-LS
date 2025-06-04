@@ -1,3 +1,17 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+DROP TABLE IF EXISTS reviews;
+DROP TABLE IF EXISTS order_items;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS shipping_method;
+DROP TABLE IF EXISTS product_animals;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS animals;
+DROP TABLE IF EXISTS users;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
 -- Create the animals table
 CREATE TABLE animals (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -37,10 +51,11 @@ CREATE TABLE product_animals (
 -- Create the users table
 CREATE TABLE users (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    username VARCHAR(100) NOT NULL,
+    firstName VARCHAR(100) NOT NULL,
+    secondName VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    role INT NOT NULL
+    privilege INT NOT NULL
 );
 
 -- Create the shipping_method table

@@ -21,5 +21,12 @@ abstract class Database implements IDatabaseOperations
         $statement->execute();
         return $statement->fetchAll();
     }
+    public function countAll()
+    {
+        $sql = "SELECT COUNT(*) FROM $this->tableName;";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+        return $statement->fetchColumn();
+    }
 }
 ?>
