@@ -1,5 +1,3 @@
--- SQL code to create tables based on the provided ER diagram
-
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
@@ -19,6 +17,7 @@ CREATE TABLE recipes (
     deleted INT DEFAULT 0,
     owner_user_id INT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    description TEXT,
     FOREIGN KEY (owner_user_id) REFERENCES users(id)
 );
 
@@ -34,14 +33,6 @@ CREATE TABLE recipe_categories (
     PRIMARY KEY (recipe_id, category_id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(id),
     FOREIGN KEY (category_id) REFERENCES categories(id)
-);
-
-CREATE TABLE recipe_steps (
-    recipe_id INT,
-    step_num INT NOT NULL,
-    step_description VARCHAR(1000) NOT NULL,
-    PRIMARY KEY (recipe_id, step_num),
-    FOREIGN KEY (recipe_id) REFERENCES recipes(id)
 );
 
 CREATE TABLE ingredients (
@@ -69,9 +60,13 @@ CREATE TABLE ingredients_units (
 CREATE TABLE recipe_ingredients (
     recipe_id INT,
     ingredient_id INT,
+    amount DECIMAL(10, 2),
+    unit_id INT,
     PRIMARY KEY (recipe_id, ingredient_id),
     FOREIGN KEY (recipe_id) REFERENCES recipes(id),
-    FOREIGN KEY (ingredient_id) REFERENCES ingredients(id)
+    FOREIGN KEY (ingredient_id) REFERENCES ingredients(id),
+    FOREIGN KEY (unit_id) REFERENCES units(id)
+
 );
 
 CREATE TABLE user_favorites (
