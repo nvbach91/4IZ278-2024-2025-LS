@@ -17,7 +17,7 @@ class Database{
      * @return PDO The shared PDO connection.
      * @throws PDOException If the connection fails.
      */
-    public static function connect() {
+    public static function connect(): PDO {
         if (self::$pdo === null) {
             $config = require __DIR__ . "/../../config/database_config.php";
             self::$pdo = new PDO(
