@@ -1,9 +1,23 @@
-# 4IZ278-2024-2025-LS
+# Semestrálka – quick README
+
+## 1 · Instalace
+
+```bash
+git clone <repo-url>
+cd <repo>
+composer install
+npm install && npm run dev
+
+cp .env.example .env      # doplňte připojení k DB
+php artisan key:generate
+php artisan migrate --seed
+php artisan serve          # → http://localhost:8000
+```
+## 2. přihlášení kouče
+
+| Role  | E-mail                  | Heslo    |
+|-------|--------------------------|----------|
+| Coach | petr.novak@example.com | password |
 
 
-## Description
-A repository for laboratories of subject 4IZ278, Semester Spring 2024-2025.
-
-
-### Go to Wiki pages for more information
-https://github.com/nvbach91/4IZ278-2024-2025-LS/wiki
+aplikace je spuštěna na: https://crm-platforma-production.up.railway.app/
