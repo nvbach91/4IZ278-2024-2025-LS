@@ -10,7 +10,7 @@ class OrderItemsDB extends Database
         $statement = $this->connection->prepare($sql);
         $statement->bindValue(':id', (int)$id, PDO::PARAM_INT);
         $statement->execute();
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function insert($orderId, $productID, $quantity, $price)

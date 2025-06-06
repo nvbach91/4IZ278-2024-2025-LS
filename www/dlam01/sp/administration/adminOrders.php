@@ -1,22 +1,24 @@
 <?php
-require_once __DIR__ . '/../database/ProductsDB.php';
+require_once __DIR__ . '/../database/OrdersDB.php';
 session_start();
 unset($_SESSION['errors']);
 if (!isset($_SESSION['privilege']) || $_SESSION['privilege'] < 2) {
     header("Location: index.php");
     exit;
 }
-$productsDB = new ProductsDB();
-$products = $productsDB->fetchAll();
+$ordersDB = new OrdersDB();
+$orders = $ordersDB->fetch(null);
 
 $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 if ($searchQuery !== '') {
-    $products = array_filter($products, function ($product) use ($searchQuery) {
-        return stripos($product['name'], $searchQuery) !== false;
+    $orders = array_filter($orders, function ($order) use ($searchQuery) {
+        return (
+            (isset($order['id']) && stripos((string)$order['id'], $searchQuery) !== false)
+        );
     });
 }
 ?>
-<?php include __DIR__ . "\../includes/header.php"; ?>
+<?php include __DIR__ . "/../includes/header.php"; ?>
 <?php if (isset($_SESSION["success"])): ?>
     <div class='alert alert-success' role='alert'>
         <?php echo $_SESSION["success"]; ?>
@@ -32,41 +34,44 @@ if ($searchQuery !== '') {
     </div>
     <form method="GET" class="mb-4">
         <div class="input-group">
-            <input type="text" name="search" class="form-control" placeholder="Search by name" value="<?php echo htmlspecialchars($searchQuery); ?>">
+            <input type="text" name="search" class="form-control" placeholder="Search by order ID" value="<?php echo htmlspecialchars($searchQuery); ?>">
             <button type="submit" class="btn btn-primary">Search</button>
         </div>
     </form>
 
     <?php
     $itemsPerPage = 20;
-    $totalItems = count($products);
+    $totalItems = count($orders);
     $totalPages = ceil($totalItems / $itemsPerPage);
     $currentPage = isset($_GET['page']) ? max(1, min($totalPages, intval($_GET['page']))) : 1;
     $offset = ($currentPage - 1) * $itemsPerPage;
-    $paginatedProducts = array_slice($products, $offset, $itemsPerPage);
+    $paginatedOrders = array_slice($orders, $offset, $itemsPerPage);
     ?>
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Stock</th>
+                <th>Order ID</th>
+                <th>user_id</th>
+                <th>Status</th>
+                <th>Total</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($paginatedProducts as $product): ?>
+            <?php foreach ($paginatedOrders as $order): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($product['id']); ?></td>
-                    <td><?php echo htmlspecialchars($product['name']); ?></td>
-                    <td><?php echo htmlspecialchars($product['description']); ?></td>
-                    <td><?php echo htmlspecialchars($product['price']); ?></td>
-                    <td><?php echo htmlspecialchars($product['stock']); ?></td>
+                    <td><?php echo htmlspecialchars($order['id']); ?></td>
+                    <td><?php echo htmlspecialchars($order['user_id']); ?></td>
+                    <td><?php echo htmlspecialchars($order['status']); ?></td>
+                    <td><?php echo htmlspecialchars($order['total_price']); ?></td>
                     <td>
-                        <a href="editProduct.php?id=<?php echo urlencode($product['id']); ?>" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="deleteProduct.php?id=<?php echo urlencode($product['id']); ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this product?');">Remove</a>
+                         <?php if ($order['status'] != 3): ?>
+                        <a href="adminCancelOrder.php?id=<?php echo urlencode($order['id']); ?>" class="btn btn-warning btn-sm">Cancel</a>
+                        <?php endif; ?>
+                        <?php if ($order['status'] == 1): ?>
+                        <a href="adminConfirmOrder.php?id=<?php echo urlencode($order['id']); ?>" class="btn btn-success btn-sm">Confirm</a>
+                        <?php endif; ?>
+                        <a href="../orderDetail.php?id=<?php echo urlencode($order['id']); ?>" class="btn btn-primary btn-sm">View</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -83,4 +88,4 @@ if ($searchQuery !== '') {
     </nav>
 </div>
 <div style="margin-bottom: 30px"></div>
-<?php include __DIR__ . "\../includes/footer.php"; ?>
+<?php include __DIR__ . "/../includes/footer.php"; ?>

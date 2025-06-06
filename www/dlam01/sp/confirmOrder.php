@@ -21,28 +21,40 @@ $shippingDB = new ShippingDB();
 $productsDB = new ProductsDB();
 $OrderItemsDB = new OrderItemsDB();
 $cartItems = [];
-foreach ($_SESSION["cart"] as $id) {
-    $item = $productsDB->fetchById($id);
-    if ($item) {
-        $cartItems[] = $item;
+$i = 0;
+if (isset($_SESSION["cart"])) {
+    foreach ($_SESSION["cart"] as $id) {
+        $ids[$i] = $id["product"];
+        $i++;
+    }
+    $i = 0;
+    $productsDB = new ProductsDB();
+    foreach ($ids as $id) {
+        $product = $productsDB->fetchById($id);
+        if ($product) {
+            $cartItems[] = $product;
+        }
     }
 }
+
 $checkoutDetails = $_SESSION["checkout_details"];
 $shippingMethod = $shippingDB->fetchById($_SESSION["shipping_method"]);
 $totalPrice = $shippingMethod["price"];
 
 foreach ($cartItems as $item) {
-    $totalPrice += $item["price"];
+    $totalPrice += $item["price"] * $_SESSION["cart"][$item["id"]]['quantity'];
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $orderId = $ordersDB->getHighestID() + 1;
-    $ordersDB->insert($orderId, $_SESSION["user_id"], 1, $shippingMethod["id"], $shippingMethod["price"], $totalPrice, $checkoutDetails["city"], $checkoutDetails["street"], $checkoutDetails["zipCode"]);
+    $ordersDB->insert($orderId, isset($_SESSION["user_id"]) ? $_SESSION["user_id"] : 4, 1, $shippingMethod["id"], $shippingMethod["price"], $totalPrice, $checkoutDetails["city"], $checkoutDetails["street"], $checkoutDetails["zipCode"]);
 
    foreach ($cartItems as $item) {
-        $OrderItemsDB->insert($orderId, $item["id"], 1, $item["price"]);
+        $OrderItemsDB->insert($orderId, $item["id"], $_SESSION["cart"][$item["id"]]['quantity'], $item["price"]);
     }
+
+    mail($checkoutDetails["email"], "Order Confirmation", "Thank you for your order! Your order ID is: $orderId. We will process it shortly.");
     unset($_SESSION["cart"]);
     unset($_SESSION["checkout_details"]);
     unset($_SESSION["shipping_method"]);
@@ -73,8 +85,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <ul class="list-group">
                 <?php foreach ($cartItems as $item): ?>
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <?php echo htmlspecialchars($item["name"]); ?>
-                        <span>$<?php echo number_format($item["price"], 2); ?></span>
+                      <?= $_SESSION["cart"][$item["id"]]['quantity']?> x <?php echo htmlspecialchars($item["name"]); ?>
+                        <span>$<?= $item["price"]*$_SESSION["cart"][$item["id"]]['quantity']; ?></span>
                     </li>
                 <?php endforeach; ?>
                 <li class="list-group-item d-flex justify-content-between align-items-center">

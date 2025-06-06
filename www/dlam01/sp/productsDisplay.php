@@ -3,6 +3,9 @@
 <?php require_once __DIR__ . '/database/CategoriesDB.php'; ?>
 <?php
 
+if(!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
 $numberOfItemsPerPage = 6;
 $productsDB = new ProductsDB();
 $animalDB = new AnimalsDB();
@@ -55,11 +58,19 @@ $productsDatabase = $productsDB->fetchPage($numberOfItemsPerPage, $page, $animal
             <div class="card h-100">
               <a href="<?= './product.php?id=' . $product["id"]; ?>"><img class="card-img-top" src="<?= $product['image']; ?>" alt="..." /></a>
               <div class="card-body">
-                <h4 class="card-title"><a href="#!"><?= $product['name']; ?></a></h4>
+                <h4 class="card-title"><a href="<?= './product.php?id=' . $product["id"]; ?>"><?= $product['name']; ?></a></h4>
               </div>
               <div class="card-footer d-flex justify-content-between align-items-center">
                 <p class="mb-0 text-price"><?= $product['price']; ?> $</p>
-                <a class="btn btn-primary" href="<?= './buy.php?id=' . $product["id"]; ?>">Add to cart</a>
+                <?php if ($product['stock'] <= 0): ?>
+                  <a class="btn btn-secondary disabled" href="#">Out of stock</a>
+                <?php elseif (in_array($product['id'],$_SESSION["cart"],false)): ?>
+                  <a class="btn btn-danger" href="<?= './remove-item.php?id=' . $product["id"]; ?>">-</a>
+                  <span class="btn btn-success disabled">Item in the cart</span>
+                  <a class="btn btn-primary" href="<?= './buy.php?id=' . $product["id"]; ?>">+</a>
+                <?php else: ?>
+                  <a class="btn btn-primary" href="<?= './buy.php?id=' . $product["id"]; ?>">Add to cart</a>
+                <?php endif; ?>
               </div>
             </div>
           </div>

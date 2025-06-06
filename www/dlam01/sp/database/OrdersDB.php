@@ -31,11 +31,28 @@ class OrdersDB extends Database
         return $statement->execute();
     }
 
+    public function fetchById($id)
+    {
+        $sql = "SELECT * FROM $this->tableName WHERE id = :id;";
+        $statement = $this->connection->prepare($sql);
+        $statement->bindValue(':id', (int)$id, PDO::PARAM_INT);
+        $statement->execute();
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
     public function getHighestID()
     {
         $sql = "SELECT MAX(id) FROM $this->tableName;";
         $statement = $this->connection->prepare($sql);
         $statement->execute();
         return $statement->fetchColumn();
+    }
+
+    public function setStatusById($id, $status)
+    {
+        $sql = "UPDATE $this->tableName SET status = :status WHERE id = :id;";
+        $statement = $this->connection->prepare($sql);
+        $statement->bindValue(':status', (int)$status, PDO::PARAM_INT);
+        $statement->bindValue(':id', (int)$id, PDO::PARAM_INT);
+        return $statement->execute();
     }
 }

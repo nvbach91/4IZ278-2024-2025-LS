@@ -3,7 +3,7 @@ require_once __DIR__ . '/../database/UsersDB.php';
 session_start();
 unset($_SESSION['errors']);
 if (!isset($_SESSION['privilege']) || $_SESSION['privilege'] < 3) {
-    header("Location: index.php");
+    header("Location: ../index.php");
     exit;
 }
 $usersDB = new UsersDB();
@@ -16,17 +16,19 @@ if ($searchQuery !== '') {
     });
 }
 ?>
-<?php include __DIR__ . "\../includes/header.php"; ?>
+<?php include __DIR__ . "/../includes/header.php"; ?>
 <?php if (isset($_SESSION["success"])): ?>
     <div class='alert alert-success' role='alert'>
         <?php echo $_SESSION["success"]; ?>
     </div>
 <?php endif; ?>
-<div class="text-start my-4" style="margin-left: 50px;">
-    <a href="adminProducts.php" class="btn btn-primary btn-lg mx-2">Manage Products</a>
-    <a href="adminUsers.php" class="btn btn-primary btn-lg mx-2">Manage Users</a>
-</div>
 <div class="container">
+    <div class="text-start my-4">
+        <a href="adminProducts.php" class="btn btn-primary btn-lg mx-2">Manage Products</a>
+        <a href="adminOrders.php" class="btn btn-primary btn-lg mx-2">Manage Orders</a>
+        <a href="adminUsers.php" class="btn btn-primary btn-lg mx-2">Manage Users</a>
+        
+    </div>
     <form method="GET" class="mb-4">
         <div class="input-group">
             <input type="text" name="search" class="form-control" placeholder="Search by email" value="<?php echo htmlspecialchars($searchQuery); ?>">
@@ -76,4 +78,4 @@ if ($searchQuery !== '') {
     </nav>
 </div>
 <div style="margin-bottom: 30px"></div>
-<?php include __DIR__ . "\../includes/footer.php"; ?>
+<?php include __DIR__ . "/../includes/footer.php"; ?>

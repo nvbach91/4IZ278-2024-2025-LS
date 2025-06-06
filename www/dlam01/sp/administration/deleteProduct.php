@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 if ($_SESSION['privilege'] < '2') {
     header("Location: ../index.php");
@@ -20,8 +19,6 @@ if (!$product) {
     exit;
 }
 
-if ($productsDB->deleteById($productId)) {
-    header("Location: adminProducts.php");
-}
+$productsDB->deleteById($productId);
+header("Location: adminProducts.php");
 exit;
-?>

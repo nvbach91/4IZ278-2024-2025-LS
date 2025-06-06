@@ -28,7 +28,7 @@ $Animals = $AnimalsDB->fetch(null);
                 <div class="collapse navbar-collapse" id="navbarResponsive">
                     <ul class="navbar-nav al-left">
                         <?php foreach ($Animals as $animal): ?>
-                            <li class="nav-item <?= $current_page == 'animal.php?animal_id=' . $animal['id'] ? 'active' : ''; ?>">
+                            <li class="nav-item <?= (isset($_GET['animal_id']) && $_GET['animal_id'] == $animal['id']) ? 'active' : '' ?>">
                                 <a class="nav-link" href="/dlam01/sp/animal.php?animal_id=<?= $animal['id']; ?>"><?= htmlspecialchars($animal['name']); ?></a>
                             </li>
                         <?php endforeach; ?>

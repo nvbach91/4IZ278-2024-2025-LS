@@ -96,4 +96,13 @@ class ProductsDB extends Database
         $statement->execute();
         
 }
+
+    public function updateStock($productId, $quantity)
+    {
+        $sql = "UPDATE $this->tableName SET stock = :stock WHERE id = :productId;";
+        $statement = $this->connection->prepare($sql);
+        $statement->bindValue(':stock', (int)$quantity, PDO::PARAM_INT);
+        $statement->bindValue(':productId', (int)$productId, PDO::PARAM_INT);
+        return $statement->execute();
+    }
 }

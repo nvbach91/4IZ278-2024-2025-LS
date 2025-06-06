@@ -23,11 +23,11 @@ if (!$user) {
     exit;
 }
 if (!empty($_POST)) {
-    $firstName = trim($_POST["firstName"]);
-    $secondName = trim($_POST["secondName"]);
-    $email = trim($_POST["email"]);
-    $password = trim($_POST["password"]);
-    $privilege = intval($_POST["privilege"]);
+    $firstName = htmlspecialchars(trim($_POST["firstName"]));
+    $secondName = htmlspecialchars(trim($_POST["secondName"]));
+    $email = htmlspecialchars(trim($_POST["email"]));
+    $password = htmlspecialchars(trim($_POST["password"]));
+    $privilege = htmlspecialchars(trim($_POST["privilege"]));
 
     if (empty($firstName)) {
         $errors["firstName"] = "First name is required.";

@@ -17,11 +17,16 @@ if (isset($_SESSION["user_id"])) {
 
 $errors = [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $firstName = trim($_POST["firstName"]);
-    $secondName = trim($_POST["secondName"]);
-    $city = trim($_POST["city"]);
-    $street = trim($_POST["street"]);
-    $zipCode = trim($_POST["zipCode"]);
+    $firstName = htmlspecialchars(trim($_POST["firstName"]));
+    $secondName = htmlspecialchars(trim($_POST["secondName"]));
+    $email = htmlspecialchars(trim($_POST["email"]));
+    $city = htmlspecialchars(trim($_POST["city"]));
+    $street = htmlspecialchars(trim($_POST["street"]));
+    $zipCode = htmlspecialchars(trim($_POST["zipCode"]));
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors["email"] = "Email is not valid";
+    }
 
     if (empty($firstName)) {
         $errors["firstName"] = "First name is required.";
@@ -38,15 +43,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (empty($street)) {
         $errors["street"] = "Street is required.";
     }
-
-    if (empty($zipCode)) {
-        $errors["zipCode"] = "Zip code is required.";
+    if (!empty($zipCode) && !preg_match('/^\d{5}(-\d{4})?$/', $zipCode)) {
+        $errors["zipCode"] = "Invalid zip code format.";
     }
-
+    
     if (empty($errors)) {
         $_SESSION["checkout_details"] = [
             "firstName" => $firstName,
             "secondName" => $secondName,
+            "email" => $email,
             "city" => $city,
             "street" => $street,
             "zipCode" => $zipCode,
@@ -77,6 +82,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <label for="secondName">Second Name</label>
             <input class="form-control" id="secondName" name="secondName" value="<?php echo htmlspecialchars($user["secondName"] ?? ''); ?>" placeholder="Second Name">
 
+            <label for="email">email</label>
+            <input class="form-control" id="email" name="email" value="<?php echo htmlspecialchars($user["email"] ?? ''); ?>" placeholder="email">
+            
             <label for="city">City</label>
             <input class="form-control" id="city" name="city" placeholder="City">
 
@@ -84,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <input class="form-control" id="street" name="street" placeholder="Street">
 
             <label for="zipCode">Zip Code</label>
-            <input class="form-control" id="zipCode" name="zipCode" placeholder="Zip Code">
+            <input class="form-control" id="zipCode" name="zipCode" placeholder="Zip Code" type="number" pattern="\d{5}(-\d{4})?">
         </div>
         <button type="submit" class="btn btn-primary">Confirm order</button>
     </form>

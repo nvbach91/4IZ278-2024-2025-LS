@@ -29,8 +29,12 @@ if (!$product) {
             <p><?= htmlspecialchars($product["description"]); ?></p>
             <h4>Price: $<?= number_format($product["price"], 2); ?></h4>
             <h5>Stock: <?= htmlspecialchars($product["stock"]); ?></h5>
-            <a href="buy.php?id=<?= urlencode($product["id"]); ?>" class="btn btn-primary">Add to Cart</a>
+            <?php if ($product['stock'] <= 0): ?>
+                  <a class="btn btn-secondary disabled" href="#">Out of stock</a>
+                <?php else: ?>
+                <a class="btn btn-primary" href="<?= './buy.php?id=' . $product["id"]; ?>">Add to cart</a>
+                <?php endif; ?>
         </div>
-    </div>
+    </div>  
 </div>
 <?php include __DIR__ . '/includes/footer.php'; ?>

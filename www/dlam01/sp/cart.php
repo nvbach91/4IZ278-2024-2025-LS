@@ -5,9 +5,13 @@ require_once __DIR__ . '/database/ProductsDB.php';
 
 $products = [];
 $i = 0;
+$ids = [];
 if (isset($_SESSION["cart"])) {
-
-    $ids = $_SESSION["cart"];
+    foreach ($_SESSION["cart"] as $id) {
+        $ids[$i] = $id["product"];
+        $i++;
+    }
+    $i = 0;
     $productsDB = new ProductsDB();
     foreach ($ids as $id) {
         $product = $productsDB->fetchById($id);
@@ -31,6 +35,7 @@ if (isset($_SESSION["cart"])) {
                     <th>Image</th>
                     <th>Name</th>
                     <th>Description</th>
+                    <th>Quantity</th>
                     <th>Price</th>
                     <th>Action</th>
                 </tr>
@@ -38,16 +43,17 @@ if (isset($_SESSION["cart"])) {
             <tbody>
                 <?php
                 $totalPrice = 0;
-                foreach ($products as $index => $product):
-                    $totalPrice += $product['price'];
+                foreach ($products as $product):
+                    $totalPrice += $product['price']*$_SESSION["cart"][$product["id"]]['quantity'];
                 ?>
                     <tr>
                         <td><img src="<?= $product['image']; ?>" alt="..." style="width: 50px; height: 50px;"></td>
                         <td><?= $product['name']; ?></td>
                         <td><?= $product['description']; ?></td>
-                        <td><?= $product['price']; ?> $</td>
+                        <td><?= $_SESSION["cart"][$product["id"]]['quantity']; ?></td>
+                        <td><?= $product['price']*$_SESSION["cart"][$product["id"]]['quantity']; ?> $</td>
                         <td>
-                            <a class="btn btn-danger" href="<?= './remove-item.php?position=' . $index; ?>">Remove</a>
+                            <a class="btn btn-danger" href="<?= './remove-item.php?id=' . $product["id"]; ?>">Remove</a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
