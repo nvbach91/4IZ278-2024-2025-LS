@@ -1,8 +1,13 @@
 <?php require_once __DIR__.'/Database.php';?>
+<?php require_once __DIR__.'/CategoriesDB.php';?>
 <?php
 
 class ProductsDB extends Database {
     protected $tableName = 'sp_eshop_products';
+
+    public function getTableName() {
+        return $this->tableName;
+    }
 
     public function fetchWithAllParams($offset, $numberOfItemsPerPage, $categories, $maxPlaytime, $minPlayers, $maxPlayers) {
         $params = [];
@@ -24,7 +29,7 @@ class ProductsDB extends Database {
         if (!empty($where)) {
             $sql .= " WHERE " . implode(' AND ', $where);
         }
-        $sql .= " LIMIT ?, ?;"; // Ensure proper spacing before LIMIT
+        $sql .= " LIMIT ?, ?;";
         $statement = $this->connection->prepare($sql);
         $params = array_merge($params, [$maxPlaytime, $minPlayers, $maxPlayers, $offset, $numberOfItemsPerPage]);
         $statement->execute($params);
@@ -53,10 +58,10 @@ class ProductsDB extends Database {
     }
 
     public function minPlayers() {
-        $sql = "SELECT MIN(minplayers) AS minPlaytime FROM $this->tableName;";
+        $sql = "SELECT MIN(minplayers) AS minPlayers FROM $this->tableName;";
         $statement = $this->connection->prepare($sql);
         $statement->execute();
-        return $statement->fetch()['minPlaytime'];
+        return $statement->fetch()['minPlayers'];
     }
     
     public function maxPlayers() {
@@ -97,16 +102,49 @@ class ProductsDB extends Database {
         return $statement->execute(['id' => $id]);
     }
 
-    public function updateProduct($id, $name, $price, $imgURL, $category) {
-        $sql = "UPDATE eshop_products SET name = ?, price = ?, img = ?, category_id = ? WHERE product_id = ?";
+    public function updateProduct($id, $name, $price, $img, $img_thumb, $quantity, $description, $minplayers, $maxplayers, $playtime) {
+        $sql = "UPDATE sp_eshop_products SET name = ?, price = ?, img = ?, img_thumb = ?, quantity = ?, 
+            description = ?, minplayers = ?, maxplayers = ?, playtime = ?, last_updated = NOW() WHERE product_id = ?";
         $statement = $this->connection->prepare($sql);
-        $statement->execute([$name, $price, $imgURL, $category, $id]);
+        $statement->execute([$name, $price, $img, $img_thumb, $quantity, $description, $minplayers, $maxplayers, $playtime, $id]);
     }
 
-    public function addProduct($name, $price, $imgURL, $category) {
-        $sql = "INSERT INTO eshop_products (name, price, img, category_id) VALUES (?, ?, ?, ?)";
+    public function updateProductQuantity($id, $quantity) {
+        $sql = "UPDATE sp_eshop_products SET quantity = ? WHERE product_id = ?";
         $statement = $this->connection->prepare($sql);
-        return $statement->execute([$name, $price, $imgURL, $category]);
+        return $statement->execute([$quantity, $id]);
+    }
+
+    public function addProduct($name, $price, $img, $img_thumb, $quantity, $description, $minplayers, $maxplayers, $playtime) {
+        $sql = "INSERT INTO sp_eshop_products 
+            (name, price, img, img_thumb, quantity, description, minplayers, maxplayers, playtime) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute([$name, $price, $img, $img_thumb, $quantity, $description, $minplayers, $maxplayers, $playtime]);
+        return $this->connection->lastInsertId();
+    }
+
+    public function fetchCategoriesByProductID($productID) {
+        $sql = "SELECT sp_eshop_categories.* FROM sp_eshop_product_category
+                JOIN sp_eshop_categories ON sp_eshop_product_category.category_id = sp_eshop_categories.category_id
+                WHERE sp_eshop_product_category.product_id = :productID;";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute(['productID' => $productID]);
+        return $statement->fetchAll();
+    }
+
+    public function fetchProductsByCategoryIDs($categoryIDs, $limit, $excludeProductID) {
+        $placeholders = implode(',', array_fill(0, count($categoryIDs), '?'));
+        $sql = "SELECT * FROM $this->tableName
+                JOIN sp_eshop_product_category ON $this->tableName.product_id = sp_eshop_product_category.product_id
+                WHERE sp_eshop_product_category.category_id IN ($placeholders)
+                AND $this->tableName.product_id != ?
+                ORDER BY RAND()
+                LIMIT ?;";
+        $statement = $this->connection->prepare($sql);
+        $params = array_merge($categoryIDs, [$excludeProductID, $limit]);
+        $statement->execute($params);
+        return $statement->fetchAll();
     }
 }
 ?>

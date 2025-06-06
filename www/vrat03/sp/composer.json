@@ -1,0 +1,18 @@
+{
+    "name": "tom/sp",
+    "description": "Semestral project for Web Apps course on VSE",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vrat03",
+            "email": "samot.vrana@gmail.com"
+        }
+    ],
+    "require": {
+        "google/apiclient": "^2.18",
+        "monolog/monolog": "^3.9",
+        "paragonie/anti-csrf": "^2.4",
+        "dompdf/dompdf": "^3.1"
+    }
+}

@@ -1,16 +1,11 @@
-<?php include __DIR__.'/privileges.php'; ?>
-<?php
-
-hasPrivilege(2);
-
-?>
-<?php require 'includes/head.php';?>
-
-<div class="container">
-    <div class="row">
-        
-
-    </div>
-</div>
-
-<?php require 'includes/foot.php';?>
+<?php include __DIR__.'/../prefix.php'; ?>
+<?php $itemDB=$productsDB->fetchProductByID($item['product_id'])?>
+<tr>
+    <td>
+        <a href="<?php echo $urlPrefix ?>/product.php?id=<?php echo urlencode($itemDB['product_id']); ?>">
+            <?php echo htmlspecialchars($itemDB['name']); ?>
+        </a>
+    </td>
+    <td><?php echo(htmlspecialchars($item['quantity'])) ?></td>
+    <td><?php echo($item['price'] * $item['quantity']) ?> Kč</td>
+</tr>

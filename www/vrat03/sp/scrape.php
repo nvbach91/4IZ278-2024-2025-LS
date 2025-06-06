@@ -1,4 +1,6 @@
+<?php include __DIR__.'/privileges.php'; ?>
 <?php
+hasPrivilege(2);
 set_time_limit(0);
 $pdo = new PDO("mysql:host=localhost;dbname=sp", "root", "");
 $start = isset($_GET['start']) ? (int)$_GET['start'] : null;

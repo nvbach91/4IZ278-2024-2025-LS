@@ -30,6 +30,13 @@ abstract class Database implements DatabaseOperations {
         $statement->execute();
         return $statement->fetchAll()[0]['numberOfRecords'];
     }
+
+    public function fetchPagination($offset, $numberOfItemsPerPage) {
+        $sql = "SELECT * FROM $this->tableName LIMIT ?, ?;";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute([$offset, $numberOfItemsPerPage]);
+        return $statement->fetchAll();
+    }
 }
 
 ?>

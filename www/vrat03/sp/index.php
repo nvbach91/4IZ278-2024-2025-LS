@@ -2,9 +2,8 @@
 <?php require_once __DIR__.'/database/CategoriesDB.php'; ?>
 <?php
 if(!isset($_SESSION)) { 
-        session_start(); 
+        session_start();
 }
-
 $productsDB = new ProductsDB();
 $categoriesDB = new CategoriesDB();
 
@@ -35,20 +34,20 @@ $productsWithPageOffset = $productsDB->fetchWithAllParams($offset, $numberOfItem
 ?>
 
 
-<?php require 'includes/head.php';?>
+<?php include __DIR__.'/includes/head.php';?> 
 <div class="container">
     <h1 class="my-4">Welcome!</h1>
     <div class="row">
         <div class="col-lg-3">
-            <?php include 'index-filter.php'; ?>
+            <?php include __DIR__.'/index-filter.php'; ?>
         </div>
         <div class="col-lg-9">
             <div class="row" id="products">
-                <?php include 'index-products.php'; ?>
+                <?php include __DIR__.'/index-products.php'; ?>
             </div>
         </div>
     </div>
 </div>
 
-<?php require 'includes/foot.php';?>
-<script src="js/index.js"></script>
+<?php include __DIR__.'/includes/foot.php';?>
+<script src="js/dropdown.js"></script>
