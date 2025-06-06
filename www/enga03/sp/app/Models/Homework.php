@@ -9,7 +9,12 @@ class Homework extends Model
     protected $table = 'z_homework';
 
     protected $fillable = [
-        'lesson_id', 'title', 'description', 'open_at', 'due_at'
+        'id',
+        'lesson_id',
+        'title',
+        'description',
+        'open_at',
+        'due_at',
     ];
 
     public function lesson()
