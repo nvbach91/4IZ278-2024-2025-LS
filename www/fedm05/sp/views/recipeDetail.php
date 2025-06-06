@@ -45,7 +45,7 @@
                     <?php endforeach; ?>
                 </div>
                 <div class="recipe-detail-right">
-                    <img src="assets/food-placeholder.png" alt="Recipe image" class="recipe-image">
+                    <img src="<?php echo $recipe["img"]?>" alt="Recipe image" class="recipe-image">
                     <h2>Instructions</h2>
                     <div class="recipe-description"><?php echo htmlspecialchars($recipe["description"]) ?></div>
                 </div>

@@ -14,10 +14,16 @@ class AddRecipeController extends BaseController
         $this->db = new Database();
     }
 
-    
+
     public function addrecipe()
     {
         // Check if form was submitted
+
+        if (!isset($_SESSION['logged_in']) || !$_SESSION['logged_in']) {
+            header('Location: ./login');
+            exit;
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_recipe'])) {
             $this->processform();
             return;
@@ -35,9 +41,11 @@ class AddRecipeController extends BaseController
     {
         try {
             // validate fields
-            if (empty($_POST['recipe_name']) || empty($_POST['portions']) || 
-                empty($_POST['difficulty']) || empty($_POST['cooking_time']) || 
-                empty($_POST['instructions'])) {
+            if (
+                empty($_POST['recipe_name']) || empty($_POST['portions']) ||
+                empty($_POST['difficulty']) || empty($_POST['cooking_time']) ||
+                empty($_POST['instructions'])
+            ) {
                 throw new Exception('Please fill in all required fields.');
             }
 
@@ -58,10 +66,10 @@ class AddRecipeController extends BaseController
             $recipeId = $recipeModel->createRecipe($recipeData);
 
             $this->processIngredients($recipeId);
+            $this->processCategories($recipeId);
 
             header('Location: ./myrecipes');
             exit;
-
         } catch (Exception $e) {
             $data = [
                 'pageTitle' => "Add new recipe",
@@ -74,7 +82,7 @@ class AddRecipeController extends BaseController
     private function handleImageUpload()
     {
         if (!isset($_FILES['recipe_image']) || $_FILES['recipe_image']['error'] === UPLOAD_ERR_NO_FILE) {
-            return null; 
+            return null;
         }
 
         if ($_FILES['recipe_image']['error'] !== UPLOAD_ERR_OK) {
@@ -84,19 +92,19 @@ class AddRecipeController extends BaseController
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (!in_array($_FILES['recipe_image']['type'], $allowedTypes)) {
             throw new Exception('Invalid image type. Please upload JPEG, PNG, or GIF.');
-        }
-
-        // set the directory
-        $uploadDir = __DIR__ . '/../assets/';
+        } // set the directory
+        $uploadDir = __DIR__ . '/../assets/recipes/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
 
         $extension = pathinfo($_FILES['recipe_image']['name'], PATHINFO_EXTENSION);
         $filename = uniqid('recipe_') . '.' . $extension;
-        $filepath = $uploadDir . $filename;
+        $fullPath = $uploadDir . $filename;
 
-        return 'uploads/recipes/' . $filename;
+        move_uploaded_file($_FILES['recipe_image']['tmp_name'], $fullPath);
+
+        return 'assets/recipes/' . $filename;
     }
 
     private function processIngredients($recipeId)
@@ -143,6 +151,7 @@ class AddRecipeController extends BaseController
         return $this->db->insert('ingredients', $ingredientData);
     }
 
+
     private function findOrCreateUnit($name)
     {
         if (empty($name)) {
@@ -176,5 +185,58 @@ class AddRecipeController extends BaseController
         ];
 
         $this->db->insert('recipe_ingredients', $data);
+    }
+
+    private function processCategories($recipeId)
+    {
+        if (!isset($_POST['ingredient_name']) || !is_array($_POST['ingredient_name'])) {
+            return;
+        }
+
+        $categoryTypes = $_POST['recipe_category_type'];
+        $categoryNames = $_POST['recipe_category_name'] ?? [];
+
+        for ($i = 0; $i < count($categoryTypes); $i++) {
+            if (empty($categoryTypes[$i])) {
+                continue;
+            }
+
+            $categoryType = $categoryTypes[$i];
+            $categoryName = $categoryNames[$i];
+
+            $categoryId = $this->findOrCreateCategory($categoryType, $categoryName);
+            $this->linkCategoryToRecipe($recipeId, $categoryId);
+        }
+    }
+
+    private function findOrCreateCategory($categoryType, $categoryName)
+    {
+        $query = "SELECT id FROM categories WHERE name = :name AND type = :type";
+        $categoryName = trim($categoryName);
+        $categoryType = trim($categoryType);
+
+        $result = $this->db->select($query, ['name' => $categoryName, 'type' => $categoryType]);
+        // if category exists, return its ID
+        if (!empty($result)) {
+            return $result[0]['id'];
+        }
+
+        // otherwise create a new ingredient
+        $ingredientData = [
+            'type' => $categoryType,
+            'name' => $categoryName,
+        ];
+
+        return $this->db->insert('categories', $ingredientData);
+    }
+
+    private function linkCategoryToRecipe($recipeId, $categoryId)
+    {
+        $data = [
+            'recipe_id' => $recipeId,
+            'category_id' => $categoryId,
+        ];
+
+        $this->db->insert('recipe_categories', $data);
     }
 }

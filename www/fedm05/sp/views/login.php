@@ -36,6 +36,14 @@ include __DIR__ . '/partial/head.php';
 
                         <button type="submit" class="btn btn-primary btn-full">Sign In</button>
                     </form>
+                    
+                    <div class="oauth-buttons">
+                        <a href="./oauth.php" class="btn btn-google">
+                            <img src="./assets/google_logo.png" alt="Google Logo" style="height:20px;vertical-align:middle;margin-right:8px;">
+                            Log in with Google
+                        </a>
+                    </div>
+                    
                     <div class="auth-links">
                         <a href="./register">Create account</a>
                     </div>

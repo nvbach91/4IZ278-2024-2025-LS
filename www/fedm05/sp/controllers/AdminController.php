@@ -25,21 +25,80 @@ class AdminController
                $_SESSION['logged_in'] && 
                isset($_SESSION['role']) && 
                $_SESSION['role'] === 'admin';
-    }
-
-    public function recipeManagement()
+    }    public function recipeManagement()
     {
         $searchTerm = isset($_GET['search']) ? $_GET['search'] : '';
         
-        // apply filter
+        $recipesPerPage = 12;
+        $currentPage = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $offset = ($currentPage - 1) * $recipesPerPage;
+        
+        $filters = [];
         if (!empty($searchTerm)) {
-            $recipes = $this->recipeModel->getRecipesByFilters(['search' => $searchTerm]);
+            $filters['search'] = $searchTerm;
+        }
+        
+        // total count for pagination
+        if (empty($filters)) {
+            $allRecipes = $this->recipeModel->getAllRecipes();
+            $totalRecipes = $allRecipes ? count($allRecipes) : 0;
         } else {
-            $recipes = $this->recipeModel->getAllRecipes();
+            $filteredRecipes = $this->recipeModel->getRecipesByFilters($filters);
+            $totalRecipes = $filteredRecipes ? count($filteredRecipes) : 0;
+        }
+        
+        // add pagination filters
+        $filters['limit'] = $recipesPerPage;
+        $filters['offset'] = $offset;
+        
+        // get paginated recipes
+        if (empty($searchTerm)) {
+            $recipes = $this->recipeModel->getAllRecipes($recipesPerPage, $offset);
+        } else {
+            $recipes = $this->recipeModel->getRecipesByFilters($filters);
+        }
+        
+        if (!$recipes) {
+            $recipes = [];
+        }
+        
+        $totalPages = ceil($totalRecipes / $recipesPerPage);
+        
+        $pageUrls = [];
+        for ($i = 1; $i <= $totalPages; $i++) {
+            $pageUrls[$i] = $this->generatePaginationUrl($i, $searchTerm);
+        }
+        
+        $pagination = [
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
+            'totalRecipes' => $totalRecipes,
+            'recipesPerPage' => $recipesPerPage,
+            'pageUrls' => $pageUrls
+        ];
+        $data = [
+            'pageTitle' => 'Recipe Management',
+            'recipes' => $recipes,
+            'pagination' => $pagination,
+            'searchTerm' => $searchTerm
+        ];
+        return $data;
+    }
+    
+    private function generatePaginationUrl($page, $searchTerm = '')
+    {
+        $params = [];
+        if ($page > 1) {
+            $params['page'] = $page;
+        }
+        if (!empty($searchTerm)) {
+            $params['search'] = $searchTerm;
         }
 
-        return $recipes;
-    }    public function deleteRecipe()
+        $queryString = !empty($params) ? '?' . http_build_query($params) : '';
+        $baseName = basename($_SERVER['PHP_SELF'], '.php');
+        return $baseName . $queryString;
+    }public function deleteRecipe()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['recipe_id'])) {
             $recipeId = $_POST['recipe_id'];

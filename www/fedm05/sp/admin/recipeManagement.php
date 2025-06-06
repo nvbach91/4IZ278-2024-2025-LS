@@ -6,8 +6,8 @@ $adminController = new AdminController();
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
     $adminController->deleteRecipe();
 }
-$recipes = $adminController->recipeManagement();
-$pageTitle = 'Recipe Management';
+$result = $adminController->recipeManagement();
+extract($result);
 ?>
 
 <!DOCTYPE html>
@@ -33,8 +33,7 @@ $pageTitle = 'Recipe Management';
             <div class="admin-header">
                 <h1>Recipe Management</h1>
                 <div class="admin-search">
-                    <form method="GET" action="" class="search-form">
-                        <input type="search"
+                    <form method="GET" action="" class="search-form">                        <input type="search"
                             name="search"
                             placeholder="Search recipes in admin..."
                             class="search-input"
@@ -68,7 +67,7 @@ $pageTitle = 'Recipe Management';
                     <?php foreach ($recipes as $recipe): ?>
                         <div class="admin-recipe-item">
                             <div class="recipe-image-container">
-                                <img src="../assets/food-placeholder.png"
+                                <img src="<?php echo htmlspecialchars("../" . $recipe['img']); ?>"
                                     alt="Recipe image"
                                     class="recipe-image">
                             </div>
@@ -90,6 +89,9 @@ $pageTitle = 'Recipe Management';
                         <p>No recipes found.</p>
                     </div>
                 <?php endif; ?>
+                
+                <!-- Pagination -->
+                <?php require __DIR__ . '/../views/partial/pagination.php'; ?>
             </div>
         </main>
 

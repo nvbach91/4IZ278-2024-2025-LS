@@ -108,3 +108,27 @@ function removeIngredient(button) {
         ingredientItem.remove();
     }
 }
+// add ingredient for form
+function addCategory() {
+    const container = document.getElementById('category-container');
+    const newCategoryItem = document.createElement('div');
+    newCategoryItem.className = 'ingredient-item';
+    
+    newCategoryItem.innerHTML = `
+        <input type="text" name="recipe_category_type[]" placeholder="Category type" class="ingredient-name" required>
+        <input type="text" name="recipe_category_name[]" placeholder="Category name" class="ingredient-name" required>
+        <button type="button" onclick="removeCategory(this)" class="remove-ingredient-btn">×</button>
+    `;
+    
+    container.appendChild(newCategoryItem);
+}
+
+// remove ingredient from form
+function removeCategory(button) {
+    const categoryItem = button.parentElement;
+    const container = document.getElementById('category-container');
+    
+    if (container.children.length > 1) {
+        categoryItem.remove();
+    }
+}

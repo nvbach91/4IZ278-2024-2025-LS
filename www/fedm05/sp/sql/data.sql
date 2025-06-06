@@ -757,3 +757,6 @@ INSERT INTO user_favorites (user_id, recipe_id) VALUES
 (3, 5), (3, 11), (3, 18), (3, 23), (3, 26), (3, 29), (3, 38), (3, 50), (3, 53), (3, 74),
 -- admin_user's favorites
 (4, 3), (4, 8), (4, 13), (4, 19), (4, 24), (4, 28), (4, 33), (4, 39), (4, 44), (4, 49);
+
+UPDATE recipes
+SET img = CONCAT('assets/recipes/recipe_', id, '.jpg');

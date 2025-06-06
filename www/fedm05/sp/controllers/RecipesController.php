@@ -38,6 +38,8 @@ class RecipesController extends BaseController
 
         $filters['limit'] = $recipesPerPage;
         $filters['offset'] = $offset;
+        $searchTerm = $filters['search'] ?? '';
+
         $countFilters = $_SESSION[$this->pageKey] ?? [];
         if (empty($countFilters)) {
             $allRecipes = $recipeModel->getAllRecipes();
@@ -95,6 +97,7 @@ class RecipesController extends BaseController
             'activeFilters' => $_SESSION[$this->pageKey] ?? [],
             'pagination' => $pagination,
             'pageKey' => $this->pageKey,
+            'searchTerm' => $searchTerm
         ];
 
         $this->render($this->viewName, $data);

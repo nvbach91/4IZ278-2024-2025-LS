@@ -390,6 +390,12 @@ body {
     grid-template-columns: 280px 1fr;
 }
 
+.oauth-buttons {
+    display: flex;
+    margin-top: 20px;
+    justify-content: center;
+
+}
 .filters-sidebar,
 .ingredients-sidebar {
     background-color: #f8f9fa;
@@ -1203,7 +1209,7 @@ body {
 
 .recipe-detail-left,
 .recipe-detail-right {
-    min-height: 500px;
+    min-height: auto;
 }
 
 .save-recipe-btn {
@@ -1433,7 +1439,7 @@ body {
 
     .ingredient-item {
         border-bottom: 1px solid #ddd;
-        padding: 4px 0;
+        padding: 0px 0px !important;
         page-break-inside: avoid;
         display: flex;
         justify-content: space-between;

@@ -29,7 +29,14 @@
                         </div>
                     </div>
                     <button type="button" onclick="addIngredient()" class="add-ingredient-btn">+ Add More Ingredients</button>
-
+                    <h2>Recipe Categories</h2>
+                    <div id="category-container">
+                        <div class="ingredient-item">
+                            <input type="text" name="recipe_category_type[]" placeholder="Category type" class="ingredient-name" required>
+                            <input type="text" name="recipe_category_name[]" placeholder="Category name" class="ingredient-name" required>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addCategory()" class="add-ingredient-btn">+ Add More Categories</button>
                     <h2>Recipe Details</h2>
                     <div class="recipe-details-section">
                         <div class="detail-group">
