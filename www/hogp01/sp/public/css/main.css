@@ -355,6 +355,7 @@ h1 {
   border-radius: 8px;
   overflow: hidden;
   border: 2px solid #ccc;
+  cursor: pointer;
 }
 .accordion .item .header {
   width: 100%;
@@ -481,6 +482,11 @@ h1 {
   border-radius: 8px;
   overflow: hidden;
   border: 2px solid #ccc;
+}
+.button {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 2em;
 }
 .success {
   width: 100%;
@@ -610,4 +616,34 @@ h1 {
     opacity: 1;
     max-width: 90%;
     text-align: center;
+}
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    background-color: white;
+    padding: 1em 2em;
+    border-radius: 0.5em;
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+    display: none;
+    text-align: center;
+}
+.modal iframe {
+  width: 100%;
+  height: 85vh;
+  border: none;
+}
+.modal .close {
+  font-size: 1.5em;
+  border: none;
+  background-color: transparent;
+}
+.modal .close:hover {
+  color: gray;
+  transform: scale(1.25);
+  transition: ease-in-out 0.2s;
+  cursor: pointer;
 }

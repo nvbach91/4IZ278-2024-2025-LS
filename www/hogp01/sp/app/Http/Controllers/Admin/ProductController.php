@@ -14,6 +14,14 @@ class ProductController extends Controller
         $products = Product::all();
         return view('admin.products', compact('products'));
     }
+    public function detail(Product $product)
+    {
+        return view('admin.product_detail', compact('product'));
+    }
+    public function new()
+    {
+        return view('admin.product_create');
+    }
 
     public function store(Request $request)
     {
@@ -55,7 +63,7 @@ class ProductController extends Controller
             'properties' => $properties,
         ]);
 
-        return redirect()->route('admin.products.index')->with('success', 'Produkt vytvořen!');
+        return view('admin.close');
     }
     public function update(Request $request, Product $product)
     {
@@ -96,7 +104,7 @@ class ProductController extends Controller
         $product->properties = $properties;
         $product->save();
 
-        return redirect()->route('admin.products.index')->with('success', 'Produkt upraven!');
+        return view('admin.close');
     }
 
     public function destroy(Product $product)
@@ -115,7 +123,8 @@ class ProductController extends Controller
 
         $product->delete();
 
-        return redirect()->route('admin.products.index')->with('success', 'Produkt zmazán.');
+
+        return view('admin.close');
     }
 
 

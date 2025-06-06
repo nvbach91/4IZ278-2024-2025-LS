@@ -27,12 +27,16 @@ class OrderController extends Controller
         $order->status = $validated['status'];
         $order->save();
 
-        if ($order->status == 'paid') {
-            Mail::to($order->user->email)->send(new PaymentSuccess($order));
-        } elseif ($order->status == 'shipped') {
-            Mail::to($order->user->email)->send(new OrderShipped($order));
-        } elseif ($order->status == 'completed') {
-            Mail::to($order->user->email)->send(new OrderCompleted($order));
+        try {
+            if ($order->status == 'paid') {
+                Mail::to($order->user->email)->send(new PaymentSuccess($order));
+            } elseif ($order->status == 'shipped') {
+                Mail::to($order->user->email)->send(new OrderShipped($order));
+            } elseif ($order->status == 'completed') {
+                Mail::to($order->user->email)->send(new OrderCompleted($order));
+            }
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['email' => 'Failed to send email..']);
         }
          
         return redirect()->route('admin.orders.index')->with('success', 'Objednávka upravena!');

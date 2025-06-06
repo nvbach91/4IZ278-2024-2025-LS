@@ -39,6 +39,8 @@ Route::get('/logout', function () {
 
 // Only for admins, catch all routes are used
 Route::middleware(['auth', 'is_admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/products/detail/{product}', [ProductController::class, 'detail'])->name('products.detail');
+    Route::get('/products/new', [ProductController::class, 'new'])->name('products.new');
     Route::resource('products', ProductController::class);
     Route::resource('orders', OrderController::class);
 
