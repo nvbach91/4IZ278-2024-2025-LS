@@ -17,10 +17,28 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $word = trim($_POST['word'] ?? '');
     $lang_code = trim($_POST['lang_code'] ?? '');
+
+    $existingConcepts = $_POST['existing_concepts'] ?? [];
     $concepts = $_POST['concepts'] ?? [];
+
     $descriptions = $_POST['descriptions'] ?? [];
 
-    if (!fieldsNotEmpty([$word, $lang_code]) || empty($concepts)) {
+    $hasAnyConcept = false;
+
+    foreach ($existingConcepts as $id) {
+        if (trim($id) !== '') {
+            $hasAnyConcept = true;
+            break;
+        }
+    }
+    foreach ($concepts as $name) {
+        if (trim($name) !== '') {
+            $hasAnyConcept = true;
+            break;
+        }
+    }
+
+    if (!fieldsNotEmpty([$word, $lang_code]) || !$hasAnyConcept) {
         $errors[] = "All word fields must be filled and at least one concept is required";
     }
 
@@ -34,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 'word' => $word,
                 'lang_code' => $lang_code
             ]);
+            $successMessages[] = "The word has been added.";
+
         } catch (Exception $e) {
             $insertSuccessful = false;
         }
@@ -46,80 +66,47 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             require_once __DIR__ . '/../models/WordConceptDB.php';
             $wordConceptDB = new WordConceptDB();
         
-            $existingConcepts = $_POST['existing_concepts'] ?? [];
-
-            for ($i = 0; $i < count($concepts); $i++) {
-                $conceptName = trim($concepts[$i]);
-                $desc = trim($descriptions[$i] ?? '');
-                $existingId = $existingConcepts[$i] ?? '';
-
-                if ($existingId) {
-
-                    $concept_id = (int)$existingId;
-
-                } elseif ($conceptName) {
-
-                    try {
-                        $conceptDB->insert([
-                            'name' => $conceptName,
-                            'description' => $desc
-                        ]);
-                        $concept = $conceptDB->fetchSorted('concept_id', 'desc')[0];
-                        $concept_id = $concept['concept_id'];
-                        $successMessages[] = "The concept $conceptName has been added.";
-
-                    } catch (Exception $e) {
-                        $errors[] = "Concept '$conceptName' already exists or failed.";
-                        continue;
-                    }
-                } else {
-                    continue;
-                }
+            foreach ($existingConcepts as $id) {
+                $id = trim($id);
+                if ($id === '') continue;
 
                 try {
                     $wordConceptDB->insert([
                         'word_id' => $word_id,
-                        'concept_id' => $concept_id
+                        'concept_id' => (int)$id
                     ]);
+
                 } catch (Exception $e) {
-                    $errors[] = "Failed to bind concept ID $concept_id to word.";
+                    $errors[] = "Failed to bind concept ID $id to word.";
                 }
+            }
 
+            for ($i = 0; $i < count($concepts); $i++) {
+                $conceptName = trim($concepts[$i]);
+                $desc = trim($descriptions[$i] ?? '');
 
+                if ($conceptName === '') continue;
 
-/*
-
-                if (!$conceptName) continue;
-
-                $conceptInsertSuccessful = false;
                 try {
                     $conceptDB->insert([
                         'name' => $conceptName,
                         'description' => $desc
                     ]);
-                    $conceptInsertSuccessful = true;
-                    $successMessages[] = "The word has been added.";
-                } catch (Exception $e) {
-                    $errors[] = "Failed to add concept $conceptName.";
-                }
-
-                if ($conceptInsertSuccessful) {
-
                     $concept = $conceptDB->fetchSorted('concept_id', 'desc')[0];
                     $concept_id = $concept['concept_id'];
-                    $successMessages[] = "The concept $conceptName has been added.";
 
                     try {
                         $wordConceptDB->insert([
-                            'word_id' => $insertedWord['word_id'],
+                            'word_id' => $word_id,
                             'concept_id' => $concept_id
                         ]);
-                        $successMessages[] = "The concept $conceptName has been bound.";
                     } catch (Exception $e) {
-                        $errors[] = "Failed to bind the concept ($conceptName) to the word.";
+                        $errors[] = "Failed to bind concept ID $concept_id to word.";
                     }
+
+                } catch (Exception $e) {
+                    $errors[] = "Concept '$conceptName' already exists or failed.";
                 }
-                    */
             }
 
         } else {

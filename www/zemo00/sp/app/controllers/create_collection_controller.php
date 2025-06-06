@@ -6,30 +6,68 @@ require_once __DIR__ . "/../models/LanguageDB.php";
 require_once __DIR__ . "/../models/WordDB.php";
 require_once __DIR__ . "/../models/CollectionWordDB.php";
 
-$collectionDB = new CollectionDB();
+//$collectionDB = new CollectionDB();
 $languageDB = new LanguageDB();
 $wordDB = new WordDB();
 
+$sort = $_GET['sort'] ?? 'word_id';
+$direction = $_GET['direction'] ?? 'asc';
+
 $languages = $languageDB->fetchAll();
-$words = $wordDB->fetchWords();
 
 $errors = [];
+$langError = '';
+
+
+$lang = null;
+if (isset($_GET['lang']) && $_GET['lang'] !== '') {
+    $valid = false;
+    foreach ($languages as $language) {
+        if ($language['code'] === $_GET['lang']) {
+            $valid = true;
+            $lang = $_GET['lang'];
+            break;
+        }
+    }
+    if (!$valid) {
+        $langError = "Invalid language";
+    }
+}
+
+if ($lang !== null) {
+    // === Pagination ===
+    $limit = 6;
+
+    $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+    $offset = ($page - 1) * $limit;
+    $totalWords = $wordDB->fetchCountByLang($lang);
+    $totalPages = ceil($totalWords / $limit);
+
+    // === Fetch words ===
+    $words = $wordDB->fetchWords($sort, $direction, $limit, $offset, $lang);
+
+}
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    $name = $_POST['name'] ?? null;
-    $icon = $_POST['icon'] ?? null;
-    $user_id = $_SESSION['user_id'];
+    $name = trim($_POST['name'] ?? '');
+    $icon = trim($_POST['icon'] ?? '');
     $wordIds = $_POST['word_ids'] ?? [];
+    $user_id = $_SESSION['user_id'] ?? null;
 
-    require __DIR__ . "/../utils/validation.php";
+    if ($name === '') {
+        $errors[] = "Collection name is required.";
+    }
 
-    if (!fieldsNotEmpty([$name])) {
-        $errors[] = "The name field is required.";
+    if (count($wordIds) < 5) {
+        $errors[] = "Please select at least 5 words for the collection.";
     }
 
     if (empty($errors)) {
         try {
+            $collectionDB = new CollectionDB();
+            $collectionWordDB = new CollectionWordDB();
+
             $collectionDB->insert([
                 'name' => $name,
                 'icon' => $icon,
@@ -38,19 +76,22 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
             $collectionId = $collectionDB->fetchSorted('collection_id', 'desc')[0]['collection_id'];
 
-            $collectionWordDB = new CollectionWordDB();
             foreach ($wordIds as $wordId) {
                 $collectionWordDB->insert([
                     'collection_id' => $collectionId,
-                    'word_id' => $wordId
+                    'word_id' => (int)$wordId
                 ]);
             }
+
+            echo "<script>sessionStorage.clear();</script>";
+
+            header("Location: " . BASE_URL . "/collections");
+            exit;
+
         } catch (Exception $e) {
-            $errors[] = "Failed to add the collection";
+            $errors[] = "Failed to create collection: " . $e->getMessage();
         }
-
     }
-
 
 }
 
