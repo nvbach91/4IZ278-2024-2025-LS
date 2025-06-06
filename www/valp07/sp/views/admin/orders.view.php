@@ -51,19 +51,8 @@
                             <div class="col-2">Price</div>
                             <div class="col-3">Actions</div>
                         </div>
-                        <?php foreach ($order['items'] as $item): ?>
-                            <div class="row align-items-center py-2 border-bottom">
-                                <div class="col-5"><?php echo htmlspecialchars($item['product_name'] ?? ''); ?></div>
-                                <div class="col-2"><?php echo (int)($item['quantity'] ?? 0); ?></div>
-                                <div class="col-2">$<?php echo number_format((float)($item['price'] ?? 0), 2); ?></div>
-                                <div class="col-3">
-                                    <form method="POST" onsubmit="return confirm('Delete this item?');">
-                                        <input type="hidden" name="delete_item_id" value="<?php echo $item['item_id']; ?>">
-                                        <button class="btn btn-sm btn-danger">Delete</button>
-                                    </form>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
+                        <a href="order.php?order_id=<?php echo urlencode($order['order_id']); ?>" class="text-decoration-none text-primary mb-2">View Order Details</a>
+
                     </div>
                 </div>
             <?php endif; ?>

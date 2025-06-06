@@ -1,17 +1,37 @@
 <?php require_once __DIR__ . '/Database.php'; ?>
 <?php
 
-class OrderItemsDB extends Database {
+class OrderItemsDB extends Database
+{
     protected $tableName = 'order_items';
 
-    public function findItemByID($id) {
+    public function findItemByID($id)
+    {
         $sql = "SELECT * FROM $this->tableName WHERE id = :id";
         $statement = $this->pdo->prepare($sql);
         $statement->execute(['id' => $id]);
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
+    public function findItemsByOrderID($orderId)
+    {
+        $sql = "SELECT 
+            oi.id AS order_item_id,
+            oi.order_id,
+            oi.product_id,
+            oi.quantity,
+            p.id AS product_id,
+            p.name,
+            p.price
+        FROM $this->tableName oi
+        JOIN products p ON oi.product_id = p.id
+        WHERE oi.order_id = :order_id";
 
-    public function editItem($args) {
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute(['order_id' => $orderId]);
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function editItem($args)
+    {
         $sql = "UPDATE $this->tableName 
                 SET order_id = :order_id, 
                     product_id = :product_id, 
@@ -28,7 +48,8 @@ class OrderItemsDB extends Database {
         ]);
     }
 
-    public function create($args) {
+    public function create($args)
+    {
         $sql = "INSERT INTO $this->tableName 
                 (order_id, product_id, quantity, price) 
                 VALUES 
@@ -40,10 +61,10 @@ class OrderItemsDB extends Database {
             'quantity' => $args['quantity'],
             'price' => $args['price'],
         ]);
-        
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $sql = "DELETE FROM $this->tableName WHERE id = :id";
         $statement = $this->pdo->prepare($sql);
         $statement->execute(['id' => $id]);

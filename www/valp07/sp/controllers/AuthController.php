@@ -30,22 +30,25 @@ class AuthController
                 $email = $_POST['email'];
                 $password = $_POST['password'];
 
-                $usersDB = new \UsersDB(DatabaseConnection::getPDOConnection());
+                $usersDB = new \UsersDB(\DatabaseConnection::getPDOConnection());
                 $users = $usersDB->findUserByEmail($email);
                 $existing_user = $users[0] ?? null;
 
                 if ($existing_user && password_verify($password, $existing_user['password_hash'])) {
                     $_SESSION['id'] = $existing_user['id'];
                     $_SESSION['user_email'] = $existing_user['email'];
+                    $_SESSION['user_role'] = $existing_user['role'];
                     header('Location: index.php');
                     exit;
                 } else {
-                    http_response_code(401);
-                    exit('Invalid login');
+                    $_SESSION['login_error'] = 'Invalid email or password.';
+                    header('Location: login.php');
+                    exit;
                 }
             } else {
-                http_response_code(400);
-                exit('Missing email or password.');
+                $_SESSION['login_error'] = 'Missing email or password.';
+                header('Location: login.php');
+                exit;
             }
         }
 
@@ -114,13 +117,13 @@ class AuthController
 
                 $to = $user['email'];
                 $subject = "Your Password Reset Link";
-                $message = "Hi " . htmlspecialchars($user['name']) . ",\n\n";
-                $message .= "You requested a password reset. Click the link below to reset your password:\n";
-                $message .= $resetLink . "\n\n";
+                $message = "Hi " . htmlspecialchars($user['name']) . ",<br><br>";
+                $message .= "Copy and paste this URL into your browser to reset your password<br>";
+                $message .= "<a href='$resetLink'>click here</a><br>";
                 $message .= "If you didn’t request this, you can safely ignore this message.";
 
                 $headers = "From: mock-eshop@example.com\r\n";
-                $headers .= "Content-Type: text/plain; charset=UTF-8";
+                $headers .= "Content-Type: text/html; charset=UTF-8";
 
                 mail($to, $subject, $message, $headers);
             } else {
@@ -162,7 +165,6 @@ class AuthController
                 ]);
             }
         }
-
         require __DIR__ . '/../views/reset-password.view.php';
     }
 }

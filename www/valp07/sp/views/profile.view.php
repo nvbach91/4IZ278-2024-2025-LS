@@ -26,6 +26,59 @@
       </form>
       <hr>
 
+      <form method="POST" action="updateAddress.php">
+        <div class="border p-3">
+          <h5>Shipping Address</h5>
+
+          <div class="mb-3">
+            <label for="address1" class="form-label">Address Line 1</label>
+            <input type="text" class="form-control" id="address1" name="address1"
+              value="<?php echo htmlspecialchars($savedAddress['address1'] ?? ''); ?>" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="address2" class="form-label">Address Line 2</label>
+            <input type="text" class="form-control" id="address2" name="address2"
+              value="<?php echo htmlspecialchars($savedAddress['address2'] ?? ''); ?>">
+          </div>
+
+          <div class="mb-3">
+            <label for="address3" class="form-label">Address Line 3</label>
+            <input type="text" class="form-control" id="address3" name="address3"
+              value="<?php echo htmlspecialchars($savedAddress['address3'] ?? ''); ?>">
+          </div>
+
+          <div class="mb-3">
+            <label for="city" class="form-label">City</label>
+            <input type="text" class="form-control" id="city" name="city"
+              value="<?php echo htmlspecialchars($savedAddress['city'] ?? ''); ?>" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="state" class="form-label">State</label>
+            <input type="text" class="form-control" id="state" name="state"
+              value="<?php echo htmlspecialchars($savedAddress['state'] ?? ''); ?>">
+          </div>
+
+          <div class="mb-3">
+            <label for="county" class="form-label">County</label>
+            <input type="text" class="form-control" id="county" name="county"
+              value="<?php echo htmlspecialchars($savedAddress['county'] ?? ''); ?>">
+          </div>
+
+          <div class="mb-3">
+            <label for="postal_code" class="form-label">Postal Code</label>
+            <input type="text" class="form-control" id="postal_code" name="postal_code"
+              value="<?php echo htmlspecialchars($savedAddress['postal_code'] ?? ''); ?>" required>
+          </div>
+
+          <button type="submit" name="action" value="update" class="btn btn-primary">Save Address</button>
+        </div>
+      </form>
+      <form method="POST" action="deleteAddress.php" onsubmit="return confirm('Are you sure you want to unlink your saved address?');">
+        <button type="submit" class="btn btn-danger">Unlink Saved Address</button>
+      </form>
+
       <?php if ($role === 'admin'): ?>
         <div class="mb-3">
           <a href="./admin/products.php" class="btn btn-outline-warning w-100">Edit Products</a>

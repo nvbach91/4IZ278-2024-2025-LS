@@ -11,9 +11,13 @@
 
             <div class="col-md-6 mb-4">
                 <div class="border p-3 h-100">
+                    <label for="name" class="form-label">Name</label>
                     <h2><textarea name="name" class="form-control" rows="2"><?php echo htmlspecialchars($product['name']); ?></textarea></h2>
+                    <label for="name" class="form-label">Price</label>
                     <h4><textarea name="price" class="form-control" rows="1"><?php echo htmlspecialchars($product['price']); ?></textarea></h4>
+                    <label for="name" class="form-label">Stock</label>
                     <h5><textarea name="stock" class="form-control" rows="1"><?php echo htmlspecialchars($product['stock']); ?></textarea></h5>
+                    <label for="name" class="form-label">Image</label>
                     <textarea name="image" class="form-control" rows="5"><?php echo htmlspecialchars($product['image']); ?></textarea>
                     <h4>Description</h4>
                     <textarea name="description" class="form-control" rows="4"><?php echo htmlspecialchars($product['description']); ?></textarea>

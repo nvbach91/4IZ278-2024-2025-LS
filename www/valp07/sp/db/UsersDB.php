@@ -57,7 +57,7 @@ class UsersDB extends Database
             'token' => $token,
             'id' => $id
         ]);
-        $resetLink = "https://eso.vse.cz/~valp07/sp/resetPassword.php?token=$token";
+        $resetLink = 'https://eso.vse.cz/~valp07/sp/resetPassword.php?token=' . urlencode($token);
         return $resetLink;
     }
     public function changeRole($id, $role)
@@ -72,6 +72,34 @@ class UsersDB extends Database
         $statement = $this->pdo->prepare($sql);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function findUserByResetToken($token)
+    {
+        $sql = "SELECT * FROM users WHERE reset_token = :token";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute(['token' => $token]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $user ?: null;
+    }
+
+    public function updatePasswordByToken(int $userId, string $hashedPassword)
+    {
+        $sql = "UPDATE $this->tableName SET password_hash = :password, reset_token = NULL WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'password' => $hashedPassword,
+            'id' => $userId
+        ]);
+    }
+    public function updateAddressId($userId, $addressId)
+    {
+        $sql = "UPDATE users SET address_id = :address_id WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([
+            'address_id' => $addressId,
+            'id' => $userId
+        ]);
     }
 }
 

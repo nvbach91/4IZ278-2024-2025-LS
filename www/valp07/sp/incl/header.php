@@ -1,3 +1,16 @@
+<?php
+require_once __DIR__ . '/../db/DatabaseConnection.php';
+require_once __DIR__ . '/../db/UsersDB.php';
+
+$role = null;
+
+if (isset($_SESSION['id'])) {
+    $connection = DatabaseConnection::getPDOConnection();
+    $usersDB = new UsersDB($connection);
+    $user = $usersDB->getUserById($_SESSION['id']);
+    $role = $user['role'] ?? null;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,6 +41,11 @@
                     <?php else: ?>
                         <li class="nav-item"><a class="nav-link" href="https://eso.vse.cz/~valp07/sp/registration.php">Register</a></li>
                         <li class="nav-item"><a class="nav-link" href="https://eso.vse.cz/~valp07/sp/login.php">Login</a></li>
+                    <?php endif; ?>
+                    <?php if ($role === 'admin'): ?>
+                        <li class="nav-item"><a class="nav-link" href="https://eso.vse.cz/~valp07/sp/admin/orders.php">Edit Orders</a></li>
+                        <li class="nav-item"><a class="nav-link" href="https://eso.vse.cz/~valp07/sp/admin/users.php">Edit Users</a></li>
+                        <li class="nav-item"><a class="nav-link" href="https://eso.vse.cz/~valp07/sp/admin/products.php">Edit Products</a></li>
                     <?php endif; ?>
                 </ul>
             </div>

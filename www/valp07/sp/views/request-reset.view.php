@@ -7,8 +7,7 @@
 
             <?php if (!empty($resetLink)): ?>
                 <div class="alert alert-success text-break">
-                    Reset link generated: <br>
-                    <a href="<?php echo htmlspecialchars($resetLink); ?>"><?php echo htmlspecialchars($resetLink); ?></a>
+                    Reset link generated
                 </div>
             <?php elseif (!empty($error)): ?>
                 <div class="alert alert-danger text-center"><?php echo htmlspecialchars($error); ?></div>

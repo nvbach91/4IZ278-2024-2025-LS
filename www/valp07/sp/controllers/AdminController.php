@@ -54,6 +54,36 @@ class AdminController
 
         require __DIR__ . '/../views/admin/product.view.php';
     }
+    public function showOrder()
+    {
+        require_once __DIR__ . '/../requireAdmin.php';
+        require_once __DIR__ . '/../db/DatabaseConnection.php';
+        require_once __DIR__ . '/../db/OrdersDB.php';
+        require_once __DIR__ . '/../db/OrderItemsDB.php';
+        require_once __DIR__ . '/../db/AddressesDB.php';
+
+        $connection = \DatabaseConnection::getPDOConnection();
+        $ordersDB = new \OrdersDB($connection);
+        $orderItemsDB = new \OrderItemsDB($connection);
+
+        $addressesDB = new \AddressesDB($connection);
+        $orderId = $_GET['order_id'] ?? null;
+        $order = $ordersDB->findOrderById($orderId);
+        if (isset($_POST['delete_item_id'])) {
+            $orderItemsDB->delete($_POST['delete_item_id']);
+        }
+
+        $order = $ordersDB->findOrderById($orderId);
+        $orderItems = $orderItemsDB->findItemsByOrderId($orderId);
+
+        if (!$orderId) {
+            http_response_code(400);
+            exit('Order ID is required.');
+        }
+
+        var_dump($orderItems);
+        require __DIR__ . '/../views/admin/order.view.php';
+    }
     public function showProducts()
     {
         $itemsPerPage = 6;
@@ -130,10 +160,13 @@ class AdminController
         require_once __DIR__ . '/../db/OrdersDB.php';
         require_once __DIR__ . '/../db/UsersDB.php';
         require_once __DIR__ . '/../db/OrderItemsDB.php';
+        require_once __DIR__ . '/../db/AddressesDB.php';
 
         $connection = \DatabaseConnection::getPDOConnection();
         $ordersDB = new \OrdersDB($connection);
         $orderItemsDB = new \OrderItemsDB($connection);
+        $addressesDB = new \AddressesDB($connection);
+
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (isset($_POST['delete_item_id'])) {
@@ -164,13 +197,26 @@ class AdminController
         foreach ($orders as $row) {
             $id = $row['order_id'];
             if (!isset($groupedOrders[$id])) {
+                $address = $addressesDB->getByOrderId($id);
+                $formattedAddress = $address
+                    ? implode(', ', array_filter([
+                        $address['address1'],
+                        $address['address2'],
+                        $address['address3'],
+                        $address['city'],
+                        $address['state'],
+                        $address['county'],
+                        $address['postal_code']
+                    ]))
+                    : 'N/A';
+
                 $groupedOrders[$id] = [
                     'order_id' => $id,
                     'created_at' => $row['created_at'],
                     'status' => $row['status'],
                     'user_email' => $row['user_email'],
                     'payment_method' => $row['payment_method'],
-                    'shipping_address' => $row['shipping_address'],
+                    'shipping_address' => $formattedAddress,
                     'items' => []
                 ];
             }
@@ -185,6 +231,7 @@ class AdminController
 
         require __DIR__ . '/../views/admin/orders.view.php';
     }
+
     public function manageUsers()
     {
         require_once __DIR__ . '/../db/DatabaseConnection.php';

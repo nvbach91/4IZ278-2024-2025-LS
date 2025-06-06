@@ -6,6 +6,8 @@ require_once __DIR__ . '/../requireUser.php';
 require_once __DIR__ . '/../db/DatabaseConnection.php';
 require_once __DIR__ . '/../db/UsersDB.php';
 require_once __DIR__ . '/../db/OrdersDB.php';
+require_once __DIR__ . '/../db/AddressesDB.php';
+use AddressesDB;
 
 use UsersDB;
 use OrdersDB;
@@ -20,7 +22,8 @@ class UserController
         $userId = $_SESSION['id'];
         $usersDB = new UsersDB($connection);
         $ordersDB = new OrdersDB($connection);
-
+        $addressesDB = new AddressesDB($connection);
+        $savedAddress = $addressesDB->findByUserId($userId);
         $user = $usersDB->getUserById($userId);
         $name = $user['name'];
         $email = $user['email'];

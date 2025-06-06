@@ -13,12 +13,30 @@
 
             <div class="col-md-6 mb-4">
                 <div class="border p-3 h-100">
-                    <h2><textarea name="name" class="form-control" rows="5"><?php echo htmlspecialchars($product['name']); ?></textarea></h2>
-                    <h4><textarea name="price" class="form-control" rows="5"><?php echo htmlspecialchars($product['price']); ?></textarea></h4>
-                    <h5><textarea name="stock" class="form-control" rows="5"><?php echo htmlspecialchars($product['stock']); ?></textarea></h5>
-                    <textarea name="image" class="form-control" rows="5"><?php echo htmlspecialchars($product['image']); ?></textarea>
-                    <h4>Description</h4>
-                    <textarea name="description" class="form-control" rows="5"><?php echo htmlspecialchars($product['description']); ?></textarea>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <textarea name="name" id="name" class="form-control" rows="2"><?php echo htmlspecialchars($product['name']); ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <textarea name="price" id="price" class="form-control" rows="1"><?php echo htmlspecialchars($product['price']); ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="stock" class="form-label">Stock</label>
+                        <textarea name="stock" id="stock" class="form-control" rows="1"><?php echo htmlspecialchars($product['stock']); ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image URL</label>
+                        <textarea name="image" id="image" class="form-control" rows="2"><?php echo htmlspecialchars($product['image']); ?></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea name="description" id="description" class="form-control" rows="4"><?php echo htmlspecialchars($product['description']); ?></textarea>
+                    </div>
                 </div>
             </div>
         </div>
@@ -30,14 +48,16 @@
                     <table class="table">
                         <tbody>
                             <tr>
-                                <th>Brand</th>
-                                <td><input type="text" class="form-control" name="brand" value="<?php echo htmlspecialchars($product['brand']); ?>"></td>
+                                <th><label for="brand" class="form-label mb-0">Brand</label></th>
+                                <td>
+                                    <input type="text" class="form-control" name="brand" id="brand" value="<?php echo htmlspecialchars($product['brand']); ?>">
+                                </td>
                             </tr>
                             <?php foreach ($productDetails as $key => $value): ?>
                                 <tr>
-                                    <th><?php echo htmlspecialchars($key); ?></th>
+                                    <th><label for="spec-<?php echo htmlspecialchars($key); ?>" class="form-label mb-0"><?php echo htmlspecialchars(ucfirst($key)); ?></label></th>
                                     <td>
-                                        <input type="text" class="form-control" name="specs[<?php echo htmlspecialchars($key); ?>]" value="<?php echo htmlspecialchars($value); ?>">
+                                        <input type="text" class="form-control" id="spec-<?php echo htmlspecialchars($key); ?>" name="specs[<?php echo htmlspecialchars($key); ?>]" value="<?php echo htmlspecialchars($value); ?>">
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

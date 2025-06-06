@@ -5,8 +5,8 @@ require __DIR__ . '/config/db.php';
 session_start();
 
 $client = new Google_Client();
-$client->setClientId('1028430425655-4ujjsf20cknuattf7otjan0n3ptt3bkh.apps.googleusercontent.com');
-$client->setClientSecret('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');
+$client->setClientId('');
+$client->setClientSecret('');
 $client->setRedirectUri('http://localhost/www/valp07/sp/google-callback.php');
 
 if (isset($_GET['code'])) {

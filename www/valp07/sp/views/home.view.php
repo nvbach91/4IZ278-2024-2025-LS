@@ -88,9 +88,10 @@
                                     <h5><?php echo number_format($product['price'], 2), ' ', GLOBAL_CURRENCY; ?></h5>
                                     <p class="card-text"><?php echo $product['description']; ?></p>
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <?php if (isset($_SESSION['id'])): ?>
-                                            <a href="buy.php?id=<?php echo $product['id']; ?>" class="btn btn-primary">Buy Now</a>
-                                        <?php endif; ?>
+                                        <form method="post" action="<?php echo isset($_SESSION['id']) ? 'buy.php?id=' . $product['id'] : 'login.php'; ?>">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit" class="btn btn-primary">Buy Now</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

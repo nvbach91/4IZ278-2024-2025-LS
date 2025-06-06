@@ -45,19 +45,35 @@ class OrdersDB extends Database
 
     public function create($args)
     {
-        $sql = "INSERT INTO $this->tableName 
-                (user_id, status, shipping_address, payment_method) 
-                VALUES 
-                (:user_id, :status, :shipping_address, :payment_method)";
+
+        $stmt = $this->pdo->prepare("
+        INSERT INTO addresses (address1, address2, address3, city, state, county, postal_code)
+        VALUES (:address1, :address2, :address3, :city, :state, :county, :postal_code)
+    ");
+        $stmt->execute([
+            'address1' => $args['address1'],
+            'address2' => $args['address2'] ?? null,
+            'address3' => $args['address3'] ?? null,
+            'city' => $args['city'],
+            'state' => $args['state'],
+            'county' => $args['county'] ?? null,
+            'postal_code' => $args['postal_code']
+        ]);
+        $addressId = $this->pdo->lastInsertId();
+
+        $sql = "INSERT INTO $this->tableName (user_id, status, payment_method, address_id)
+            VALUES (:user_id, :status, :payment_method, :address_id)";
         $statement = $this->pdo->prepare($sql);
         $statement->execute([
             'user_id' => $args['user_id'],
             'status' => $args['status'],
-            'shipping_address' => $args['shipping_address'],
             'payment_method' => $args['payment_method'],
+            'address_id' => $addressId
         ]);
+
         return $this->pdo->lastInsertId();
     }
+
 
     public function delete($id)
     {
@@ -73,7 +89,13 @@ class OrdersDB extends Database
             o.created_at, 
             o.status, 
             o.payment_method, 
-            o.shipping_address,
+            a.address1,
+            a.address2,
+            a.address3,
+            a.city,
+            a.state,
+            a.county,
+            a.postal_code,
             u.email AS user_email,
             oi.id AS item_id,
             oi.product_id,
@@ -82,6 +104,7 @@ class OrdersDB extends Database
             p.name AS product_name
         FROM orders o
         JOIN users u ON o.user_id = u.id
+        LEFT JOIN addresses a ON o.address_id = a.id
         LEFT JOIN order_items oi ON o.id = oi.order_id
         LEFT JOIN products p ON oi.product_id = p.id
         ORDER BY o.created_at DESC, o.id
