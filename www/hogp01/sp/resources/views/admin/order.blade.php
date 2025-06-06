@@ -3,6 +3,24 @@
 @section('title', 'Orders')
 @section('content')
 
+<!--Error Toast-->
+@if ($errors->any())
+  <div id="toast-error" class="toast-error">
+  @foreach ($errors->all() as $error)
+    {{ $error }}
+  @endforeach
+  </div>
+@endif
+<script>
+    setTimeout(() => {
+        const toast = document.getElementById('toast-error');
+        if (toast) {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 500); // Wait for fade-out transition
+        }
+    }, 2000);
+</script>
+
 <div class="order-editor">
   
   <div class="wrapper">

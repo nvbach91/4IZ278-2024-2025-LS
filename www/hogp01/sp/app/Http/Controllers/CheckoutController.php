@@ -104,7 +104,7 @@ class CheckoutController extends Controller
                 // Sends confirmation mail
                 Mail::to($order->user->email)->send(new OrderConfirmation($order, $totalAmount));
             } catch (\Exception $e) {
-                return redirect()->back()->withErrors(['email' => 'Failed to send email..']);
+                return redirect()->route('confirmation', ['order' => $order->id])->withErrors(['email' => 'Failed to send email..']);
             }
             return redirect()->route('confirmation', ['order' => $order->id]);
             

@@ -15,7 +15,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::all();
+        $orders = Order::all()->sortByDesc('created_at');
         return view('admin.order', compact('orders'));
     }
     public function update(Request $request, Order $order)
@@ -36,7 +36,7 @@ class OrderController extends Controller
                 Mail::to($order->user->email)->send(new OrderCompleted($order));
             }
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['email' => 'Failed to send email..']);
+            return redirect()->route('admin.orders.index')->withErrors(['email' => 'Failed to send email..']);
         }
          
         return redirect()->route('admin.orders.index')->with('success', 'Objednávka upravena!');

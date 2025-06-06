@@ -59,7 +59,7 @@
             const toast = document.getElementById('toast-message');
             if (toast) {
                 toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300); // Wait for fade-out transition
+                setTimeout(() => toast.remove(), 500); // Wait for fade-out transition
             }
         }, 2000);
     </script>
