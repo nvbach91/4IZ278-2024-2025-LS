@@ -24,10 +24,7 @@ body {
     font-family: "Playfair Display", serif;
     font-size: .85em
 }
-.container {
-    display: flex;
-    gap: 30px;
-}
+
 .card {
     flex-direction: column;
     background-image: url(https://www.photos-public-domain.com/wp-content/uploads/2012/05/white-paper-texture.jpg);
@@ -59,19 +56,19 @@ header div {
     display: block
 }
 
-section h1 {
+main h1 {
     font-size: 1.8em;
     font-weight: 700
 }
 
-section h2,
-section h3 {
+main h2,
+main h3 {
     font-size: 1.2em;
     font-weight: 600;
     margin-top: 5px
 }
 
-section h3 {
+main h3 {
     font-size: 1em;
     font-weight: 400
 }
@@ -79,7 +76,7 @@ section h3 {
 .right,
 footer,
 footer p,
-section {
+main {
     text-align: center
 }
 
