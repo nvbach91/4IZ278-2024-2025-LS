@@ -101,7 +101,7 @@ class OrderController extends Controller
     }
     public function adminOrders()
     {
-        $orders = Order::all();
+        $orders = Order::with('user')->orderBy('created_at', 'desc')->get();
         $categories = Category::all();
         return view('admin.admin-orders', compact('orders', 'categories'));
     }
