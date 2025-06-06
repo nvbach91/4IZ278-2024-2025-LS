@@ -25,6 +25,32 @@ class ProductController extends Controller
             $query->where('category_id', $request->category);
         }
 
+        if ($request->filled('priceRange')) {
+            switch ($request->priceRange) {
+                case '1':
+                    $query->where('price', '<', 100);
+                    break;
+                case '2':
+                    $query->whereBetween('price', [100, 500]);
+                    break;
+                case '3':
+                    $query->whereBetween('price', [500, 1000]);
+                    break;
+                case '4':
+                    $query->whereBetween('price', [1000, 2000]);
+                    break;
+                case '5':
+                    $query->where('price', '>', 2000);
+                default:
+                    $query->latest();
+            }
+        }
+
+        // Stock filter
+        if ($request->filled('inStock')) {
+            $query->where('stock', '>', 0);
+        }
+
         switch ($request->get('sort')) {
             case 'price-low':
                 $query->orderBy('price', 'asc');
@@ -59,6 +85,28 @@ class ProductController extends Controller
     {
         Product::where('product_id', $id)->delete();
         return redirect()->back()->with('success', 'Zboží smazáno!');
+    }
+
+    public function updateProduct(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required',
+            'price' => 'required',
+            'stock' => 'required',
+            'category' => 'required',
+            'image' => 'required',
+        ]);
+        Product::where('id', $id)
+            ->update([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'price' => $validated['price'],
+                'stock' => $validated['stock'],
+                'category_id' => $validated['category'],
+                'image' => $validated['image'],
+            ]);
+        return redirect()->back()->with('success', 'Objednávka aktualizována!');
     }
 
 

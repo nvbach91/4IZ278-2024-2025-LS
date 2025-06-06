@@ -43,6 +43,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 //authenticated users
 Route::get('/profile/{id}', [UserController::class, 'profile'])->name('profile.index')->middleware('auth');
+Route::get('/update-user-user/{id}', [UserController::class, 'updateUserUser'])->name('update.user.user')->middleware('auth');
+Route::get('/update-adress/{id}', [UserController::class, 'updateAdress'])->name('update.adress')->middleware('auth');
 
 Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 Route::get('/product/{id}', [ProductController::class, 'detail'])->name('products.detail');
@@ -76,4 +78,5 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/admin-product/{id}', [ProductController::class, 'adminProduct'])->name('admin.product');
     Route::get('/delete-product/{id}', [ProductController::class, 'deleteProduct'])->name('delete.product');
+    Route::get('/update-product/{id}', [ProductController::class, 'updateProduct'])->name('update.product');
 });

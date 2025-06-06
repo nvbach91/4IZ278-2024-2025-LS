@@ -5,11 +5,11 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
         </svg>
-        <h2 class="text-2xl font-semibold mb-4">Your cart is empty</h2>
-        <p class="text-neutral-600 mb-8">Looks like you haven't added any products to your cart yet.</p>
+        <h2 class="text-2xl font-semibold mb-4">Košík je prázdný</h2>
+        <p class="text-neutral-600 mb-8">Přidejte si nějaké zboží do košíku.</p>
         <a href="{{ route('products.index') }}" data-navlink
             class="inline-flex items-center bg-blue-700 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-            Start Shopping
+            Začít nakupovat
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd"
                     d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z"
@@ -59,7 +59,7 @@
                                         <div class="ml-4">
                                             <a href="" data-navlink
                                                 class="text-sm font-medium text-neutral-900 hover:text-primary-500">
-                                                {{ $item['price'] }}
+                                                {{ $item['name'] }}
                                             </a>
                                             <div class="text-sm text-neutral-500">
                                                 Category: {{ $item['category'] }}

@@ -113,7 +113,7 @@
                     <!-- Skrytá pole pro předání deliveryData -->
                     <input type="hidden" name="first-name" value="{{ $deliverData['street'] }}">
                     <input type="hidden" name="last-name" value="{{ $deliverData['street'] }}">
-                    <input type="hidden" name="email" value="{{ $deliverData['street'] }}">
+                    <input type="hidden" name="email" value="{{ $deliverData['email'] }}">
                     <input type="hidden" name="phone" value="{{ $deliverData['street'] }}">
                     <input type="hidden" name="street" value="{{ $deliverData['street'] }}">
                     <input type="hidden" name="zip" value="{{ $deliverData['zip'] }}">

@@ -3,15 +3,15 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Invoice</title>
+    <title>Faktura</title>
 </head>
 
 <body>
-    <h1>Invoice</h1>
-    <p>Order ID: {{ $order->id }}</p>
-    <p>Total: {{ $order->price }} Kč</p>
-    <p>Address: {{ $order->street }}, {{ $order->postal_code }} {{ $order->city }}</p>
-    <p>Payment: {{ $order->payment }}</p>
+    <h1>Faktura</h1>
+    <p>ID objednávky: {{ $order->id }}</p>
+    <p>Cena celkem: {{ $order->price }} Kč</p>
+    <p>Adresa: {{ $order->street }}, {{ $order->postal_code }} {{ $order->city }}</p>
+    <!--<p>Payment: {{ $order->payment }}</p>-->
 </body>
 
 </html>

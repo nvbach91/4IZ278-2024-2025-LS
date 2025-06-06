@@ -13,7 +13,7 @@ define('BASE_URL', '/4IZ278/DU/du06/');
     <meta name="author" content="" />
     @vite('resources/css/app.css')
     <title>Shop Homepage - Start Bootstrap Template</title>
-    @fluxAppearance
+    
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
 </head>

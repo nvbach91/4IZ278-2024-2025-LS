@@ -13,7 +13,7 @@ define('BASE_URL', '/4IZ278/DU/du06/');
     <meta name="author" content="" />
     @vite('resources/css/app.css')
     <title>Shop Homepage - Start Bootstrap Template</title>
-    @fluxAppearance
+    
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600&display=swap" rel="stylesheet" />
 </head>
@@ -26,64 +26,57 @@ define('BASE_URL', '/4IZ278/DU/du06/');
         <!-- Filters and sorting -->
         <div class="flex flex-col md:flex-row gap-4 mb-8">
             <div class="md:w-1/4 lg:w-1/5">
-                <div class="bg-white rounded-lg shadow p-4">
-                    <h2 class="font-semibold text-lg mb-4">Filters</h2>
+                <form method="GET" action="{{ route('products.index') }}" id="price-range-form">
+                    <div class="bg-white rounded-lg shadow p-4">
+                        <h2 class="font-semibold text-lg mb-4">Filters</h2>
 
-                    <!-- Price Range Filter -->
-                    <div class="mb-6">
-                        <h3 class="font-medium mb-2">Price Range</h3>
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="price-1"
-                                    class="rounded text-primary-500 focus:ring-primary-500 mr-2">
-                                <label for="price-1">Under $100</label>
+                        <!-- Price Range Filter -->
+                        <div class="mb-6">
+                            <h3 class="font-medium mb-2">Price Range</h3>
+                            <div class="space-y-2">
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @php
+                                        $labels = [
+                                            1 => 'Under $100',
+                                            2 => '$100 - $500',
+                                            3 => '$500 - $1000',
+                                            4 => '$1000 - $2000',
+                                            5 => '$2000+',
+                                        ];
+                                    @endphp
+                                    <div class="flex items-center">
+                                        <input type="radio" value="{{ $i }}" id="price-{{ $i }}"
+                                            class="mr-2" name="priceRange"
+                                            onchange="document.getElementById('price-range-form').submit();"
+                                            {{ request('priceRange') == $i ? 'checked' : '' }}>
+                                        <label for="price-{{ $i }}">{{ $labels[$i] }}</label>
+                                    </div>
+                                @endfor
+                                <div class="flex items-center">
+                                    <input type="radio" value="6" id="price-6" class="mr-2" name="priceRange"
+                                        onchange="document.getElementById('price-range-form').submit();"
+                                        {{ request('priceRange') == $i ? 'checked' : '' }}>
+                                    <label for="price-6">All</label>
+                                </div>
                             </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="price-2"
-                                    class="rounded text-primary-500 focus:ring-primary-500 mr-2">
-                                <label for="price-2">$100 - $500</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="price-3"
-                                    class="rounded text-primary-500 focus:ring-primary-500 mr-2">
-                                <label for="price-3">$500 - $1000</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="price-4"
-                                    class="rounded text-primary-500 focus:ring-primary-500 mr-2">
-                                <label for="price-4">$1000 - $2000</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="price-5"
-                                    class="rounded text-primary-500 focus:ring-primary-500 mr-2">
-                                <label for="price-5">$2000+</label>
+                        </div>
+
+                        <!-- Availability Filter -->
+                        <div class="mb-6">
+                            <h3 class="font-medium mb-2">Availability</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="in-stock" name="inStock" value="1"
+                                        onchange="document.getElementById('price-range-form').submit();"
+                                        class="rounded text-primary-500 focus:ring-primary-500 mr-2"
+                                        {{ request('inStock') ? 'checked' : '' }}>
+                                    <label for="in-stock">In Stock</label>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </form>
 
-                    <!-- Availability Filter -->
-                    <div class="mb-6">
-                        <h3 class="font-medium mb-2">Availability</h3>
-                        <div class="space-y-2">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="in-stock"
-                                    class="rounded text-primary-500 focus:ring-primary-500 mr-2">
-                                <label for="in-stock">In Stock</label>
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" id="on-sale"
-                                    class="rounded text-primary-500 focus:ring-primary-500 mr-2">
-                                <label for="on-sale">On Sale</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Apply Filters Button -->
-                    <button id="apply-filters"
-                        class="w-full py-2 bg-primary-500 text-white rounded hover:bg-primary-600 transition-colors">
-                        Apply Filters
-                    </button>
-                </div>
             </div>
 
             <div class="md:w-3/4 lg:w-4/5">
@@ -103,7 +96,8 @@ define('BASE_URL', '/4IZ278/DU/du06/');
                                     Price: High to Low</option>
                                 <option value="name-asc" {{ request('sort') == 'name-asc' ? 'selected' : '' }}>Name: A
                                     to Z</option>
-                                <option value="name-desc" {{ request('sort') == 'name-desc' ? 'selected' : '' }}>Name: Z
+                                <option value="name-desc" {{ request('sort') == 'name-desc' ? 'selected' : '' }}>Name:
+                                    Z
                                     to A</option>
                             </select>
                         </div>

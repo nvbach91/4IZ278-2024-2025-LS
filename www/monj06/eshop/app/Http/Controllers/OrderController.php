@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -50,7 +51,7 @@ class OrderController extends Controller
             'phone' => 'required|regex:/^\s*(\d\s*){9}$/|max:255',
             'street' => 'required|string|max:255',
             'city' => 'required|string|max:255',
-            'zip' => 'required|numeric|max:255',
+            'zip' => 'required|numeric',
         ]);
 
         return view('order-summary', [
@@ -95,7 +96,7 @@ class OrderController extends Controller
     }
     public function deleteItemOrder($id)
     {
-        DB::table('order-items')->where('product_id', $id)->delete();
+        DB::table('order_items')->where('product_id', $id)->delete();
         return redirect()->back()->with('success', 'Zboží smazáno!');
     }
     public function adminOrders()
@@ -134,12 +135,18 @@ class OrderController extends Controller
         $order = Order::create($orderData);
 
         $cart = session('cart', []);
+
         foreach ($cart as $productId => $item) {
             DB::table("order_items")->insert([
                 'order_id' => $order->id,
                 'product_id' => $productId,
                 'quantity' => $item['quantity'],
             ]);
+
+
+            DB::table('products')
+                ->where('id', $productId)
+                ->decrement('stock', $item['quantity']);
         }
 
         //  Vyčištění košíku

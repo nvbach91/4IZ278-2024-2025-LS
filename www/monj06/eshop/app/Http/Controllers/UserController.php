@@ -45,4 +45,38 @@ class UserController extends Controller
             ]);
         return redirect()->back()->with('success', 'Uživatel aktualizován!');
     }
+    public function updateUserUser(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'required|numeric',
+            'password' => 'required|min:8',
+        ]);
+        User::where('id', $id)
+            ->update([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'phone' => $validated['phone'],
+                'password' => $validated['password'],
+            ]);
+        return redirect()->back()->with('success', 'Uživatel aktualizován!');
+    }
+    public function updateAdress(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'street' => 'required|string|max:255',
+            'city' => 'required',
+            'postalCode' => 'required|numeric',
+        ]);
+        User::where('id', $id)
+            ->update([
+                'street' => $validated['street'],
+                'city' => $validated['city'],
+                'postal_code' => $validated['postalCode'],
+            ]);
+        $user = User::findOrFail($id);
+        $categories = Category::all();
+        return view('profile', compact('user', 'categories'));
+    }
 }
