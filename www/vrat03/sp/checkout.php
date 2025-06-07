@@ -51,8 +51,8 @@ $user= isset($_SESSION['user']) ? $usersDB->fetchUserByID($_SESSION['user']['id'
             <?php if (isset($user)): ?>
                 <p><strong>Name:</strong> <?php echo htmlspecialchars($user['name']); ?></p>
                 <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-                <p><strong>Phone:</strong> <?php echo htmlspecialchars($user['phone']); ?></p>
-                <p><strong>Address:</strong> <?php echo htmlspecialchars($user['address']); ?></p>
+                <p><strong>Phone:</strong> <?php echo isset($user['phone']) ? htmlspecialchars($user['phone']) : ''; ?></p>
+                <p><strong>Address:</strong> <?php echo isset($user['address']) ? htmlspecialchars($user['address']) :'' ; ?></p>
                 <?php
                     $missing = empty($user['name']) || empty($user['email']) || empty($user['address']);
                     if ($missing):

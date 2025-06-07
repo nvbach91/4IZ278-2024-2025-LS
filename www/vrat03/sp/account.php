@@ -82,12 +82,12 @@ if (!empty($_POST)) {
         </div>
         <div class="mb-3">
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" class="form-control" value="<?php echo htmlspecialchars($name); ?>">
+            <input type="text" id="name" name="name" class="form-control" value="<?php echo isset($name) ? htmlspecialchars($name) : ''?>">
         </div>
 
         <div class="mb-3">
             <label for="email">Email:</label>
-            <input id="email" name="email" class="form-control" value="<?php echo htmlspecialchars($email); ?>" disabled>
+            <input id="email" name="email" class="form-control" value="<?php echo isset($email) ? htmlspecialchars($email) : ''?>" disabled>
         </div>
 
         <div id="alertPhone" class="alert alert-danger" role="alert" style="display: <?php echo isset($errors['name']) ? 'block' : 'none'; ?>;">
@@ -95,7 +95,7 @@ if (!empty($_POST)) {
         </div>
         <div class="mb-3">
             <label for="phone">Phone:</label>
-            <input type="tel" id="phone" name="phone" class="form-control" value="<?php echo htmlspecialchars($phone); ?>">
+            <input type="tel" id="phone" name="phone" class="form-control" value="<?php echo isset($phone) ? htmlspecialchars($phone) : ''?>">
         </div>
 
         <div id="alertAddress" class="alert alert-danger" role="alert" style="display: <?php echo isset($errors['name']) ? 'block' : 'none'; ?>;">
@@ -103,7 +103,7 @@ if (!empty($_POST)) {
         </div>
         <div class="mb-3">
             <label for="address">Address:</label>
-            <input type="text" id="address" name="address" class="form-control" value="<?php echo htmlspecialchars($address); ?>">
+            <input type="text" id="address" name="address" class="form-control" value="<?php echo isset($address) ? htmlspecialchars($address) : ''?>">
         </div>
         <button type="submit" id="submitButton" class="btn btn-primary d-flex align-items-center" <?php echo isset($errors['success']) ? 'disabled' : ''; ?>>
             <span class="material-symbols-outlined">save</span>

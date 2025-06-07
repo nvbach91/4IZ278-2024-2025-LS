@@ -2,11 +2,11 @@
 <?php $csrf = new \ParagonIE\AntiCSRF\AntiCSRF; ?>
 
 <tr id="user-<?php echo htmlspecialchars($user['user_id']); ?>">
-    <td><?php echo htmlspecialchars($user['user_id']); ?></td>
-    <td><?php echo htmlspecialchars($user['name']); ?></td>
-    <td><?php echo htmlspecialchars($user['email']); ?></td>
-    <td><?php echo htmlspecialchars($user['phone']); ?></td>
-    <td><?php echo htmlspecialchars($user['address']); ?></td>
+    <td><?php echo isset($user['user_id']) ? htmlspecialchars($user['user_id']) : ''; ?></td>
+    <td><?php echo isset($user['name']) ? htmlspecialchars($user['name']) : ''; ?></td>
+    <td><?php echo isset($user['email']) ? htmlspecialchars($user['email']) : ''; ?></td>
+    <td><?php echo isset($user['phone']) ? htmlspecialchars($user['phone']) : ''; ?></td>
+    <td><?php echo isset($user['address']) ? htmlspecialchars($user['address']) : ''; ?></td>
     <?php if ($loggedUserPrivilege >= 3) { ?>
         <td><form method="post" action="" class="d-inline d-flex gap-2 flex-wrap">
                 <?php $csrf->insertToken(); ?>

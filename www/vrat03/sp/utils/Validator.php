@@ -27,7 +27,7 @@
         }
 
         private function validatePhoneFormat(string $field, string $value): bool {
-            if (!empty($value) && !preg_match('/^(\+\d{1,3} )?([0-9] ?){9}$/', $value)) {
+            if (!empty($value) && !preg_match('/^(\+\d{1,3} ?)?([0-9] ?){9}$/', $value)) {
                 $this->errors[$field] = "Invalid $field number format.";
                 return false;
             }

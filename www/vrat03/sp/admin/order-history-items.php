@@ -75,12 +75,12 @@ $csrf_token_input = ob_get_clean();
                 <div class="ps-3">
                     <details>
                         <?php $user = $UsersDB->fetchUserById($order['user_id']);?>
-                        <summary>Customer: <?php echo htmlspecialchars($user['name']); ?></summary>
+                        <summary>Customer: <?php echo isset($user['name']) ? htmlspecialchars($user['name']) : ''; ?></summary>
                         <p class="ps-3">
-                            Name: <?php echo htmlspecialchars($user['name']); ?><br>
-                            Email: <?php echo htmlspecialchars($user['email']); ?><br>
-                            Phone: <?php echo htmlspecialchars($user['phone']); ?><br>
-                            Address: <?php echo htmlspecialchars($user['address']); ?>
+                            Name: <?php echo isset($user['name']) ? htmlspecialchars($user['name']) : ''; ?><br>
+                            Email: <?php echo isset($user['email']) ? htmlspecialchars($user['email']) : ''; ?><br>
+                            Phone: <?php echo isset($user['phone']) ? htmlspecialchars($user['phone']) : ''; ?><br>
+                            Address: <?php echo isset($user['address']) ? htmlspecialchars($user['address']) : ''; ?>
                         </p>
                     </details>
                     <table class="table table-hover table-striped table-sm mt-2" id="order-<?php echo htmlspecialchars($order['order_id']); ?>">
