@@ -63,6 +63,19 @@ class UserDB extends Model {
         }
     }
 
+    /**
+     * Refreshes the verification token.
+     * 
+     * @param string $email The email of the user.
+     * @param string $token The new token.
+     */
+    public function refreshToken(string $email, string $token): void {
+        $user = $this->fetchByEmail($email);
+        if ($user) {
+            $this->update($user['user_id'], ['verification_token' => $token, 'token_created_at' => date('Y-m-d H:i:s')]);
+        }
+    }
+
 }
 
 ?>

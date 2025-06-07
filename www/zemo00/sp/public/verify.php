@@ -6,24 +6,30 @@ $userDB = new UserDB();
 
 $token = $_GET['token'] ?? '';
 
-if ($token) {
-    $user = $userDB->fetchWhere(['verification_token' => $token], ['user_id', 'token_created_at', 'email'])[0] ?? null;
-    if ($user) {
-        $tokenAge = time() - strtotime($user['token_created_at']);
-        if ($tokenAge < 600) {
-            $userDB->verify($user['email']);
-            $url = BASE_URL . "/login";
-            header("Location: $url");
-            exit;
-        } else {
-            echo "Token expired";
+$result = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $token = $_POST['token'];
+    if ($token) {
+        $user = $userDB->fetchWhere(['verification_token' => $token], ['user_id', 'token_created_at', 'email'])[0] ?? null;
+        echo 'user:' . var_dump($user);
+        if ($user) {
+            echo 'user exists';
+            $tokenAge = time() - strtotime($user['token_created_at']);
+            if ($tokenAge < 600) {
+                $userDB->verify($user['email']);
+                echo 'user is verified';
+                $result = 'success';
+            } else {
+                $result = 'expired';
+            }
         }
+    } else {
+        $result = 'no-token';
     }
-} else {
-    echo "No verification token provided";
 }
-$url = BASE_URL . "/login";
-header("Location: $url");
-exit;
+
+require __DIR__ . "/../app/views/pages/verification_page.php";
+
 
 ?>
