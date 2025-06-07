@@ -12,7 +12,8 @@ class AppLogger {
         if (self::$logger === null) {
             self::$logger = new Logger('TomsShopLogger');
 
-            $logPath = __DIR__ . '/../logs/app.log';
+            $week = date('o-\WW');
+            $logPath = __DIR__ . "/../logs/app-".$week.".log";
             $handler = new StreamHandler($logPath, Level::Debug);
 
             self::$logger->pushHandler($handler);
