@@ -16,7 +16,11 @@ document.addEventListener('click', function(e) {
         .then(res => res.json())
         .then(data => {
             let text, type;
-            if (data === true) {
+            if (data && data.login) {
+                window.location.href = './login.php';
+                return;
+            }
+            else if (data === true) {
                 text = "Product was successfully added to the cart.";
                 type = "success";
             } else {
