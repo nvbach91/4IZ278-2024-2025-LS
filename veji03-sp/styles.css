@@ -1,0 +1,290 @@
+/* Reset a základ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Navigace */
+.navbar {
+  background-color: #343a40;
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand {
+  color: #fff;
+}
+
+.navbar .nav-link:hover {
+  color: #ffc107;
+}
+
+/* Kontejnery */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Karty produktů */
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s;
+  background-color: #fff;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+.card img {
+  max-width: 100%;
+  height: 200px;
+  object-fit: contain;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Tlačítka */
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Formuláře */
+form input,
+form select,
+form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Tabulky (např. v adminu) */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+table th,
+table td {
+  border: 1px solid #ccc;
+  padding: 0.75rem;
+  text-align: left;
+}
+
+/* Košík */
+.cart-summary {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 6px;
+}
+
+/* Přihlášení a registrace */
+.auth-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* index.php - výpis produktů */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #fff;
+  transition: box-shadow 0.2s;
+}
+
+.product-card:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  background-color: #f5f5f5;
+}
+
+.product-card-body {
+  padding: 1rem;
+  flex-grow: 1;
+}
+
+.product-card-title {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.product-card-price {
+  font-size: 1rem;
+  color: #28a745;
+  font-weight: 500;
+}
+
+.product-card-actions {
+  padding: 0 1rem 1rem;
+}
+
+/* product.php - detail produktu */
+.product-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.product-image {
+  flex: 1 1 300px;
+  max-width: 400px;
+}
+
+.product-image img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.product-info {
+  flex: 2 1 400px;
+}
+
+.product-info h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.product-info .price {
+  font-size: 1.5rem;
+  color: #28a745;
+  margin-bottom: 1rem;
+}
+
+.product-info .description {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.product-info form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.product-info input[type="number"] {
+  max-width: 120px;
+}
+
+.cart-container {
+  margin-top: 2rem;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.cart-table th,
+.cart-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.cart-table img {
+  height: 60px;
+  object-fit: contain;
+}
+
+.cart-total {
+  text-align: right;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
+.checkout-container {
+  margin-top: 2rem;
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.checkout-form label {
+  font-weight: bold;
+}
+
+.checkout-form input,
+.checkout-form select {
+  padding: 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 100%;
+}
+
+.checkout-summary {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f1f1f1;
+  border-radius: 6px;
+  font-weight: bold;
+}
