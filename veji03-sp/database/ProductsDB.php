@@ -17,7 +17,8 @@ class ProductsDB {
         $minRam, $maxRam,
         $minBattery, $maxBattery,
         $minYear, $maxYear,
-        $minDisplay, $maxDisplay
+        $minDisplay, $maxDisplay,
+        $limit = null, $offset = null
     ) {
         $query = "SELECT p.id, p.name, p.price, p.image FROM products p WHERE (p.deactivated IS NULL OR p.deactivated = 0)";
         $params = [];
@@ -72,6 +73,12 @@ class ProductsDB {
 
         $query .= " ORDER BY p.name";
 
+        if ($limit !== null && $offset !== null) {
+            $query .= " LIMIT ? OFFSET ?";
+            $params[] = (int)$limit;
+            $params[] = (int)$offset;
+        }
+
         $stmt = $this->pdo->prepare($query);
         $stmt->execute($params);
         return $stmt->fetchAll();
@@ -86,5 +93,68 @@ class ProductsDB {
         ");
         $stmt->execute([$id]);
         return $stmt->fetch();
+    }
+
+    public function countFilteredProducts(
+        $brandId, $minPrice, $maxPrice,
+        $minRam, $maxRam,
+        $minBattery, $maxBattery,
+        $minYear, $maxYear,
+        $minDisplay, $maxDisplay
+    ) {
+        $query = "SELECT COUNT(*) FROM products p WHERE (p.deactivated IS NULL OR p.deactivated = 0)";
+        $params = [];
+
+        if ($brandId) {
+            $query .= " AND p.brand_id = ?";
+            $params[] = $brandId;
+        }
+        if ($minPrice !== '') {
+            $query .= " AND p.price >= ?";
+            $params[] = $minPrice;
+        }
+        if ($maxPrice !== '') {
+            $query .= " AND p.price <= ?";
+            $params[] = $maxPrice;
+        }
+        if ($minRam !== '') {
+            $query .= " AND p.ram >= ?";
+            $params[] = $minRam;
+        }
+        if ($maxRam !== '') {
+            $query .= " AND p.ram <= ?";
+            $params[] = $maxRam;
+        }
+        if ($minBattery !== '') {
+            $query .= " AND p.battery_capacity >= ?";
+            $params[] = $minBattery;
+        }
+        if ($maxBattery !== '') {
+            $query .= " AND p.battery_capacity <= ?";
+            $params[] = $maxBattery;
+        }
+        if ($minYear !== '') {
+            $query .= " AND p.release_year >= ?";
+            $params[] = $minYear;
+        }
+        if ($maxYear !== '') {
+            $query .= " AND p.release_year <= ?";
+            $params[] = $maxYear;
+        }
+        if ($minDisplay !== '' && $maxDisplay !== '') {
+            $query .= " AND p.display_size BETWEEN ? AND ?";
+            $params[] = $minDisplay;
+            $params[] = $maxDisplay;
+        } elseif ($minDisplay !== '') {
+            $query .= " AND p.display_size >= ?";
+            $params[] = $minDisplay;
+        } elseif ($maxDisplay !== '') {
+            $query .= " AND p.display_size <= ?";
+            $params[] = $maxDisplay;
+        }
+
+        $stmt = $this->pdo->prepare($query);
+        $stmt->execute($params);
+        return $stmt->fetchColumn();
     }
 }

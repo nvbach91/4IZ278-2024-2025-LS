@@ -1,9 +1,5 @@
 <?php
-
-const DB_HOST = 'localhost';
-const DB_DATABASE = 'eshop';
-const DB_USERNAME = 'root';
-const DB_PASSWORD = '';
+require_once __DIR__ . '/database-config.php';
 
 class Database {
     private static ?PDO $connection = null;
@@ -14,7 +10,7 @@ class Database {
             $options = [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => false, // bezpečnější práce s bind parametry
+                PDO::ATTR_EMULATE_PREPARES   => false,
             ];
 
             self::$connection = new PDO($dsn, DB_USERNAME, DB_PASSWORD, $options);

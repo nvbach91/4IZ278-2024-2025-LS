@@ -1,6 +1,5 @@
 <?php
-require_once __DIR__ . '/database/ProductsDB.php';
-$productsDB = new ProductsDB();
+require_once __DIR__ . '/includes/init.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     header('Location: index.php');
@@ -8,10 +7,43 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 }
 
 $product = $productsDB->fetchProductById($_GET['id']);
+
 if (!$product) {
     header('Location: index.php');
     exit;
 }
+
+$productId = (int)$_GET['id'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!isset($_SESSION['user'])) {
+        $_SESSION['redirect_after_login'] = [
+            'url' => "product.php?id=$productId",
+            'add_to_cart' => true,
+            'product_id' => $productId,
+            'quantity' => isset($_POST['quantity']) ? max(1, (int)$_POST['quantity']) : 1
+        ];
+        header("Location: login.php");
+        exit;
+    }
+
+    $quantity = isset($_POST['quantity']) ? max(1, (int)$_POST['quantity']) : 1;
+
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+    }
+    
+
+    if (isset($_SESSION['cart'][$productId])) {
+        $_SESSION['cart'][$productId] += $quantity;
+    } else {
+        $_SESSION['cart'][$productId] = $quantity;
+    }
+
+    header("Location: cart.php");
+    exit;
+}
+
 ?>
 
 <?php include __DIR__ . '/includes/head.php'; ?>
@@ -32,7 +64,7 @@ if (!$product) {
             <p><strong>Rok vydání:</strong> <?= htmlspecialchars($product['release_year']) ?></p>
             <p><?= nl2br(htmlspecialchars($product['description'])) ?></p>
 
-            <form method="post" action="cart.php">
+            <form method="post">
                 <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
                 <div class="mb-3">
                     <label for="quantity" class="form-label">Počet kusů</label>
