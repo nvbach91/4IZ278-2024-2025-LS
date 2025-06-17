@@ -15,6 +15,10 @@ abstract class Database implements DatabaseFunctions {
         ]);
     }
 
+    public function getPdo() {
+        return $this->pdo;
+    }
+
     public function fetchAll() {
         return $this->pdo->query("SELECT * FROM {$this->tableName}")->fetchAll();
     }
