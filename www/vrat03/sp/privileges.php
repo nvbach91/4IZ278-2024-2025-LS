@@ -10,6 +10,11 @@ if(!isset($_SESSION)) {
 
 if (!isset($_SESSION['user'])) {
     $_SESSION['redirect_after_login'] = getURL();
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
+        header('Content-Type: application/json');
+        echo json_encode(['login' => true]);
+        exit;
+    }
     $log->warning('Unauthorized access attempt by unauthenticated user', [
         'requested_url' => getURL()
     ]);
