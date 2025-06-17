@@ -72,9 +72,7 @@ class ServiceController extends Controller
 
     public function saveTimeSlots(Request $request, $id)
     {
-
         $service = Service::findOrFail($id);
-        $providerId = $request->input('provider_id');
 
         $dateFrom = Carbon::parse($request->input('date_from'));
         $dateTo = Carbon::parse($request->input('date_to'));
@@ -89,12 +87,10 @@ class ServiceController extends Controller
             $exists = $service->timeslots()
                 ->where('start_time', $slot['start_time'])
                 ->where('end_time', $slot['end_time'])
-                ->where('provider_id', $providerId)
                 ->exists();
 
             if (!$exists) {
                 $service->timeslots()->create([
-                    'provider_id' => $providerId,
                     'start_time' => $slot['start_time'],
                     'end_time' => $slot['end_time'],
                     'available' => true,
@@ -103,14 +99,13 @@ class ServiceController extends Controller
             }
         }
 
-
         return redirect()->route('business.show', ['id' => $service->business_id])
             ->with('success', "Successfully created {$createdCount} time slots.");
     }
 
+
     protected function generateTimeSlots(Carbon $dateFrom, Carbon $dateTo, Carbon $timeFrom, Carbon $timeTo, int $duration)
     {
-
 
         $slots = [];
         $period = CarbonPeriod::create($dateFrom, $dateTo);
@@ -150,7 +145,7 @@ class ServiceController extends Controller
 
     public function deleteTimeslots(Request $request, $id)
     {
-        $date = $request->query('date'); // comes from URL like ?date=2025-06-01
+        $date = $request->query('date');
 
         $service = Service::with('timeslots')->findOrFail($id);
 
@@ -166,5 +161,26 @@ class ServiceController extends Controller
             ->delete();
 
         return redirect()->back()->with('success', "Smazáno $deletedCount časových slotů pro datum " . \Carbon\Carbon::parse($date)->format('d.m.Y'));
+    }
+
+    public function availableDates(Request $request, $id)
+    {
+        $service = Service::with('timeslots')->findOrFail($id);
+
+        $dateFrom = $request->query('date_from', now()->startOfMonth()->toDateString());
+        $dateTo = $request->query('date_to', now()->endOfMonth()->toDateString());
+
+        $datesWithSlots = $service->timeslots
+            ->filter(function ($slot) use ($dateFrom, $dateTo) {
+                $date = $slot->start_time->toDateString();
+                return $date >= $dateFrom && $date <= $dateTo;
+            })
+            ->groupBy(function ($slot) {
+                return $slot->start_time->format('Y-m-d');
+            })
+            ->keys()
+            ->toArray();
+
+        return response()->json(['dates' => $datesWithSlots]);
     }
 }

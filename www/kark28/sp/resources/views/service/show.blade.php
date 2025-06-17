@@ -1,10 +1,8 @@
 @extends('layouts.app')
 
-
 @section('title', 'Rezervace | Rezervační systém')
 
 @section('content')
-    @include('service.confirm-reservation')
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-8">
@@ -24,13 +22,14 @@
 
                     <div class="mb-3">
                         <label for="datePicker" class="form-label">Vybrat datum:</label>
-                        <input type="date" id="datePicker" class="form-control" data-service-id="{{ $service->id }}" />
+                        <input type="text" id="datePicker" class="form-control" data-service-id="{{ $service->id }}" />
+
                     </div>
 
                     <div id="timeslotContainer">
                         <p class="text-muted">Vyberte datum pro zobrazení dostupných časů.</p>
                     </div>
-                    <button onclick="showOverlay()"
+                    <button onclick="handleReservationClick()"
                         class=" btn btn-primary d-flex justify-content-end gap-2 mt-3">Rezervovat</button>
                 </div>
             </div>
@@ -40,11 +39,37 @@
 
 @section('scripts')
     <script>
-        const BASE_URL = "{{ url('') }}";
-        const CONFIRM_RESERVATION_URL = "{{ route('reservation.confirm') }}";
+        window.SERVER_NOW = "{{ \Carbon\Carbon::now('Europe/Prague')->format('Y-m-d\\TH:i:sP') }}";
+
+        function handleReservationClick() {
+            const datePicker = document.getElementById('datePicker');
+            const serviceId = datePicker?.dataset.serviceId;
+            const date = datePicker?.value;
+
+            if (!selectedTimeSlot || !date || !serviceId || !selectedSlotId) {
+                alert("Prosím vyberte datum a čas.");
+                return;
+            }
+
+            openReservationOverlay(serviceId, date, selectedTimeSlot, selectedSlotId);
+        }
+
+        function openReservationOverlay(serviceId, date, time, slotId) {
+            const params = new URLSearchParams({
+                type: 'reservation',
+                service_id: serviceId,
+                date: date,
+                time: time,
+                slot_id: slotId
+            });
+
+            fetch(`{{ route('overlay.confirm') }}?` + params.toString())
+                .then(res => res.text())
+                .then(html => showOverlay(html));
+        }
     </script>
 
+    <!-- Flatpickr -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="{{ asset('js/service-timeslot.js') }}"></script>
-    <script src="{{ asset('js/overlay.js') }}"></script>
-
 @endsection

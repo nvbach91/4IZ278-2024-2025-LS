@@ -50,7 +50,8 @@ class BusinessManager extends Model
 	public static function availableRoles(): array
 	{
 		return [
-			'owner' => 'Vlastník',
+			// changing to owner is disabled due to not defined logic with multiple owners
+			//'owner' => 'Vlastník',
 			'manager' => 'Manažer',
 			'worker' => 'Personál',
 		];

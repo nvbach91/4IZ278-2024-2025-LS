@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Cookie;
+use App\Http\Controllers\ReservationController;
 
 
 class UserController extends Controller
@@ -39,12 +39,22 @@ class UserController extends Controller
         ]);
 
         $user = User::create([
+            'id' => (string) Str::uuid(),
             'name' => Str::of($fields['name'])->trim(),
             'email' => Str::of($fields['email'])->trim(),
             'password_hash' => Hash::make($fields['password'])
         ]);
 
         Auth::login($user);
+        $request->session()->regenerate();
+        session(['user_id' => $user->id]);
+
+        $owned = $user->ownedBusiness();
+
+        if ($owned) {
+            session(['owned_business_id' => $owned->id]);
+        }
+
         return redirect('/');
     }
 
@@ -67,9 +77,13 @@ class UserController extends Controller
 
         // Everything OK
         Auth::login($user);
+        session(['user_id' => $user->id]);
+
         $owned = $user->ownedBusiness();
 
-        Cookie::queue('owned_business_id', $owned->id, 60 * 24 * 7);
+        if ($owned) {
+            session(['owned_business_id' => $owned->id]);
+        }
 
 
         return redirect('/');
@@ -87,42 +101,30 @@ class UserController extends Controller
 
     public function showUserProfile()
     {
-
         $user = Auth::user();
 
-        $reservations = $user->reservations()
-            ->with('timeslot.service.business')
-            ->get();
-
-
-        $statusTranslations = [
-            'pending' => 'Čeká na schválení',
-            'confirmed' => 'Potvrzeno',
-            'cancelled' => 'Zrušeno',
-            'completed' => 'Dokončeno',
-            'rejected' => 'Zamítnuto',
-            null => 'Neznámý'
-        ];
-
-
-        $now = now();
-
-        $activeReservations = $reservations->filter(function ($reservation) use ($now) {
-            return $reservation->timeslot && $reservation->timeslot->start_time > $now;
-        });
-
-        $pastReservations = $reservations->filter(function ($reservation) use ($now) {
-            return !$reservation->timeslot || $reservation->timeslot->start_time <= $now;
-        });
-
-
-
+        // Instantiate ReservationController
+        $reservationController = new ReservationController();
+        $reservations = $reservationController->getUserReservationsGroupedByTime($user);
 
         return view('user.profile', [
             'user' => $user,
-            'activeReservations' => $activeReservations,
-            'pastReservations' => $pastReservations,
-            'statusTranslations' => $statusTranslations
+            'activeReservations' => $reservations['active'],
+            'pastReservations' => $reservations['past'],
         ]);
+    }
+
+    public function destroy(Request $request)
+    {
+        $user = $request->user();
+
+        Auth::logout(); // Log them out first
+
+        $user->delete(); // Delete the user from DB
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('success', 'Účet byl úspěšně smazán.');
     }
 }

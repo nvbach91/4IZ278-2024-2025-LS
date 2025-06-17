@@ -15,7 +15,8 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" required placeholder="Jméno Příjmení" value="<?php echo e(old('name')); ?>">
+unset($__errorArgs, $__bag); ?>" required
+                placeholder="Jméno Příjmení" value="<?php echo e(old('name')); ?>">
             <?php $__errorArgs = ['name'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -36,7 +37,8 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" name="email" required placeholder="email@email.cz" value="<?php echo e(old('email')); ?>">
+unset($__errorArgs, $__bag); ?>" name="email" required
+                placeholder="email@email.cz" value="<?php echo e(old('email')); ?>">
             <?php $__errorArgs = ['email'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -57,18 +59,19 @@ if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
-unset($__errorArgs, $__bag); ?>" name="password" required placeholder="********" value="<?php echo e(old('password')); ?>">
+unset($__errorArgs, $__bag); ?>" name="password" required
+                placeholder="********" value="<?php echo e(old('password')); ?>">
             <div id="passwordHelpBlock" class="form-text">
-        Heslo musí mít alespoň 8 znaků.
-        </div>
+                Heslo musí mít alespoň 8 znaků.
+            </div>
 
-        <?php $__errorArgs = ['password'];
+            <?php $__errorArgs = ['password'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-            <div class="text-danger"><?php echo e($message); ?></div>
-        <?php unset($message);
+                <div class="text-danger"><?php echo e($message); ?></div>
+            <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>

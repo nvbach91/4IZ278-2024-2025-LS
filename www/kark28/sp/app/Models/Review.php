@@ -35,9 +35,12 @@ class Review extends Model
 	];
 
 	protected $fillable = [
+		'user_id',
+		'business_id',
 		'rating',
-		'comment'
+		'comment',
 	];
+
 
 	public function user()
 	{

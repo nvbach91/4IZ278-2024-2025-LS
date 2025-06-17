@@ -27,10 +27,11 @@ class BusinessController extends Controller
     }
 
 
+
     public function show($id)
     {
         $business = Business::with([
-            'services',
+            'services.timeslots.reservations.user',
             'business_managers' => function ($query) {
                 $query->orderByRaw("FIELD(permission_level, 'owner', 'manager', 'worker')");
             },
@@ -38,46 +39,72 @@ class BusinessController extends Controller
             'reviews.user'
         ])->findOrFail($id);
 
-        return view('business.show', compact('business'));
+        $currentUser = Auth::user();
+        $editRole = $business->canEdit($currentUser);
+
+        $groupedSlotsByService = [];
+        foreach ($business->services as $service) {
+            $grouped = $service->timeslots->groupBy(function ($slot) {
+                return \Carbon\Carbon::parse($slot->start_time)->format('Y-m-d');
+            });
+
+            $groupedSlotsByService[$service->id] = $grouped->map(function ($slots, $date) {
+                if (\Carbon\Carbon::parse($date)->isBefore(\Carbon\Carbon::today())) {
+                    return null;
+                }
+
+                $sorted = $slots->sortBy('start_time');
+                $first = $sorted->first();
+                $last = $slots->sortByDesc('end_time')->first();
+                $reservations = $slots->where('available', 0)->count();
+
+                return [
+                    'date' => $date,
+                    'day' => \Carbon\Carbon::parse($date)->isoFormat('dd'),
+                    'start' => \Carbon\Carbon::parse($first->start_time)->format('H:i'),
+                    'end' => \Carbon\Carbon::parse($last->end_time)->format('H:i'),
+                    'count' => $slots->count(),
+                    'reservations' => $reservations,
+                    'can_delete' => $reservations === 0,
+                ];
+            })->filter();
+        }
+
+        return view('business.show', compact('business', 'currentUser', 'editRole', 'groupedSlotsByService'));
     }
+
 
     public function create()
     {
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
-
-        $alreadyManager = BusinessManager::where('user_id', $user->id)->exists();
-
-        if ($alreadyManager) {
-
-            $businessId = BusinessManager::where('user_id', $user->id)->value('business_id');
-
-            return redirect()->route('business.show', $businessId)->with('error', 'Už spravujete jeden business.');
+        if ($user->ownedBusiness()) {
+            return redirect()
+                ->route('business.show', $user->ownedBusiness()->id)
+                ->with('error', 'Už vlastníte jeden business.');
         }
 
         return view('business.create');
     }
 
-
     public function store(Request $request)
     {
-
+        /** @var \App\Models\User $user */
         $user = Auth::user();
 
-        $ownedBusiness = $user->ownedBusiness();
-        if ($ownedBusiness) {
-            return redirect()->route('business.show', $ownedBusiness->id)
+        if ($user->ownedBusiness()) {
+            return redirect()
+                ->route('business.show', $user->ownedBusiness()->id)
                 ->with('error', 'Už vlastníte jeden business.');
         }
 
-
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'description' => 'required|string',
         ]);
 
         $business = Business::create($validated);
-
 
         BusinessManager::create([
             'business_id' => $business->id,
@@ -85,8 +112,9 @@ class BusinessController extends Controller
             'permission_level' => 'owner',
         ]);
 
-
-        return redirect()->route('business.show', $business->id)->with('success', 'Business byl úspěšně vytvořen!');
+        return redirect()
+            ->route('business.show', $business->id)
+            ->with('success', 'Business byl úspěšně vytvořen!');
     }
 
     public function edit($id)
@@ -97,54 +125,51 @@ class BusinessController extends Controller
         ])->findOrFail($id);
 
 
-        $userId = Auth::id();
+        $currentUser = Auth::user();
+        $editRole = $business->canEdit($currentUser);
 
-        $manager = BusinessManager::where('business_id', $business->id)
-            ->where('user_id', $userId)
-            ->whereIn('permission_level', ['owner', 'manager'])
-            ->first();
-
-        if (!$manager) {
+        if (! $editRole) {
             abort(403, 'Nemáte oprávnění upravovat tento byznys.');
-        } else
-            $roles = BusinessManager::availableRoles();
+        }
 
-        return view('business.edit', compact('business', 'roles'));
+        $roles = BusinessManager::availableRoles();
+
+        return view('business.edit', compact('business', 'roles', 'currentUser'));
     }
 
 
     public function update(Request $request, $id)
     {
-        $business = Business::findOrFail($id);
+        $business   = Business::with('business_managers')->findOrFail($id);
+        $currentUser = Auth::user();
 
-        // Validace základních údajů o firmě
-        $rules = [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-        ];
-
-        // Pokud jsou odeslány služby, validuj i je
-        if ($request->has('services')) {
-            $rules['services.*.id'] = 'nullable|integer|exists:services,id';
-            $rules['services.*.name'] = 'required|string|max:255';
-            $rules['services.*.description'] = 'nullable|string';
-            $rules['services.*.duration_minutes'] = 'required|integer|min:1';
-            $rules['services.*.price'] = 'required|numeric|min:0';
+        if (! $business->canEdit($currentUser)) {
+            abort(403, 'Nemáte oprávnění upravovat tento byznys.');
         }
 
-        $validated = $request->validate($rules);
+        $validated = $request->validate([
+            'name'        => 'required|string|max:255',
+            'description' => 'required|string',
+            'services.*.id'               => 'nullable|integer|exists:services,id',
+            'services.*.name'             => 'required|string|max:255',
+            'services.*.description'      => 'nullable|string',
+            'services.*.duration_minutes' => 'required|integer|min:1',
+            'services.*.price'            => 'required|numeric|min:0',
+            'managers.*.id'               => 'required|integer|exists:business_managers,id',
+            'managers.*.permission_level' => 'required|in:owner,manager,worker',
+            'managers.*.delete'           => 'nullable|in:0,1',
+            'new_managers.*.email'        => 'nullable|email|exists:users,email',
+            'new_managers.*.permission_level' => 'nullable|in:owner,manager,worker',
+        ]);
 
-        // Aktualizace firmy
         $business->update([
             'name' => $validated['name'],
             'description' => $validated['description'],
         ]);
 
-        // Pokud jsou odeslány služby, aktualizuj je
         if ($request->has('services')) {
             foreach ($request->services as $serviceData) {
                 if (!empty($serviceData['id'])) {
-                    // Aktualizace existující služby
                     $service = \App\Models\Service::find($serviceData['id']);
                     if ($service && $service->business_id == $business->id) {
                         $service->update([
@@ -155,7 +180,6 @@ class BusinessController extends Controller
                         ]);
                     }
                 } else {
-                    // Vytvoření nové služby
                     $business->services()->create([
                         'name' => $serviceData['name'],
                         'description' => $serviceData['description'] ?? null,
@@ -166,57 +190,38 @@ class BusinessController extends Controller
             }
         }
 
-        // Odebrat manažery
-        if ($request->has('managers')) {
-            foreach ($request->input('managers') as $managerData) {
-                if (!empty($managerData['delete']) && $managerData['delete'] == '1') {
-                    $managerRecord = BusinessManager::find($managerData['id']);
-                    if ($managerRecord && $managerRecord->business_id == $business->id) {
-                        $managerRecord->delete();
-                    }
-                }
+        collect($validated['managers'] ?? [])->each(function (array $m) use ($business) {
+            $bm = $business->business_managers()->find($m['id']);
+            if (! $bm) return;
+
+            if (! empty($m['delete']) && $m['delete'] == '1') {
+                $bm->delete();
+            } else {
+                $bm->update(['permission_level' => $m['permission_level']]);
             }
-        }
+        });
 
-
-        // Přidat nového podle e-mailů
         $errors = [];
+        foreach ($validated['new_managers'] ?? [] as $nm) {
+            if (empty($nm['email'])) continue;
 
-        if ($request->has('new_managers')) {
-            foreach ($request->input('new_managers') as $newManagerData) {
-                if (!empty($newManagerData['email'])) {
-                    $user = \App\Models\User::where('email', $newManagerData['email'])->first();
-
-                    if (!$user) {
-                        // Uživatel nenalezen
-                        $errors[] = "Uživatel s e-mailem {$newManagerData['email']} nebyl nalezen.";
-                        continue;
-                    }
-
-                    $alreadyAssigned = $business->business_managers->contains('user_id', $user->id);
-
-                    if ($alreadyAssigned) {
-                        $errors[] = "Uživatel {$user->email} je již přiřazen.";
-                        continue;
-                    }
-
-                    $role = $newManagerData['permission_level'] ?? 'manager';
-
-                    BusinessManager::create([
-                        'business_id' => $business->id,
-                        'user_id' => $user->id,
-                        'permission_level' => $role,
-                    ]);
-                }
+            $user = \App\Models\User::where('email', $nm['email'])->first();
+            if ($business->business_managers->contains('user_id', $user->id)) {
+                $errors[] = "Uživatel {$user->email} je již přiřazen.";
+                continue;
             }
+            $business->business_managers()->create([
+                'user_id'          => $user->id,
+                'permission_level' => $nm['permission_level'] ?? 'manager',
+            ]);
         }
 
-        if (!empty($errors)) {
+        if ($errors) {
             return back()->withErrors($errors);
         }
 
-
-
-        return redirect()->route('business.show', $business->id)->with('success', 'Firma byla úspěšně upravena.');
+        return redirect()
+            ->route('business.show', $business->id)
+            ->with('success', 'Firma byla úspěšně upravena.');
     }
 }

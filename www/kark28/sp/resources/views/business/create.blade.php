@@ -25,7 +25,7 @@
 
             <div class="mb-3">
                 <label for="description" class="form-label">Popis</label>
-                <textarea name="description" id="description" class="form-control">{{ old('description') }}</textarea>
+                <textarea name="description" id="description" class="form-control" required>{{ old('description') }}</textarea>
             </div>
 
             <button type="submit" class="btn btn-primary">Vytvořit</button>

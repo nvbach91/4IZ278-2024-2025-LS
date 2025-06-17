@@ -2,9 +2,16 @@
 
 @section('content')
 
-    @if (request()->cookie('owned_business_id') == $business->id)
-        <a href="{{ route('business.edit', $business->id) }}" class="btn btn-primary float-end">Upravit firmu</a>
+    @php
+        $editRole = $business->canEdit($currentUser);
+    @endphp
+
+    @if ($editRole)
+        <a href="{{ route('business.edit', $business->id) }}" class="btn btn-primary float-end">
+            Upravit firmu
+        </a>
     @endif
+
 
     <div class="w-100 px-3 mt-3">
         <a href="{{ route('home') }}" class="btn btn-link text-decoration-none">
@@ -34,9 +41,18 @@
                                         <p class="card-text mb-2"><strong>Cena:</strong> {{ $service->price }} Kč</p>
                                     </div>
                                     <div class="mt-auto d-flex justify-content-end">
-                                        @if (request()->cookie('owned_business_id') == $business->id)
+                                        @php
+                                            $allowedRoles = ['owner', 'manager', 'worker'];
+                                        @endphp
+
+                                        @if(
+                                            Auth::check() &&
+                                            Auth::user()->hasRoleAtBusiness($business, $allowedRoles)
+                                        )
                                             <a href="{{ route('business.service', $service->id) }}"
-                                                class="btn btn-sm btn-outline-primary">Definovat čas</a>
+                                            class="btn btn-sm btn-outline-primary">
+                                            Definovat čas
+                                            </a>
                                     </div>
                                     @php
                                         $groupedSlots = $service->timeslots->groupBy(function ($slot) {
@@ -60,12 +76,25 @@
                                             <tbody>
                                                 @foreach ($groupedSlots as $date => $slots)
                                                     @php
+                                                        if (
+                                                            \Carbon\Carbon::parse($date)->isBefore(
+                                                                \Carbon\Carbon::today(),
+                                                            )
+                                                        ) {
+                                                            continue;
+                                                        }
+
                                                         $first = $slots->sortBy('start_time')->first();
                                                         $last = $slots->sortByDesc('end_time')->first();
                                                         $reservations = $slots->where('available', 0)->count();
                                                     @endphp
                                                     <tr>
-                                                        <td>{{ \Carbon\Carbon::parse($date)->format('d.m.Y') }}</td>
+                                                        @php
+                                                            $day = \Carbon\Carbon::parse($date)->isoFormat('dd');
+                                                        @endphp
+                                                        <td>{{ \Carbon\Carbon::parse($date)->format('d.m.Y') }}
+                                                            ({{ $day }})
+                                                        </td>
                                                         <td>{{ \Carbon\Carbon::parse($first->start_time)->format('H:i') }}
                                                         </td>
                                                         <td>{{ \Carbon\Carbon::parse($last->end_time)->format('H:i') }}
@@ -79,15 +108,22 @@
                                                         </td>
                                                         <td>
 
-                                                            <form
-                                                                action="{{ route('business.service', ['id' => $service->id]) }}?date={{ $date }}"
-                                                                method="POST" class="d-inline"
-                                                                onsubmit="return confirm('Opravdu chcete smazat všechny sloty pro tento den?');">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit"
-                                                                    class="btn btn-sm btn-outline-danger">Smazat</button>
-                                                            </form>
+                                                            @if ($reservations === 0)
+                                                                <form
+                                                                    action="{{ route('business.service', ['id' => $service->id]) }}?date={{ $date }}"
+                                                                    method="POST" class="d-inline"
+                                                                    onsubmit="return confirm('Opravdu chcete smazat všechny sloty pro tento den?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit"
+                                                                        class="btn btn-sm btn-outline-danger">Smazat</button>
+                                                                </form>
+                                                            @else
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-outline-secondary" disabled
+                                                                    title="Sloty mají rezervace">Nelze smazat</button>
+                                                            @endif
+
 
                                                         </td>
                                                     </tr>
@@ -116,6 +152,26 @@
 
     <div class="col-md-6">
         <div class="right-column h-100">
+                @php
+                    $allowedRoles = ['owner', 'manager', 'worker'];
+                @endphp
+
+                @if(
+                    Auth::check() &&
+                    Auth::user()->hasRoleAtBusiness($business, $allowedRoles)
+                    )       
+                    <div class="bg-light p-3">
+                        <h3>Rezervace</h3>
+                        <a href="{{ route('business.reservations', $business->id) }}" class="btn btn-outline-secondary">
+                            Zobrazit rezervace
+                        </a>
+
+
+
+                    </div>
+                <br>
+            @endif
+
             <div class="bg-light p-3">
                 <h3>Majitel a tým</h3>
                 @foreach ($business->business_managers as $manager)

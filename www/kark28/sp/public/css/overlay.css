@@ -12,6 +12,10 @@
     align-items: center;
 }
 
+.overlay-background.show {
+  display: flex;
+}
+
 .overlay-content {
     background: white;
     padding: 2rem;

@@ -32,7 +32,13 @@ class TimeslotController extends Controller
             ->map(function ($slot) {
                 return [
                     'id' => $slot->id,
-                    'start_time' => Carbon::parse($slot->start_time)->format('H:i'),
+                    'start_time' => Carbon::createFromFormat(
+                        'Y-m-d H:i:s',
+                        $slot->start_time,
+                        'Europe/Prague'
+                    )
+                    ->setTimezone('UTC')
+                    ->toIso8601ZuluString(),
                     'end_time' => Carbon::parse($slot->end_time)->format('H:i'),
                     'available' => $slot->available,
                 ];
@@ -40,6 +46,29 @@ class TimeslotController extends Controller
 
         return response()->json([
             'html' => View::make('partials.timeslots', ['slots' => $slots])->render()
+        ]);
+    }
+
+    public function availableDates($id)
+    {
+        $service = Service::with('timeslots')->findOrFail($id);
+
+        $today = \Carbon\Carbon::today();
+
+        $dates = $service->timeslots
+            ->where('available', true)
+            ->map(function ($slot) {
+                return \Carbon\Carbon::parse($slot->start_time)->toDateString();
+            })
+            ->filter(function ($date) use ($today) {
+                return $date >= $today->toDateString();
+            })
+            ->unique()
+            ->sort()
+            ->values();
+
+        return response()->json([
+            'dates' => $dates,
         ]);
     }
 }

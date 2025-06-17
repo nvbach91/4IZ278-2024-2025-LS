@@ -50,7 +50,25 @@ class Business extends Model
 		return $this->hasMany(Service::class);
 	}
 
+	public function canEdit(?User $user): string|false
+    {
+        if (! $user) {
+            return false;
+        }
 
+        $mgr = $this->business_managers
+                    ->firstWhere('user_id', $user->id);
+
+        if (! $mgr) {
+            return false;
+        }
+
+        return match($mgr->permission_level) {
+            'owner'   => 'owner',
+            'manager' => 'manager',
+            default   => false,
+        };
+    }
 
 	public function scopeFilter(Builder $query, array $filters): Builder
 	{
@@ -72,5 +90,17 @@ class Business extends Model
 			});
 	}
 
-
+public function reservations()
+{
+    return $this->hasManyThrough(
+        \App\Models\Reservation::class,
+        \App\Models\Timeslot::class,    
+        'service_id',                  
+        'timeslot_id',                  
+        'id',                           
+        'id'                           
+    )->join('services', 'timeslots.service_id', '=', 'services.id')
+     ->where('services.business_id', $this->id)
+     ->select('reservations.*'); // Avoid duplicate columns
+}
 }

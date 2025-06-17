@@ -1,4 +1,9 @@
 @include('partials.header')
+<script>
+    window.SERVER_NOW = @json(\Carbon\Carbon::now()->toIso8601String());
+    const BASE_URL = "{{ url('') }}";
+    const CONFIRM_RESERVATION_URL = "{{ route('reservation.confirm') }}";
+</script>
 @include('partials.nav')
 
 @if (session('success'))
@@ -19,4 +24,8 @@
     @yield('content')
 </div>
 
+@include('layouts.overlay')
 @include('partials.footer')
+
+
+@stack('scripts')

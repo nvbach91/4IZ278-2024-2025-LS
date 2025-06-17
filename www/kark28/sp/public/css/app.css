@@ -36,4 +36,23 @@
     opacity: 0.5;
     pointer-events: none;
 }
+.availability-dot {
+    width: 6px;
+    height: 6px;
+    background-color: green;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.flatpickr-day {
+    position: relative;
+}
+
+h2[id] {
+  scroll-margin-top: 70px; 
+}
+
+
 

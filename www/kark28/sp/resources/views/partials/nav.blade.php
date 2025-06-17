@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('home') }}">Rezervační Systém</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -28,14 +28,13 @@
                             {{ Auth::user()->name }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ route('user.profile') }}">Můj Profil</a></li>
-                            <li><a class="dropdown-item" href="{{ route('user.profile') }}">Moje Rezervace</a></li>
-                            <li><a class="dropdown-item" href="{{ route('user.profile') }}">Můj Business</a></li>
+                            <li><a class="dropdown-item" href="{{ route('user.profile') }}#profile">Můj Profil</a></li>
+                            <li><a class="dropdown-item" href="{{ route('user.profile') }}#reservations">Moje Rezervace</a></li>
+                            <li><a class="dropdown-item" href="{{ route('user.profile') }}#business">Business</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-
                                 <a class="dropdown-item icon-link" href="{{ route('logout') }}"><i
                                         class="fa-solid fa-right-from-bracket"></i> Odhlásit se</a>
                             </li>

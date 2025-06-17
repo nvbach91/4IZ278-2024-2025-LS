@@ -21,3 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/service/{id}/timeslots', [TimeslotController::class, 'getByDate']);
+
+Route::get('/service/{id}/available-dates', [TimeslotController::class, 'availableDates']);
