@@ -2,7 +2,7 @@
 <?php 
 
 class CustomItemDB extends Database {
-    protected $tableName = "customItem";
+    protected $tableName = "customitem";
 
     public function getCustomItem($id) {
         $sql = "SELECT * FROM {$this->tableName} WHERE id_custom_item = :id";

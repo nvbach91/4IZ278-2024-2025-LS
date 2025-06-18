@@ -18,6 +18,16 @@
         unset($_SESSION["createGearlistSuccess"]);
     }
 
+    if(isset($_SESSION["addFail"])) {
+        $addFail = $_SESSION["addFail"];
+        unset($_SESSION["addFail"]);
+    }
+
+    if(isset($_SESSION["addSuccess"])) {
+        $addSuccess = $_SESSION["addSuccess"];
+        unset($_SESSION["addSuccess"]);
+    }
+
     $gearlistId = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
     $gearlistDB = new GearlistDB();
@@ -58,6 +68,10 @@
             $errors['userId'] = "Nelze identifikovat uživatele";
         }
 
+        if($productId == "null" && $customItemId == "null") {
+            $errors['productId'] = "Vyberte buď produkt nebo vlastní předmět pro přidání";
+        }
+
         if(empty($gearlistId)) {
             $errors['gearlistId'] = "Gearlist nelze identifikovat";
         }
@@ -72,7 +86,9 @@
             } elseif($customItemId == null) {
                 $gearlistItemDB->addProductItem($gearlistId, $productId, $quantity, $note);
             } else {
-                $errors['item'] = "Musíte vybrat buď produkt nebo vlastní položku";
+                $_SESSION["addFail"] = "Pro přidání nemůžete vybrat produkt a vlastní předmět zároveň.";
+                header("Location: ./gearlist.php?id=" . $gearlistId);
+                exit();
             }
             $_SESSION["addSuccess"] = "Položka byla úspěšně přidána do gearlistu.";
             header("Location: ./gearlist.php?id=" . $gearlistId);
@@ -102,6 +118,15 @@
     <?php if(isset($createGearlistSuccess)) :?>
         <div class="alert alert-success mt-3"><?php echo $createGearlistSuccess;?></div>
     <?php endif; ?>
+
+    <?php if(isset($addFail)) :?>
+        <div class="alert alert-danger mt-3"><?php echo $addFail;?></div>
+    <?php endif; ?>
+
+    <?php if(isset($addSuccess)) :?>
+        <div class="alert alert-success mt-3"><?php echo $addSuccess;?></div>
+    <?php endif; ?>
+
     <?php if($loggedIn): ?>
         <h1 class="text-center mb-4">Gearlist</h1>
         <div class="row">
