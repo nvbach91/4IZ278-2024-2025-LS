@@ -1,6 +1,9 @@
 @extends("layouts.default")
 @section("heading", "Editace profilu")
 @section("content")
+    @php
+        echo session('return_url');
+    @endphp
     <x-form class="text-center" style="margin-top: 50px;" enctype="multipart/form-data" method="post"
             action="{{route('editProfile', ['user' => auth()->user()])}}">
         @method("put")
@@ -10,7 +13,7 @@
                 <div class="input-group"><span class="input-group-text">Jméno</span><input class="form-control"
                                                                                            type="text"
                                                                                            name="name"
-                                                                                           value="{{auth()->user()->name}} "
+                                                                                           value="{{auth()->user()->name}}"
                                                                                            required />
                 </div>
                 <div class="input-group"><span class="input-group-text">Příjmení</span><input class="form-control"
@@ -40,17 +43,9 @@
             </div>
         </section>
         <button class="btn btn-outline-success" type="submit" style="margin-top: 60px;">Uložit změny</button>
-        @if(
-            session('success')
-        )
-            <x-toast>
-                nude
-            </x-toast>
-
-        @endif
     </x-form>
 @endsection
 @section("scripts")
-    <script src="{{ asset('js/editProfilePhoto.js') }}"></script>
+    @vite("resources/js/editProfilePhoto.js")
 @endsection
 

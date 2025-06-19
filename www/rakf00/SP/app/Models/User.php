@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+
 class User extends Authenticatable
 {
     protected $fillable
@@ -21,6 +22,18 @@ class User extends Authenticatable
             'password',
         ];
 
+    public function getFullNameAttribute(): string
+    {
+        return mb_strtoupper($this->name.' '.$this->surname, 'UTF-8');
+    }
+
+    public function accounts()
+    {
+        return $this->belongsToMany(Account::class, 'account_memberships')
+            ->using(AccountMemberships::class)
+            ->withPivot('role');
+    }
+
     protected function casts(): array
     {
         return [
@@ -28,8 +41,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function getFullNameAttribute()
+    public static function getUserByUsername(string $username): ?User
     {
-        return strtoupper($this->name.' '.$this->surname);
+        return User::where('username', $username)->first();
     }
 }
+

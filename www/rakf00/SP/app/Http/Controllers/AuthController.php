@@ -46,7 +46,7 @@ class AuthController extends Controller
         return redirect()->route('dashboardPage');
     }
 
-    public function createUsername($name, $surname): string
+    private function createUsername($name, $surname): string
     {
         $random = rand(101, 999);
 
@@ -76,5 +76,16 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return redirect()->route('dashboardPage');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+
+        return redirect()->route('loginPage');
     }
 }

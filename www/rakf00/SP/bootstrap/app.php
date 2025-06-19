@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Middleware\EnsureUserIsAuthenticated;
+use App\Http\Middleware\Authenticated;
+use App\Http\Middleware\CheckIdentity;
+use App\Http\Middleware\CheckRole;
 use App\Http\Middleware\StoreReturnUrl;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -13,12 +15,20 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        
+        // Přidat pouze do web routes
+        $middleware->web(append: [
+            \App\Http\Middleware\StoreReturnUrl::class,
+        ]);
+        
+        // Aliasy pro použití v routách
         $middleware->alias([
-            'loggedIn' => EnsureUserIsAuthenticated::class,
+            'auth' => Authenticated::class,
+            'role' => CheckRole::class,
+            'identity' => CheckIdentity::class,
         ]);
-        $middleware->append([
-            StoreReturnUrl::class,
-        ]);
+        
+        // ODSTRANĚNO: $middleware->append([StoreReturnUrl::class,]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
