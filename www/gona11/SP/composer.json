@@ -1,0 +1,19 @@
+{
+    "name": "agonc/sp",
+    "description": "semestrální práce pro 4IZ278 LS24/25",
+    "autoload": {
+        "psr-4": {
+            "Agonc\\Sp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Andrej Gončarov",
+            "email": "gona11@vse.cz"
+        }
+    ],
+    "require": {
+        "league/oauth2-client": "^2.8",
+        "league/oauth2-google": "^4.0"
+    }
+}
