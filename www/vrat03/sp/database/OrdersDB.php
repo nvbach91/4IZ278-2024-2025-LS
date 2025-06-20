@@ -94,6 +94,34 @@ class OrdersDB extends Database {
         $statement = $this->connection->prepare($sql);
         $statement->execute(['status' => $status, 'order_id' => $orderId]);
     }
+
+    public function decreaseProductQuantitiesByOrderId($orderId) {
+        $sql = "SELECT product_id, quantity FROM sp_eshop_order_items WHERE order_id = :order_id;";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute(['order_id' => $orderId]);
+        $items = $statement->fetchAll();
+
+        foreach ($items as $item) {
+            $checkSql = "SELECT quantity FROM sp_eshop_products WHERE product_id = :product_id;";
+            $checkStmt = $this->connection->prepare($checkSql);
+            $checkStmt->execute(['product_id' => $item['product_id']]);
+            $currentQuantity = $checkStmt->fetchColumn();
+            if ($currentQuantity === false || $currentQuantity < $item['quantity']) {
+                return false;
+            }
+        }
+
+        // Pokud je všeho dostatek, aktualizuj zásoby
+        foreach ($items as $item) {
+            $updateSql = "UPDATE sp_eshop_products SET quantity = quantity - :quantity WHERE product_id = :product_id;";
+            $updateStmt = $this->connection->prepare($updateSql);
+            $updateStmt->execute([
+            'quantity' => $item['quantity'],
+            'product_id' => $item['product_id']
+            ]);
+        }
+        return true;
+    }
 }
 
 ?>

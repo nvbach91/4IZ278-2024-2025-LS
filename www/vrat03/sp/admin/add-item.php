@@ -18,6 +18,32 @@ $errors = [];
 
 $allCategories = $categoriesDB->fetchAll([]);
 
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    $errors['success'] = 'Product added successfully.';
+} 
+if (isset($_GET['id'])) {
+    $productID = (int)$_GET['id'];
+    $product = $productsDB->fetchProductById($productID);
+    if($product) {
+        $name = $product['name'];
+        $price = $product['price'];
+        $imgURL = $product['img'];
+        $imgThumbURL = $product['img_thumb'];
+        $quantity = $product['quantity'];
+        $description = $product['description'];
+        $minPlayers = $product['minplayers'];
+        $maxPlayers = $product['maxplayers'];
+        $playtime = $product['playtime'];
+        $productCategories = $productsDB->fetchCategoriesByProductID($productID);
+        $allCategories = $categoriesDB->fetchAll([]);
+        $productCategoriesID = is_array($productCategories) && isset($productCategories[0]['category_id'])
+                            ? array_map(function($cat) { return $cat['category_id']; }, $productCategories)
+                            : $productCategories;
+    }
+}
+
+
+
 
 if (!empty($_POST)) {
     if (!$csrf->validateRequest()) {
@@ -68,7 +94,8 @@ if (!empty($_POST)) {
                 'playtime' => $playtime,
                 'categories' => $productCategoriesID
             ]);
-            $errors['success'] = 'Product added successfully.';
+            header('Location:'.$urlPrefix.'/admin/add-item.php?id='.$productID.'&success=1');
+            exit;
         } else {
             $errors = $validator->getErrors();
         }
@@ -184,7 +211,7 @@ if (!empty($_POST)) {
                     <?php endforeach; ?>
                 </div>
             </div>
-            <button type="submit" id="submitButton" class="btn btn-success d-flex align-items-center" <?php echo isset($errors['success'])||isset($errors['alert']) ? 'disabled' : ''; ?>>
+            <button type="submit" id="submitButton" class="btn btn-success d-flex align-items-center">
                 <span class="material-symbols-outlined">save</span>
                 Save changes
             </button>

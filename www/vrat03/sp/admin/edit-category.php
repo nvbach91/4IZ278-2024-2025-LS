@@ -31,6 +31,10 @@ if (!$category) {
     exit();
 }
 
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    $errors['success'] = 'Category updated successfully.';
+}
+
 $name = $category['name'];
 
 if (!empty($_POST)) {
@@ -57,7 +61,8 @@ if (!empty($_POST)) {
                     'old_name' => $oldName,
                     'new_name' => $name
                 ]);
-                $errors['success'] = 'Category updated successfully';
+                header('Location:'.$urlPrefix.'/admin/edit-category.php?id='.$categoryID.'&success=1');
+                exit;
             }
             
         } else {
@@ -92,7 +97,7 @@ if (!empty($_POST)) {
                 <label for="name" class="form-label">Name</label>
                 <input type="text" id="name" class="form-control" name="name" value="<?php echo htmlspecialchars($name); ?>">
             </div>
-            <button type="submit" id="submitButton" class="btn btn-primary d-flex align-items-center" <?php echo isset($errors['success'])||isset($errors['alert']) ? 'disabled' : ''; ?>>
+            <button type="submit" id="submitButton" class="btn btn-primary d-flex align-items-center">
                 <span class="material-symbols-outlined">save</span>
                 Save changes
             </button>

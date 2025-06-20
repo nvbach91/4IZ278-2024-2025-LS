@@ -11,9 +11,16 @@
         }
 
         private function validateRequired(string $field, $value): bool {
-            if (empty($value)) {
-                $this->errors[$field] = "Field '$field' must be filled.";
-                return false;
+            if (is_array($value)) {
+                if (empty($value)) {
+                    $this->errors[$field] = "Field '$field' must be filled.";
+                    return false;
+                }
+            } else {
+                if (!isset($value) || (is_string($value) && trim($value) === '' && $value !== '0')) {
+                    $this->errors[$field] = "Field '$field' must be filled.";
+                    return false;
+                }
             }
             return true;
         }

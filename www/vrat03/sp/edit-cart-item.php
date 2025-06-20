@@ -16,16 +16,16 @@ if ($isSetID && !empty($_SESSION["cart"])) {
                 if ($action === 'add') {
                     if ($product['quantity'] > 0) {
                         $_SESSION['cart'][$key]['quantity'] += 1;
-                        $productsDB->updateProductQuantity($item['id'], $product['quantity'] - 1);
+                        //$productsDB->updateProductQuantity($item['id'], $product['quantity'] - 1);
                     }
                 } elseif ($action === 'remove') {
                     $_SESSION['cart'][$key]['quantity'] -= 1;
-                    $productsDB->updateProductQuantity($item['id'], $product['quantity'] + 1);
+                    //$productsDB->updateProductQuantity($item['id'], $product['quantity'] + 1);
                     if ($_SESSION['cart'][$key]['quantity'] <= 0) {
                         unset($_SESSION['cart'][$key]);
                     }
                 } elseif ($action === 'delete') {
-                    $productsDB->updateProductQuantity($item['id'], $product['quantity'] + $item['quantity']);
+                    //$productsDB->updateProductQuantity($item['id'], $product['quantity'] + $item['quantity']);
                     unset($_SESSION['cart'][$key]);
                 }
                 break;

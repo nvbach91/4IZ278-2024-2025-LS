@@ -12,6 +12,17 @@ $categoriesDB = new CategoriesDB();
 $log = AppLogger::getLogger();
 $errors = [];
 
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    $errors['success'] = 'Category added successfully.';
+}
+if (isset($_GET['id'])) {
+    $categoryID = (int)$_GET['id'];
+    $category = $categoriesDB->fetchCategoryById($categoryID);
+    if($category) {
+        $name = $category['name'];
+    }
+}
+
 if (!empty($_POST)) {
     if (!$csrf->validateRequest()) {
         $errors['alert']="Invalid CSRF token.<br> Use <a href=".$_SERVER['PHP_SELF'].">this link</a> to reload page.";
@@ -24,14 +35,17 @@ if (!empty($_POST)) {
         $name = htmlspecialchars(trim($_POST['name'])); 
 
         $validator->validateRequiredField('name', $name);
-
-        if(!$validator->hasErrors()) {
+        $exists = $categoriesDB->getCategoryByName($name);
+        if ($exists) {
+            $errors['alert'] = 'Category with this name already exists. (Category ID: '.$exists['category_id'].')';
+        } else if(!$validator->hasErrors() || empty( $errors)) {
             $categoryId = $categoriesDB->addCategory($name);
             $log->info('Category added', [
                 'category_id' => $categoryId,
                 'name' => $name
             ]);
-            $errors['success'] = 'Category added successfully.';
+            header('Location:'.$urlPrefix.'/admin/add-category.php?id='.$categoryId.'&success=1');
+            exit;
         } else {
             $errors = $validator->getErrors();
         }
@@ -62,7 +76,7 @@ if (!empty($_POST)) {
                 <label for="name" class="form-label">Name</label>
                 <input type="text" id="name" class="form-control"  name="name" value="<?php echo isset($name) ? htmlspecialchars($name) : ''; ?>">
             </div>
-            <button type="submit" id="submitButton" class="btn btn-primary d-flex align-items-center" <?php echo isset($errors['success'])||isset($errors['alert']) ? 'disabled' : ''; ?>>
+            <button type="submit" id="submitButton" class="btn btn-primary d-flex align-items-center">
                 <span class="material-symbols-outlined">save</span>
                 Add Category
             </button>

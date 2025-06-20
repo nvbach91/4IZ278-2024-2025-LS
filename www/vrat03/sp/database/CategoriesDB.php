@@ -11,6 +11,13 @@ class CategoriesDB extends Database {
         return $statement->fetch();
     }
 
+    public function getCategoryByName($name) {
+        $sql = "SELECT * FROM $this->tableName WHERE name = ?;";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute([$name]);
+        return $statement->fetch();
+    }
+
     public function addCategory($name) {
         $sql = "INSERT INTO $this->tableName (name) VALUES (?);";
         $statement = $this->connection->prepare($sql);

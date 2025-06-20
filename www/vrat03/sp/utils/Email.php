@@ -127,7 +127,7 @@ class Email
                         <h1>Your order has been successfully placed!</h1>
                         <p>Thank you for shopping at <a href=".$url.">Tom's shop</a>.</p>
                         <p>Your order ID is: <strong>$orderId</strong></p>
-                        <p>You can view your order details in <a href='".$url."/account-history.php'>your account.</a></p>
+                        <p>You can view your order details in <a href='".$url."/order-items.php?id=".$orderId."'>your account.</a></p>
                     </body>
                 </html>
             ";

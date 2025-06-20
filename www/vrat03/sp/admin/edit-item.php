@@ -34,6 +34,10 @@ if (!$product) {
     exit();
 }
 
+if (isset($_GET['success']) && $_GET['success'] == 1) {
+    $errors['success'] = 'Item updated successfully';
+}
+
 $name = $product['name'];
 $price = $product['price'];
 $imgURL = $product['img'];
@@ -80,7 +84,7 @@ if (!empty($_POST)) {
 
         if(!$validator->hasErrors()) {
             if (isset($_POST['last_updated']) && $_POST['last_updated'] !== $product['last_updated']) {
-                $errors['alert'] = 'This category has been modified by another user.';
+                $errors['alert'] = 'This item has been modified by another user.';
             } else {
                 $productsDB->updateProduct($productID, $name, $price, $imgURL, $imgThumbURL, $quantity, $description, $minPlayers, $maxPlayers, $playtime);
                 $productCategoryDB->removeAllCategoriesByProductID($productID);
@@ -100,7 +104,8 @@ if (!empty($_POST)) {
                     'playtime' => $playtime,
                     'categories' => $productCategoriesID
                 ]);
-                $errors['success'] = 'Item updated successfully';
+                header('Location:'.$urlPrefix.'/admin/edit-item.php?id='.$productID.'&success=1');
+                exit;
             }
             
         } else {
@@ -225,7 +230,7 @@ if (!empty($_POST)) {
                     <?php endforeach; ?>
                 </div>
             </div>
-            <button type="submit" id="submitButton" class="btn btn-success d-flex align-items-center" <?php echo isset($errors['success'])||isset($errors['alert']) ? 'disabled' : ''; ?>>
+            <button type="submit" id="submitButton" class="btn btn-success d-flex align-items-center">
                 <span class="material-symbols-outlined">save</span>
                 Save changes
             </button>

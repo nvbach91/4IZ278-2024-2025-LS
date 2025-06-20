@@ -29,7 +29,7 @@
     <!-- Players -->
     <div class="input-group mb-3">
         <label for="min-players" class="form-label">Min players:</label>
-        <input type="range" class="form-range" id="min-players" min="<?php echo $minPlayers; ?>" max="<?php echo $maxPlayers; ?>" 
+        <input type="range" class="form-range" id="min-players" min="<?php echo $minPlayers; ?>" max="<?php echo $maxMinPlayers; ?>" 
             value="<?php echo $minPlayersWeb; ?>" oninput="this.nextElementSibling.value = this.value" step="1">
         <input type="number" name="min-players" class="form-control" id="min-players" min="<?php echo $minPlayers; ?>" max="<?php echo $maxPlayers; ?>" 
             value="<?php echo $minPlayersWeb; ?>" oninput="this.previousElementSibling.value = this.value" >

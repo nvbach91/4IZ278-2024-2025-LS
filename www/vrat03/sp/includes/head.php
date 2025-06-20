@@ -17,7 +17,7 @@ if (!isset($_SESSION)) {
     <title>Tom's games</title>
     <link rel="icon" type="image/x-icon" href="<?php echo $urlPrefix ?>/image/favicon-white.ico" />
     <link rel="stylesheet" href="<?php echo $urlPrefix ?>/css/style.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&display=block&icon_names=account_circle,add_circle,add_shopping_cart,category,delete,download,edit,filter_alt,filter_alt_off,home,lock,login,logout,manage_accounts,overview,save,shop,shopping_cart,shopping_cart_checkout" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0&display=block&icon_names=account_circle,add_circle,add_shopping_cart,category,delete,download,edit,filter_alt,filter_alt_off,home,list_alt,lock,login,logout,manage_accounts,overview,save,shop,shopping_cart,shopping_cart_checkout" />
 </head>
 
 <body style="padding-top: 50px;">

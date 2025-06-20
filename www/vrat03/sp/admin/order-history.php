@@ -15,6 +15,7 @@ $productsDB = new ProductsDB();
 $UsersDB = new UsersDB();
 $emailClient = new Email();
 $userId = $_SESSION['user']['id'];
+$errors = [];
 
 $statusFilter = isset($_GET['status']) ? $_GET['status'] : 'all';
 
@@ -59,12 +60,22 @@ if (isset($_POST['change_status']) && isset($_POST['order_id'])) {
     }
     $orderId = (int)($_POST['order_id']);
     $status = (int)($_POST['completed']);
-    $ordersDB->updateOrderStatus($orderId, $status);
     $user = $ordersDB->getUserByOrderId($orderId);
     $email = $user['email'];
-    $emailClient->sendOrderStatusChange($orderId, $status, $email);
-    header('Location: '.$urlPrefix.'/admin/order-history.php');
-    exit();
+    //$emailClient->sendOrderStatusChange($orderId, $status, $email);
+    if ($status === 1) {
+        if($ordersDB->decreaseProductQuantitiesByOrderId($orderId) === false) {
+            $errors['alert'] = 'Error decreasing product quantities for order ID: '.$orderId.' Insufficient stock.';
+        } else {
+            $ordersDB->updateOrderStatus($orderId, $status);
+            $errors['success'] = 'Order status changed successfully.';
+            $emailClient->sendOrderStatusChange($orderId, $status, $email);
+        }
+    }
+    if (!isset($errors['alert']) && !isset($errors['success'])) {
+        header('Location: '.$urlPrefix.'/admin/order-history.php');
+        exit();
+    }
 }
 
 //preparation of URL parameters for pagination
@@ -81,6 +92,12 @@ if (!$_GET) {
 
 <?php include __DIR__.'/../includes/head.php';?>
 <div class="container">
+    <div class="alert alert-danger" role="alert" style="display: <?php echo isset($errors['alert']) ? 'block' : 'none'; ?>;">
+        <?php echo $errors['alert']; ?>
+    </div>
+    <div class="alert alert-success" role="alert" style="display: <?php echo isset($errors['success']) ? 'block' : 'none'; ?>;">
+        <?php echo $errors['success']; ?>
+    </div>
     <?php include __DIR__.'/order-history-items.php'; ?>
 </div>
 

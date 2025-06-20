@@ -7,7 +7,7 @@ $isSetID = !empty($_POST['id']);
 
 if($isSetID) {
     $product = $productsDB->fetchProductByID($_POST['id']);
-    if ($product && $product['quantity'] > 0) {
+    if ($product) { // && $product['quantity'] > 0) {
         $found = false;
         if (!isset($_SESSION['cart'])) {
             $_SESSION['cart'] = [];
@@ -29,7 +29,7 @@ if($isSetID) {
             ];
         }
 
-        $productsDB->updateProductQuantity($product['product_id'], $product['quantity'] - 1);
+        //$productsDB->updateProductQuantity($product['product_id'], $product['quantity'] - 1);
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH'])) {
             header('Content-Type: application/json');
             echo json_encode(true);

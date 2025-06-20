@@ -63,6 +63,13 @@ class ProductsDB extends Database {
         $statement->execute();
         return $statement->fetch()['minPlayers'];
     }
+
+    public function maxMinPlayers() {
+        $sql = "SELECT MAX(minplayers) AS maxMinPlayers FROM $this->tableName;";
+        $statement = $this->connection->prepare($sql);
+        $statement->execute();
+        return $statement->fetch()['maxMinPlayers'];
+    }
     
     public function maxPlayers() {
         $sql = "SELECT MAX(maxplayers) AS maxPlayers FROM $this->tableName;";

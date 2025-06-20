@@ -27,13 +27,22 @@ foreach ($products as $product): ?>
                 <?php } ?>
                 
                 <div class="d-flex gap-2">
-                    <form method="POST" action="<?php echo $urlPrefix ?>/add-to-cart.php" class="addToCart">
-                        <input type="hidden" name="id" value=<?php echo $product['product_id']; ?>>
-                        <button class="btn btn-primary d-flex align-items-center <?php echo $product['quantity'] <= 0 ? 'disabled' : ''; ?>" type="submit">
-                            <span class="material-symbols-outlined">add_shopping_cart</span>
-                            Buy
-                        </button>
-                    </form>             
+                    <?php if ($product['quantity'] > 0): ?>
+                        <form method="POST" action="<?php echo $urlPrefix ?>/add-to-cart.php" class="addToCart">
+                            <input type="hidden" name="id" value=<?php echo $product['product_id']; ?>>
+                                <button class="btn btn-primary d-flex align-items-center" type="submit">
+                                    <span class="material-symbols-outlined">add_shopping_cart</span>
+                                    Buy
+                                </button>
+                        </form>
+                    <?php else: ?>
+                        <div style="visibility:hidden;">
+                            <button class="btn btn-primary d-flex align-items-center" type="button">
+                                <span class="material-symbols-outlined">add_shopping_cart</span>
+                                Buy
+                            </button>
+                        </div>
+                    <?php endif; ?>             
                     <?php if(isset($_SESSION['user'])&&$_SESSION['user']['privilege']>=2){ ?>
                         <a href="<?php echo $urlPrefix ?>/admin/edit-item.php?id=<?= urlencode($product['product_id']) ?>" class="btn btn-secondary">Edit</a>
                     <?php } ?>

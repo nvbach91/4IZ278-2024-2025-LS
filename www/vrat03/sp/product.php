@@ -58,10 +58,15 @@ if(empty($products)) {
             
             <div class="d-flex gap-2">
                 <!-- Buy button for  -->
-                <form method="POST" action="<?php echo $urlPrefix ?>/add-to-cart.php" class="m-0">
-                    <input type="hidden" name="id" value="<?php echo $product['product_id']; ?>">
-                    <button class="btn btn-primary <?php echo $product['quantity'] <= 0 ? 'disabled' : ''; ?>" type="submit">Buy</button>
-                </form>
+                <?php if ($product['quantity'] > 0): ?>
+                        <form method="POST" action="<?php echo $urlPrefix ?>/add-to-cart.php" class="addToCart">
+                            <input type="hidden" name="id" value=<?php echo $product['product_id']; ?>>
+                                <button class="btn btn-primary d-flex align-items-center" type="submit">
+                                    <span class="material-symbols-outlined">add_shopping_cart</span>
+                                    Buy
+                                </button>
+                        </form>
+                    <?php endif; ?>
                 <!-- Edit button for logged-in users with privilege >= 2-->
                 <?php if(isset($_SESSION['user'])&&$_SESSION['user']['privilege']>=2){ ?>
                     <a href="<?php echo $urlPrefix ?>/admin/edit-item.php?id=<?= urlencode($product['product_id']) ?>" class="btn btn-secondary">Edit</a>

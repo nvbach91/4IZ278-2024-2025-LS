@@ -13,6 +13,7 @@ $categories = $categoriesDB->fetchAll([]);
 $minPlaytime = $productsDB->minPlaytime();
 $maxPlaytime = $productsDB->maxPlaytime();
 $minPlayers = $productsDB->minPlayers();
+$maxMinPlayers = $productsDB->maxMinPlayers();
 $maxPlayers = $productsDB->maxPlayers();
 
 //webpage
