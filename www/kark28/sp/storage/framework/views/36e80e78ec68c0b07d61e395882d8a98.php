@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="<?php echo e(route('home')); ?>">Rezervační Systém</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <ul class="navbar-nav ms-auto">
+                <?php if(Auth::check()): ?>
+
+                    <?php if(Auth::user()->ownedBusiness()): ?>
+                        <li class="nav-item me-3">
+
+                            <a href="<?php echo e(route('business.show', Auth::user()->ownedBusiness()->id)); ?>"
+                                class="d-flex align-items-center icon-link btn btn-secondary">
+                                <i class="fa-solid fa-briefcase"></i>
+                                <?php echo e(Auth::user()->ownedBusiness()->name); ?>
+
+                            </a>
+                        </li>
+                    <?php endif; ?>
+
+                    <li class="nav-item dropdown ms-auto">
+                        <a class="dropdown-toggle d-flex align-items-center icon-link btn btn-secondary" href="#"
+                            role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-user"></i>
+                            <?php echo e(Auth::user()->name); ?>
+
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="<?php echo e(route('user.profile')); ?>#profile">Můj Profil</a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('user.profile')); ?>#reservations">Moje Rezervace</a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('user.profile')); ?>#business">Business</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li>
+                                <a class="dropdown-item icon-link" href="<?php echo e(route('logout')); ?>"><i
+                                        class="fa-solid fa-right-from-bracket"></i> Odhlásit se</a>
+                            </li>
+                        </ul>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item">
+
+                        <a class="nav-link icon-link" href="<?php echo e(route('login')); ?>"> <i
+                                class="fa-solid fa-right-to-bracket"></i> Přihlášení</a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+</nav>
+<?php /**PATH C:\xampp\htdocs\rezervacni system\rezervacni_system\resources\views/partials/nav.blade.php ENDPATH**/ ?>
