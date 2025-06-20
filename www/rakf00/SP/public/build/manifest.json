@@ -1,0 +1,47 @@
+{
+  "resources/css/accountPage.css": {
+    "file": "assets/accountPage-DOrbgqgC.css",
+    "src": "resources/css/accountPage.css",
+    "isEntry": true
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-ghxe2H_y.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/authenticate.css": {
+    "file": "assets/authenticate-DCjfsV53.css",
+    "src": "resources/css/authenticate.css",
+    "isEntry": true
+  },
+  "resources/js/accountDetail.js": {
+    "file": "assets/accountDetail-CRVVAK5P.js",
+    "name": "accountDetail",
+    "src": "resources/js/accountDetail.js",
+    "isEntry": true
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-QvkzyGQt.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/dashboard.js": {
+    "file": "assets/dashboard-CuiGHyyv.js",
+    "name": "dashboard",
+    "src": "resources/js/dashboard.js",
+    "isEntry": true
+  },
+  "resources/js/editProfilePhoto.js": {
+    "file": "assets/editProfilePhoto-BKc3ZbJh.js",
+    "name": "editProfilePhoto",
+    "src": "resources/js/editProfilePhoto.js",
+    "isEntry": true
+  },
+  "resources/js/memberManagement.js": {
+    "file": "assets/memberManagement-CzYc7Q3j.js",
+    "name": "memberManagement",
+    "src": "resources/js/memberManagement.js",
+    "isEntry": true
+  }
+}
