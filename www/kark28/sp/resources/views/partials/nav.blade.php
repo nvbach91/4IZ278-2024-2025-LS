@@ -10,16 +10,62 @@
             <ul class="navbar-nav ms-auto">
                 @if (Auth::check())
 
-                    @if (Auth::user()->ownedBusiness())
-                        <li class="nav-item me-3">
 
-                            <a href="{{ route('business.show', Auth::user()->ownedBusiness()->id) }}"
-                                class="d-flex align-items-center icon-link btn btn-secondary">
-                                <i class="fa-solid fa-briefcase"></i>
-                                {{ Auth::user()->ownedBusiness()->name }}
-                            </a>
-                        </li>
-                    @endif
+                    @php
+                        $user = Auth::user();
+                        $owned = $user->ownedBusiness();
+                        $managed = $user->managedBusinesses();
+                    @endphp
+
+                    <li class="nav-item dropdown me-3">
+                        <a class="btn btn-secondary dropdown-toggle d-flex align-items-center icon-link" href="#"
+                            role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-briefcase me-1"></i>
+                            Business
+                        </a>
+                        <ul class="dropdown-menu">
+                            {{-- Owned business --}}
+                            @if ($owned)
+                                <li>
+                                    <a class="dropdown-item d-flex justify-content-between align-items-center"
+                                        href="{{ route('business.show', $owned->id) }}">
+                                        <span><i class="fa-solid fa-briefcase me-1"></i> {{ $owned->name }}</span>
+                                        <span class="badge bg-primary">Vlastník</span>
+                                    </a>
+                                </li>
+                            @else
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('business.create') }}">
+                                        <i class="fa-solid fa-plus me-1"></i> Vytvořit Business
+                                    </a>
+                                </li>
+                            @endif
+
+                            {{-- Managed businesses --}}
+                            @if ($managed->isNotEmpty())
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="dropdown-header text-muted small">Spravuji</li>
+                                @foreach ($managed as $biz)
+                                    {{-- Avoid duplicate if also owned --}}
+                                    @if (!$owned || $biz->id !== $owned->id)
+                                        <li>
+                                            <a class="dropdown-item d-flex justify-content-between align-items-center"
+                                                href="{{ route('business.show', $biz->id) }}">
+                                                <span><i class="fa-solid fa-briefcase me-1"></i>
+                                                    {{ $biz->name }}</span>
+                                                <span class="badge bg-secondary">Správce</span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </ul>
+                    </li>
+
+
+
 
                     <li class="nav-item dropdown ms-auto">
                         <a class="dropdown-toggle d-flex align-items-center icon-link btn btn-secondary" href="#"
@@ -29,7 +75,8 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="{{ route('user.profile') }}#profile">Můj Profil</a></li>
-                            <li><a class="dropdown-item" href="{{ route('user.profile') }}#reservations">Moje Rezervace</a></li>
+                            <li><a class="dropdown-item" href="{{ route('user.reservations') }}#reservations">Moje
+                                    Rezervace</a></li>
                             <li><a class="dropdown-item" href="{{ route('user.profile') }}#business">Business</a></li>
                             <li>
                                 <hr class="dropdown-divider">

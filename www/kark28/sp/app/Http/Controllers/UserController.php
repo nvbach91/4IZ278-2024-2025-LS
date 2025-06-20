@@ -103,14 +103,8 @@ class UserController extends Controller
     {
         $user = Auth::user();
 
-        // Instantiate ReservationController
-        $reservationController = new ReservationController();
-        $reservations = $reservationController->getUserReservationsGroupedByTime($user);
-
         return view('user.profile', [
-            'user' => $user,
-            'activeReservations' => $reservations['active'],
-            'pastReservations' => $reservations['past'],
+            'user' => $user
         ]);
     }
 

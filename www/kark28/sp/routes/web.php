@@ -77,8 +77,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
-    Route::get('/user_profile', [UserController::class, 'showUserprofile'])->name('user.profile');
-    Route::delete('/user_profile/delete', [UserController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/user_profile', [UserController::class, 'showUserProfile'])->name('user.profile');
+
+    Route::get('/user/reservations', [ReservationController::class, 'showUserReservations'])->name('user.reservations');
+    Route::get('/user/reservations/active', [ReservationController::class, 'showActiveReservations'])->name('reservations.active');
+    Route::get('/user/reservations/past', [ReservationController::class, 'showPastReservations'])->name('reservations.past');
 
     // BUSINESS
 

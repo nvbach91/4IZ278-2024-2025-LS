@@ -156,44 +156,74 @@ class ReservationController extends Controller
             }
         }
     }
+    public function showUserReservations()
+    {
+        $user = auth()->user();
+        $reservations = $this->getActiveReservationsForUser($user);
 
-  public function getUserReservationsGroupedByTime($user): array
-{
-    $reservations = $user->reservations()
-        ->with('timeslot.service.business')
-        ->get();
-
-    $now = now();
-    $this->markPastReservationsCompleted($reservations);
-
-    $activeReservations = $reservations->filter(function ($reservation) use ($now) {
-        return $reservation->timeslot && $reservation->timeslot->start_time > $now;
-    })->sortBy(function ($reservation) {
-        return $reservation->timeslot->start_time ?? now();
-    })->values();
-
-    $pastReservations = $reservations->filter(function ($reservation) use ($now) {
-        return !$reservation->timeslot || $reservation->timeslot->start_time <= $now;
-    })->sortByDesc(function ($reservation) {
-        return $reservation->timeslot->start_time ?? now();
-    })->values();
-
-    // Check which businesses the user already reviewed
-    $reviewedBusinessIds = $user->reviews()->pluck('business_id')->toArray();
-
-    // Find the first past reservation where user hasn't reviewed the business yet
-    foreach ($pastReservations as $reservation) {
-        $business = optional($reservation->timeslot?->service?->business);
-        if ($business && !in_array($business->id, $reviewedBusinessIds)) {
-            $reservation->show_review_button = true;
-            break;
-        }
+        return view('user.reservations', [
+            'initialTab' => 'active',
+            'initialContent' => view('user.partials.active_reservations', compact('reservations'))->render(),
+        ]);
     }
 
-    return [
-        'active' => $activeReservations,
-        'past' => $pastReservations,
-    ];
-}
+    public function showActiveReservations()
+    {
+        $user = auth()->user();
+        $reservations = $this->getActiveReservationsForUser($user);
+        return view('user.partials.active_reservations', compact('reservations'));
+    }
 
+    public function showPastReservations()
+    {
+        $user = auth()->user();
+        $reservations = $this->getPastReservationsForUser($user);
+        return view('user.partials.past_reservations', compact('reservations'));
+    }
+
+
+    public function getActiveReservationsForUser($user): \Illuminate\Support\Collection
+    {
+        $now = now();
+
+        return \App\Models\Reservation::query()
+            ->where('user_id', $user->id)
+            ->whereHas('timeslot', function ($query) use ($now) {
+                $query->where('start_time', '>', $now);
+            })
+            ->with('timeslot.service.business')
+            ->join('timeslots', 'reservations.timeslot_id', '=', 'timeslots.id')
+            ->orderBy('timeslots.start_time')
+            ->get(['reservations.*']);
+    }
+
+    public function getPastReservationsForUser($user): \Illuminate\Support\Collection
+    {
+        $now = now();
+
+        $reservations = $user->reservations()
+            ->where(function ($query) use ($now) {
+                $query->whereDoesntHave('timeslot')
+                    ->orWhereHas('timeslot', function ($q) use ($now) {
+                        $q->where('start_time', '<=', $now);
+                    });
+            })
+            ->with('timeslot.service.business')
+            ->get()
+            ->sortByDesc(fn($r) => $r->timeslot->start_time ?? $now)
+            ->values();
+
+        $reviewedBusinessIds = $user->reviews()->pluck('business_id')->toArray();
+
+        // Find the first past reservation where user hasn't reviewed the business yet
+        foreach ($reservations as $reservation) {
+            $business = optional($reservation->timeslot?->service?->business);
+            if ($business && !in_array($business->id, $reviewedBusinessIds)) {
+                $reservation->show_review_button = true;
+                break;
+            }
+        }
+
+        return $reservations;
+    }
 }

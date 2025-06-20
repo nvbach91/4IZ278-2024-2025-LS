@@ -172,6 +172,11 @@ class BusinessController extends Controller
                 if (!empty($serviceData['id'])) {
                     $service = \App\Models\Service::find($serviceData['id']);
                     if ($service && $service->business_id == $business->id) {
+
+                        if ($service->reservations()->exists()) {
+                            $errors[] = "Službu '{$service->name}' nelze upravit – má již existující rezervace.";
+                        }
+
                         $service->update([
                             'name' => $serviceData['name'],
                             'description' => $serviceData['description'] ?? null,
@@ -217,8 +222,9 @@ class BusinessController extends Controller
         }
 
         if ($errors) {
-            return back()->withErrors($errors);
+            return back()->withErrors($errors)->withInput();
         }
+
 
         return redirect()
             ->route('business.show', $business->id)
