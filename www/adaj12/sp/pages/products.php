@@ -11,7 +11,14 @@ $added = isset($_GET['added']);
 $categories = getCategories();
 $genres = getGenres();
 $filters = getFilters();
-$products = getProducts($filters);
+
+$page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$limit = 10;
+$offset = ($page - 1) * $limit;
+$totalProducts = getProductsCount($filters);
+$totalPages = ceil($totalProducts / $limit);
+
+$products = getProducts($filters, $limit, $offset);
 ?>
 
 <?php if ($added): ?>
@@ -75,17 +82,40 @@ $products = getProducts($filters);
                                     <small>Kategorie: <?= htmlspecialchars($product['category_name'] ?? '-') ?></small><br>
                                     <small>Věk: <?= $product['min_age'] ?>+</small>
                                 </p>
-                                <form method="POST" class="d-inline">
-                                    <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['id']) ?>">
-                                    <input type="number" name="quantity" value="1" min="1" max="<?= (int)$product['stock'] ?>" class="form-control d-inline product-qty-input">
-                                    <button type="submit" class="btn btn-primary btn-sm">Přidat do košíku</button>
-                                </form>
+                                <p>
+                                    <strong>Skladem:</strong>
+                                    <?= (int)$product['stock'] ?>
+                                    <?php if ((int)$product['stock'] === 0): ?>
+                                        <span class="text-danger ms-2">Není skladem</span>
+                                    <?php endif; ?>
+                                </p>
+                                <?php if ((int)$product['stock'] > 0): ?>
+                                    <form method="POST" class="d-inline">
+                                        <input type="hidden" name="product_id" value="<?= htmlspecialchars($product['id']) ?>">
+                                        <input type="number" name="quantity" value="1" min="1" max="<?= (int)$product['stock'] ?>" class="form-control d-inline product-qty-input">
+                                        <button type="submit" class="btn btn-primary btn-sm">Přidat do košíku</button>
+                                    </form>
+                                <?php endif; ?>
                                 <a href="game.php?id=<?= htmlspecialchars($product['id']) ?>" class="btn btn-outline-secondary btn-sm ms-2">Detail</a>
                             </div>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
+            <?php if ($totalPages > 1): ?>
+                <nav aria-label="Stránkování produktů">
+                    <ul class="pagination">
+                        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                            <li class="page-item<?= $i == $page ? ' active' : '' ?>">
+                                <a class="page-link"
+                                   href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>">
+                                    <?= $i ?>
+                                </a>
+                            </li>
+                        <?php endfor; ?>
+                    </ul>
+                </nav>
+            <?php endif; ?>
         </section>
     </div>
 </div>

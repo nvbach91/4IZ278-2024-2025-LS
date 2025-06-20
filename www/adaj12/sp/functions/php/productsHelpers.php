@@ -42,7 +42,11 @@ function getFilters() {
     ];
 }
 
-function getProducts($filters) {
-    return getProductsDB()->fetchFiltered($filters);
+function getProducts($filters, $limit = 10, $offset = 0) {
+    return getProductsDB()->fetchFiltered($filters, $limit, $offset);
+}
+
+function getProductsCount($filters) {
+    return getProductsDB()->countFiltered($filters);
 }
 ?>

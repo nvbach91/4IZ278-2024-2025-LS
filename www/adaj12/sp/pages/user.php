@@ -81,55 +81,48 @@ $error = $_GET['error'] ?? '';
         <div class="profile-orders-box">
             <h5 class="text-center text-muted mb-4">Aktivní objednávky a jejich historie</h5>
             <?php
-            $userOrders = $userId ? getUserOrdersWithItems($userId) : [];
+            $ordersPerPage = 10;
+            $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+            $userOrders = $userId ? getUserOrderListSimple($userId) : [];
+            $totalOrders = count($userOrders);
+            $totalPages = ceil($totalOrders / $ordersPerPage);
+            $ordersToShow = array_slice($userOrders, ($page-1)*$ordersPerPage, $ordersPerPage);
 
-            if (!empty($userOrders)):
-                foreach ($userOrders as $order):
-                    $items = $order['items'];
-                    $address = $order['address'];
-                    ?>
-                    <div class="card mb-4 shadow-sm border-0">
-                        <div class="card-body">
-                            <h6 class="fw-bold mb-2">Objednávka #<?= $order['id'] ?></h6>
-                            <div class="mb-2">
-                                <span class="text-muted">Datum:</span>
-                                <?= date('d.m.Y H:i', strtotime($order['date'])) ?>
-                            </div>
-                            <div class="mb-2">
-                                <span class="text-muted">Stav:</span>
-                                <span class="fw-semibold"><?= htmlspecialchars($order['status']) ?></span>
-                            </div>
-                            <?php if ($address): ?>
-                            <div class="mb-2">
-                                <span class="text-muted">Dodací adresa:</span><br>
-                                <?= htmlspecialchars($address['name'] ?? '') ?><br>
-                                <?= htmlspecialchars($address['street'] ?? '') ?><br>
-                                <?= htmlspecialchars($address['city'] ?? '') ?>, <?= htmlspecialchars($address['postal_code'] ?? '') ?><br>
-                                Tel: <?= htmlspecialchars($address['phone'] ?? '') ?><br>
-                                E-mail: <?= htmlspecialchars($address['email'] ?? '') ?><br>
-                                <span class="text-muted">Doprava:</span> <?= htmlspecialchars($address['shipping_method'] ?? '-') ?><br>
-                                <span class="text-muted">Platba:</span> <?= htmlspecialchars($address['payment_method'] ?? '-') ?>
-                            </div>
-                            <?php endif; ?>
-                            <div class="mb-2">
-                                <span class="fw-bold">Položky:</span>
-                                <ul class="mb-0">
-                                    <?php foreach ($items as $item): ?>
-                                        <li>
-                                            <?= htmlspecialchars($item['product']['name'] ?? 'Neznámý produkt') ?> × <?= $item['quantity'] ?>
-                                            (<?= number_format($item['price'], 2, ',', ' ') ?> Kč/ks)
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            </div>
-                            <div class="fw-bold mt-2">
-                                Celková cena:
-                                <?= number_format(array_sum(array_map(fn($it) => $it['price'] * $it['quantity'], $items)), 2, ',', ' ') ?> Kč
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach;
-            else: ?>
+            if (!empty($ordersToShow)): ?>
+                <table class="table table-bordered bg-white">
+                    <thead>
+                        <tr>
+                            <th>ID objednávky</th>
+                            <th>Datum</th>
+                            <th>Stav</th>
+                            <th>Detail</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($ordersToShow as $order): ?>
+                            <tr>
+                                <td>#<?= $order['id'] ?></td>
+                                <td><?= date('d.m.Y H:i', strtotime($order['date'])) ?></td>
+                                <td><?= htmlspecialchars($order['status']) ?></td>
+                                <td>
+                                    <a href="detail.php?id=<?= $order['id'] ?>" class="btn btn-outline-secondary btn-sm">Zobrazit detail</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+                <?php if ($totalPages > 1): ?>
+                    <nav aria-label="Stránkování objednávek">
+                        <ul class="pagination justify-content-center">
+                            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                                <li class="page-item<?= $i == $page ? ' active' : '' ?>">
+                                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                                </li>
+                            <?php endfor; ?>
+                        </ul>
+                    </nav>
+                <?php endif; ?>
+            <?php else: ?>
                 <div class="alert alert-secondary text-center">
                     Nemáte žádné objednávky.
                 </div>

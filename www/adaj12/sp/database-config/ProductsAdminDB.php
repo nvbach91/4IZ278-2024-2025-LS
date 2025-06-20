@@ -10,6 +10,20 @@ class ProductsAdminDB extends Database {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function fetchPage($limit, $offset) {
+        $sql = "SELECT * FROM {$this->tableName} ORDER BY id DESC LIMIT :limit OFFSET :offset";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countAll() {
+        $stmt = $this->pdo->query("SELECT COUNT(*) FROM {$this->tableName}");
+        return (int)$stmt->fetchColumn();
+    }
+
     public function fetchById($id) {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->tableName} WHERE id = ?");
         $stmt->execute([$id]);
@@ -61,7 +75,6 @@ class ProductsAdminDB extends Database {
         $stmt->execute([$id]);
     }
 
-    // Implementace fetchFiltered
     public function fetchFiltered($filters = []) {
         return $this->fetchAll();
     }

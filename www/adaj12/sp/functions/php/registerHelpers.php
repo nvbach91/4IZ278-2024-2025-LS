@@ -25,6 +25,16 @@ function handleRegistration(): array {
         } else {
             $passwordHash = password_hash($password, PASSWORD_DEFAULT);
             $ok = $usersDB->insert($name, $email, $passwordHash);
+
+            $to = $email;
+            $subject = "Registrace Deskovkárna";
+            $message = "Dobrý den $name,\n\nděkujeme za registraci na našem webu.";
+            $headers = "From: adaj12@vse.cz";
+
+            $headers .= "MIME-Version: 1.0";
+
+            $headers .= "Content-Type: text/plain; charset=UTF-8";
+            
             if ($ok) {
                 $success = 'Registrace byla úspěšná, nyní se můžete přihlásit.';
             } else {

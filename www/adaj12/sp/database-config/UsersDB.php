@@ -5,7 +5,6 @@ class UsersDB extends Database
 {
     protected $tableName = "users";
 
-    // Najdi uživatele podle ID
     public function findById($id)
     {
         $stmt = $this->pdo->prepare("SELECT * FROM {$this->tableName} WHERE id = ?");

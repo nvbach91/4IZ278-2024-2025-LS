@@ -32,8 +32,8 @@ require_once __DIR__ . '/../pages/layouts/admin-head.php';
                 <td><?= (int)$product['min_age'] ?></td>
                 <td><?= (int)$product['max_age'] ?></td>
                 <td><?= htmlspecialchars($product['tag']) ?></td>
-                <td><?= htmlspecialchars($product['genre_id']) ?></td>
-                <td><?= htmlspecialchars($product['category_id']) ?></td>
+                <td><?= htmlspecialchars($product['genre_text']) ?></td>
+                <td><?= htmlspecialchars($product['category_text']) ?></td>
                 <td>
                     <button type="button" class="btn btn-outline-primary btn-sm edit-product-btn"
                         data-id="<?= $product['id'] ?>"
@@ -46,8 +46,8 @@ require_once __DIR__ . '/../pages/layouts/admin-head.php';
                         data-min_age="<?= (int)$product['min_age'] ?>"
                         data-max_age="<?= (int)$product['max_age'] ?>"
                         data-tag="<?= htmlspecialchars($product['tag'], ENT_QUOTES) ?>"
-                        data-genre_id="<?= (int)$product['genre_id'] ?>"
-                        data-category_id="<?= (int)$product['category_id'] ?>"
+                        data-genre_id="<?= $product['genre_id'] ?>"
+                        data-category_id="<?= $product['category_id'] ?>"
                         data-bs-toggle="modal"
                         data-bs-target="#productModal"
                     >Upravit</button>
@@ -60,9 +60,20 @@ require_once __DIR__ . '/../pages/layouts/admin-head.php';
         <?php endforeach; ?>
         </tbody>
     </table>
+
+    <?php if ($totalPages > 1): ?>
+    <nav aria-label="Stránkování produktů">
+        <ul class="pagination">
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                <li class="page-item<?= $i == $page ? ' active' : '' ?>">
+                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                </li>
+            <?php endfor; ?>
+        </ul>
+    </nav>
+    <?php endif; ?>
 </div>
 
-<!-- Modal pro přidání produktu -->
 <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <form method="post" action="products-save.php" class="modal-content" enctype="multipart/form-data">
@@ -78,11 +89,11 @@ require_once __DIR__ . '/../pages/layouts/admin-head.php';
         </div>
         <div class="mb-2">
             <label class="form-label">Krátký popis</label>
-            <input type="text" class="form-control" name="description" id="modal_product_description">
+            <input type="text" class="form-control" name="description" id="modal_product_description" required>
         </div>
         <div class="mb-2">
             <label class="form-label">Detailní popis</label>
-            <textarea class="form-control" name="detail" id="modal_product_detail"></textarea>
+            <textarea class="form-control" name="detail" id="modal_product_detail" required></textarea>
         </div>
         <div class="mb-2">
             <label class="form-label">Cena (Kč)</label>
@@ -90,7 +101,7 @@ require_once __DIR__ . '/../pages/layouts/admin-head.php';
         </div>
         <div class="mb-2">
             <label class="form-label">Obrázek (název souboru nebo URL)</label>
-            <input type="text" class="form-control" name="image" id="modal_product_image">
+            <input type="text" class="form-control" name="image" id="modal_product_image" required>
         </div>
         <div class="mb-2">
             <label class="form-label">Skladem</label>
@@ -98,23 +109,33 @@ require_once __DIR__ . '/../pages/layouts/admin-head.php';
         </div>
         <div class="mb-2">
             <label class="form-label">Minimální věk</label>
-            <input type="number" min="0" class="form-control" name="min_age" id="modal_product_min_age">
+            <input type="number" min="0" class="form-control" name="min_age" id="modal_product_min_age" required>
         </div>
         <div class="mb-2">
             <label class="form-label">Maximální věk</label>
-            <input type="number" min="0" class="form-control" name="max_age" id="modal_product_max_age">
+            <input type="number" min="0" class="form-control" name="max_age" id="modal_product_max_age" required>
         </div>
         <div class="mb-2">
             <label class="form-label">Tag</label>
-            <input type="text" class="form-control" name="tag" id="modal_product_tag">
+            <input type="text" class="form-control" name="tag" id="modal_product_tag" required>
         </div>
         <div class="mb-2">
-            <label class="form-label">ID žánru</label>
-            <input type="number" min="0" class="form-control" name="genre_id" id="modal_product_genre_id">
+            <label class="form-label">Žánr</label>
+            <select class="form-select" name="genre_id" id="modal_product_genre_id" required>
+                <option value="" disabled selected>Vyber žánr...</option>
+                <?php foreach ($genres as $g): ?>
+                    <option value="<?= $g['id'] ?>"><?= htmlspecialchars($g['name']) ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
         <div class="mb-2">
-            <label class="form-label">ID kategorie</label>
-            <input type="number" min="0" class="form-control" name="category_id" id="modal_product_category_id">
+            <label class="form-label">Kategorie</label>
+            <select class="form-select" name="category_id" id="modal_product_category_id" required>
+                <option value="" disabled selected>Vyber kategorii...</option>
+                <?php foreach ($categories as $c): ?>
+                    <option value="<?= $c['id'] ?>"><?= htmlspecialchars($c['name']) ?></option>
+                <?php endforeach; ?>
+            </select>
         </div>
       </div>
       <div class="modal-footer">

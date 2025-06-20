@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $shipping_city = trim($_POST['shipping_city'] ?? '');
         $shipping_phone = trim($_POST['shipping_phone'] ?? '');
 
-        // VALIDACE dodacích údajů – jen pokud jsou vyplněny
+        // VALIDACE dodacích údajů
         $error = '';
         if ($shipping_name !== '' && strlen($shipping_name) < 3) $error = 'Zadejte jméno a příjmení (alespoň 3 znaky).';
         if ($shipping_street !== '' && strlen($shipping_street) < 3) $error = 'Zadejte ulici a číslo popisné (alespoň 3 znaky).';

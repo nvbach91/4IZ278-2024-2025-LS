@@ -34,13 +34,17 @@ list($product, $categoryNames, $errorMsg) = getGameDetail();
                     </div>
                 </div>
                 <div class="col-auto">
-                    <form method="post" action="/~adaj12/test/pages/products.php">
-                        <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
-                        <div class="input-group">
-                            <input type="number" name="quantity" value="1" min="1" max="<?= (int)$product['stock'] ?>" class="form-control" style="max-width:90px;">
-                            <button type="submit" class="btn btn-primary">Přidat do košíku</button>
-                        </div>
-                    </form>
+                    <?php if ((int)$product['stock'] > 0): ?>
+                        <form method="post" action="/~adaj12/test/pages/products.php">
+                            <input type="hidden" name="product_id" value="<?= (int)$product['id'] ?>">
+                            <div class="input-group">
+                                <input type="number" name="quantity" value="1" min="1" max="<?= (int)$product['stock'] ?>" class="form-control" style="max-width:90px;">
+                                <button type="submit" class="btn btn-primary">Přidat do košíku</button>
+                            </div>
+                        </form>
+                    <?php else: ?>
+                        <span class="text-danger fw-bold ms-2">Není skladem</span>
+                    <?php endif; ?>
                 </div>
             </div>
             <!-- Parametry -->

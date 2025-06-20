@@ -8,28 +8,25 @@ require_once __DIR__ . '/layouts/head.php';
         <div class="alert alert-danger"><?= htmlspecialchars($_GET['error']) ?></div>
     <?php endif; ?>
     <form method="post" action="../functions/php/checkoutProcess.php" novalidate>
-        <!-- Zvol dopravu -->
         <div class="mb-4 p-3 checkout-box">
             <strong>Zvol dopravu</strong>
             <select class="form-select mt-2" name="shipping_method" required>
-                <option value="" disabled selected>Vyber dopravu...</option>
+                <option value="" disabled <?= empty($shipping_method) ? 'selected' : '' ?>>Vyber dopravu...</option>
                 <?php foreach ($dopravy as $key => $name): ?>
-                    <option value="<?= $key ?>"><?= $name ?></option>
+                    <option value="<?= $key ?>" <?= $shipping_method === $key ? 'selected' : '' ?>><?= $name ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
-        <!-- Zvol možnost platby -->
         <div class="mb-4 p-3 checkout-box">
             <strong>Zvol možnost platby</strong>
             <select class="form-select mt-2" name="payment_method" required>
-                <option value="" disabled selected>Vyber platbu...</option>
+                <option value="" disabled <?= empty($payment_method) ? 'selected' : '' ?>>Vyber platbu...</option>
                 <?php foreach ($platby as $key => $name): ?>
-                    <option value="<?= $key ?>"><?= $name ?></option>
+                    <option value="<?= $key ?>" <?= $payment_method === $key ? 'selected' : '' ?>><?= $name ?></option>
                 <?php endforeach; ?>
             </select>
         </div>
         <div class="row">
-            <!-- Fakturační údaje -->
             <div class="col-md-6">
                 <div class="p-3 checkout-box">
                     <strong>Fakturační údaje</strong>
@@ -60,7 +57,6 @@ require_once __DIR__ . '/layouts/head.php';
                     </div>
                 </div>
             </div>
-            <!-- Email a souhlasy -->
             <div class="col-md-6">
                 <div class="p-3 checkout-box">
                     <strong>Emailová adresa a souhlasy</strong>
@@ -78,7 +74,6 @@ require_once __DIR__ . '/layouts/head.php';
                 </div>
             </div>
         </div>
-        <!-- Potvrdit objednávku -->
         <div class="text-center mt-5">
             <button type="submit" class="btn btn-success btn-lg">Odeslat objednávku</button>
         </div>

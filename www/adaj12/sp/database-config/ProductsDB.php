@@ -29,7 +29,7 @@ class ProductsDB extends Database {
     }
 
     // Filtruje + JOIN na názvy kategorií a žánrů
-    public function fetchFiltered($filters) {
+    public function fetchFiltered($filters, $limit = 10, $offset = 0) {
         $where = [];
         $params = [];
 
@@ -59,9 +59,50 @@ class ProductsDB extends Database {
         if ($where) {
             $sql .= " WHERE " . implode(' AND ', $where);
         }
+        $sql .= " ORDER BY products.id DESC LIMIT :limit OFFSET :offset";
+        $params[':limit'] = (int)$limit;
+        $params[':offset'] = (int)$offset;
+
+        $stmt = $this->pdo->prepare($sql);
+        foreach ($params as $key => $val) {
+            if ($key === ':limit' || $key === ':offset') {
+                $stmt->bindValue($key, $val, PDO::PARAM_INT);
+            } else {
+                $stmt->bindValue($key, $val);
+            }
+        }
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function countFiltered($filters) {
+        $where = [];
+        $params = [];
+
+        if (!empty($filters['category'])) {
+            $where[] = 'products.category_id = :category';
+            $params[':category'] = $filters['category'];
+        }
+        if (!empty($filters['genre'])) {
+            $where[] = 'products.genre_id = :genre';
+            $params[':genre'] = $filters['genre'];
+        }
+        if (!empty($filters['min_age'])) {
+            $where[] = 'products.min_age <= :min_age';
+            $params[':min_age'] = $filters['min_age'];
+        }
+        if (!empty($filters['max_price'])) {
+            $where[] = 'products.price <= :max_price';
+            $params[':max_price'] = $filters['max_price'];
+        }
+
+        $sql = "SELECT COUNT(*) FROM products";
+        if ($where) {
+            $sql .= " WHERE " . implode(' AND ', $where);
+        }
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return (int)$stmt->fetchColumn();
     }
 
     // Vrací všechny kategorie (id+name)

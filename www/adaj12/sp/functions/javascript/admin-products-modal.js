@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function() {
-    // Nový produkt – vyprázdnit modal
     document.getElementById('addProductBtn').addEventListener('click', function() {
         document.getElementById('modal_product_id').value = '';
         document.getElementById('modal_product_name').value = '';
@@ -11,11 +10,10 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('modal_product_min_age').value = '';
         document.getElementById('modal_product_max_age').value = '';
         document.getElementById('modal_product_tag').value = '';
-        document.getElementById('modal_product_genre_id').value = '';
-        document.getElementById('modal_product_category_id').value = '';
+        document.getElementById('modal_product_genre_id').selectedIndex = 0;
+        document.getElementById('modal_product_category_id').selectedIndex = 0;
     });
 
-    // Úprava produktu – předvyplnit
     document.querySelectorAll('.edit-product-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
             document.getElementById('modal_product_id').value = btn.getAttribute('data-id') || '';

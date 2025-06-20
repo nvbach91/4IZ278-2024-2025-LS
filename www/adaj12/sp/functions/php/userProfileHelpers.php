@@ -1,5 +1,4 @@
 <?php
-// Funkce pro zjištění, zda je uživatel přihlášen
 function isUserLoggedIn(): bool {
     return !empty($_SESSION['user_id']);
 }
@@ -16,7 +15,7 @@ function getCurrentUserData($userId): array {
     return $usersDB->findById($userId) ?? [];
 }
 
-// Funkce pro získání všech objednávek uživatele i s položkami a produkty
+// Funkce pro získání všech objednávek uživatele 
 function getUserOrdersWithItems($userId): array {
     require_once __DIR__ . '/../../database-config/OrdersDB.php';
     require_once __DIR__ . '/../../database-config/ProductsDB.php';
@@ -32,4 +31,20 @@ function getUserOrdersWithItems($userId): array {
         }
     }
     return $orders;
+}
+
+// Funkce pro získání seznamu objednávek (id, datum, status)
+function getUserOrderListSimple($userId): array {
+    require_once __DIR__ . '/../../database-config/OrdersDB.php';
+    $ordersDB = new OrdersDB();
+    $orders = $ordersDB->getOrdersByUserId($userId);
+    $simple = [];
+    foreach ($orders as $order) {
+        $simple[] = [
+            'id' => $order['id'],
+            'date' => $order['date'],
+            'status' => $order['status']
+        ];
+    }
+    return $simple;
 }
