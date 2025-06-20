@@ -1,9 +1,6 @@
 @extends("layouts.default")
 @section("heading", "Editace profilu")
 @section("content")
-    @php
-        echo session('return_url');
-    @endphp
     <x-form class="text-center" style="margin-top: 50px;" enctype="multipart/form-data" method="post"
             action="{{route('editProfile', ['user' => auth()->user()])}}">
         @method("put")

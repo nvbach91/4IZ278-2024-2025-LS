@@ -10,6 +10,7 @@ class Authenticated
 {
     public function handle(Request $request, Closure $next)
     {
+
         if (! Auth::check()) {
             return redirect()->route('loginPage');
         }

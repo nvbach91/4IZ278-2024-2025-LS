@@ -8,7 +8,7 @@
     @endif
     <x-profile-photo class="object-fit-cover border rounded-circle"
                      style="display: block;overflow: hidden;width: 110px;height: 110px;padding: 2px;margin-top: 25px;margin-bottom: 10px;"
-                     width="117" height="117" />
+                     width="117" height="117"/>
     <h3>{{auth()->user()->full_name}}</h3>
     <p style="color: #6f6f6f;">&#64;{{auth()->user()->username}}</p>
     <div class="d-inline-flex justify-content-between align-items-center"
@@ -34,8 +34,9 @@
                 <div class="col" data-flag="{{ $account->pivot->role === 'admin' ? 'admin' : '' }}">
                     <a href="{{ route('accountDetailPage', $account) }}">
                         <div data-bss-disabled-mobile="true" data-bss-hover-animate="pulse"
-                             style="background: var(--bs-secondary-bg);border-radius: 13px;box-shadow: 4px 0 3px rgb(231,226,226);">
+                             style="{{ $account->pivot->role === 'admin' ? 'background:#FFE3BB' : 'background:lightgrey' }};border-radius: 13px;box-shadow: 4px 0 3px rgb(231,226,226);">
                             <h3 class="text-center">{{$account->name}}</h3>
+                            <h4 class="text-center" style="color: #504f4f">{{$account->id}}</h4>
                             <p class="lead text-center text-success">{{$account->balance}}CZK</p>
                         </div>
                     </a>

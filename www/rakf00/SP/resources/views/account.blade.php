@@ -2,12 +2,13 @@
 
 @section("custom-css")
     @vite(["resources/css/accountPage.css"])
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.bootstrap5.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.bootstrap5.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css"/>
 @endsection
 @php
     $userId = auth()->id();
     $role = $account->getUserRole($userId);
+    $paymentAgainNumber = 0;
 @endphp
 @section("heading", $account->name)
 @if($role === "admin")
@@ -48,12 +49,18 @@
                     <th>Popis</th>
                     <th>Částka</th>
                     <th>Odesílatel/Vložil</th>
+                    <th>Příjemce</th>
+                    <th>Akce</th>
                 </tr>
                 </thead>
                 <tbody>
                 @foreach($transactions as $transaction)
+                    @php
+                        $transactionDate = new DateTime($transaction->created_at, new DateTimeZone('UTC'));
+                        $transactionDate->setTimezone(new DateTimeZone('Europe/Prague'));
+                    @endphp
                     <tr class="{{$transaction->amount > 0 ? "positive-row" : "negative-row"}}">
-                        <td>{{date_format(date_create($transaction->created_at), "d.m.y H:i")}}</td>
+                        <td>{{ $transactionDate->format('d.m.y H:i:s') }}</td>
                         <td>
                             @if($transaction->type_id === 1)
                                 Platba
@@ -70,6 +77,23 @@
                                 {{ $transaction->recipient_account_id }}
                             @endif
                         </td>
+                        @if($transaction->type_id === 1)
+                            <td>@if($transaction->user)
+                                    {{$transaction->recipient_account_id}}
+                                    @php $paymentAgainNumber = $transaction->recipient_account_id@endphp
+                                @else
+                                    {{ $transaction->account_id }}
+                                    @php$paymentAgainNumber = $transaction->account_id@endphp
+                                @endif</td>
+                            <td>
+                                <button class="btn btn-secondary payment-again-btn" data-recipient="{{$paymentAgainNumber}}"><i class="fa fa-refresh"></i>Opakovat
+                                </button>
+                            </td>
+                        @else
+                            <td></td>
+                            <td></td>
+                        @endif
+
                     </tr>
                 @endforeach
                 </tbody>
@@ -112,7 +136,7 @@
                    data-username="{{ $member->username }}"
                    data-role="{{ $memberRole }}"
                    data-joined="{{ $dateJoined}}">
-                    <x-profile-photo class="avatar me-3" :src="$src" />
+                    <x-profile-photo class="avatar me-3" :src="$src"/>
                     {{ $member->full_name }} - <strong style="color:{{ $color }}">{{ $memberRole }}</strong>
                 </a>
             @endforeach
@@ -173,7 +197,7 @@
             <input type="text" name="userName" id="userName" placeholder="@username">
         </label>
         @error('userName')
-        <x-error :message="$message" /> @enderror
+        <x-error :message="$message"/> @enderror
         <div class="d-flex justify-content-center gap-3 mt-4">
             <button type="submit" class="btn btn-secondary">Přidat</button>
             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Zpět</button>
@@ -187,14 +211,14 @@
                    value="{{ old('amount') }}">
         </label>
         @error('amount')
-        <x-error :message="$message" /> @enderror
+        <x-error :message="$message"/> @enderror
 
         <label for="textareaDeposit">Popis (nepovinný):
             <input name="description" id="textareaDeposit" maxlength="30" placeholder="Příspěvek na ..."
                    value="{{ old('description') }}">
         </label>
         @error('description')
-        <x-error :message="$message" /> @enderror
+        <x-error :message="$message"/> @enderror
 
         <div class="d-flex justify-content-center gap-3 mt-4">
             <button type="submit" class="btn btn-secondary">Vložit</button>
@@ -232,7 +256,7 @@
                    value="{{ old('recipient') }}">
         </label>
         @error('recipient')
-        <x-error :message="$message" />
+        <x-error :message="$message"/>
         @enderror
         <label for="paymentAmount">Částka:
             <input type="number" id="paymentAmount" name="amount" min="1" max="{{$account->balance}}"
@@ -240,7 +264,7 @@
                    value="{{ old('amount') }}">
         </label>
         @error('amount')
-        <x-error :message="$message" />
+        <x-error :message="$message"/>
         @enderror
 
         <label for="textareaPayment">Popis (nepovinný):
@@ -248,7 +272,7 @@
                    placeholder="Platba za ..." value="{{ old('description') }}">
         </label>
         @error('description')
-        <x-error :message="$message" />
+        <x-error :message="$message"/>
         @enderror
 
         <div class="d-flex justify-content-center gap-3 mt-4">
